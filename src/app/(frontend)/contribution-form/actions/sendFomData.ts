@@ -41,7 +41,7 @@ export async function sendFormData(formData: FormData) {
             verify: 'PENDING',
         }
 
-        console.log('Donation data to be sent:', contributionData)
+        console.log('Contribution data to be sent:', contributionData)
 
         const createdDonation = await payload.create({
             collection: 'contributions',

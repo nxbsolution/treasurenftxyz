@@ -72,9 +72,7 @@ const FormSchema = z.object({
 export type FormValues = z.infer<typeof FormSchema>
 
 export default function ContributionForm() {
-
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   const router = useRouter()
 
   const form = useForm<FormValues>({
