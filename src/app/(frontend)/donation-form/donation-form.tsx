@@ -31,7 +31,6 @@ import {
 
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/hooks/use-toast'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -53,10 +52,10 @@ const FormSchema = z.object({
   mobile: z.string().min(10, 'Mobile number is invalid.'),
   cityName: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
-  star: z.string().min(1, 'Please select a star.').optional(),
-  depositAddress: z.enum(['Tron (TRC20)', 'BNB Smart Chain (BEP20)'], {
+  star: z.string().min(1, 'Please select a star.'),
+  depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
-  }).optional(),
+  }),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   screenShot: z
     .instanceof(File)
@@ -70,6 +69,7 @@ const FormSchema = z.object({
 export type FormValues = z.infer<typeof FormSchema>
 
 export default function DonationForm() {
+
   const router = useRouter()
 
   const form = useForm<FormValues>({
@@ -85,34 +85,15 @@ export default function DonationForm() {
       transactionId: '',
     },
   })
-  const { toast } = useToast()
 
   async function onSubmit(data: FormValues) {
     try {
-      // await PostForm({data})
-      // await PostForm()
-      // router.push('/success')
+      await PostForm({data})
+      router.push('/success')
     } catch (error) {
       console.error(error)
-      // Handle error appropriately
     }
   }
-
-  // function onSubmit(data: FormValues) {
-
-  //   router.push('/success')
-  //   console.log(data)
-  //   PostForm({data})
-
-  //   // toast({
-  //   //   title: 'You submitted the following values:',
-  //   //   description: (
-  //   //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //   //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-  //   //     </pre>
-  //   //   ),
-  //   // })
-  // }
 
   return (
     <>
@@ -255,12 +236,12 @@ export default function DonationForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1 star: 25 USDT">1 star: 25 USDT</SelectItem>
-                      <SelectItem value="2 star: 60 USDT">2 star: 60 USDT</SelectItem>
-                      <SelectItem value="3 star: 90 USDT">3 star: 90 USDT</SelectItem>
-                      <SelectItem value="4 star: 140 USDT">4 star: 140 USDT</SelectItem>
-                      <SelectItem value="5 star: 200 USDT">5 star: 200 USDT</SelectItem>
-                      <SelectItem value="6 star: 400 USDT">6 star: 400 USDT</SelectItem>
+                      <SelectItem value="1star">1 star: 25 USDT</SelectItem>
+                      <SelectItem value="2star">2 star: 60 USDT</SelectItem>
+                      <SelectItem value="3star">3 star: 90 USDT</SelectItem>
+                      <SelectItem value="4star">4 star: 140 USDT</SelectItem>
+                      <SelectItem value="5star">5 star: 200 USDT</SelectItem>
+                      <SelectItem value="6star">6 star: 400 USDT</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your star level.</FormDescription>
@@ -283,7 +264,7 @@ export default function DonationForm() {
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="Tron (TRC20)" />
+                          <RadioGroupItem value="TRC-20" />
                         </FormControl>
                         <FormLabel className="font-normal">
                           Tron (TRC20)
@@ -293,7 +274,7 @@ export default function DonationForm() {
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="BNB Smart Chain (BEP20)" />
+                          <RadioGroupItem value="BEP-20" />
                         </FormControl>
                         <FormLabel className="font-normal">
                           BNB Smart Chain (BEP20)

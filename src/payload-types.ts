@@ -645,17 +645,17 @@ export interface Form {
 export interface Donation {
   id: number;
   uploadStarCertificate?: (number | null) | Media;
-  realName?: string | null;
-  nft_username?: string | null;
-  uid?: string | null;
-  mobile?: string | null;
-  cityName?: string | null;
-  uplineName?: string | null;
+  realName: string;
+  nft_username: string;
+  uid: string;
+  mobile: string;
+  cityName: string;
+  uplineName: string;
   star?: ('1star' | '2star' | '3star' | '4star' | '5star' | '6star') | null;
-  depositAddress?: ('TRC-20' | 'BEP-20') | null;
-  transactionId?: string | null;
+  depositAddress: 'TRC-20' | 'BEP-20';
+  transactionId: string;
   screenShot?: (number | null) | Media;
-  verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
+  verify: 'PENDING' | 'APPROVED' | 'REJECTED';
   updatedAt: string;
   createdAt: string;
 }
