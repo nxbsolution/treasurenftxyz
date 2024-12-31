@@ -224,12 +224,12 @@ export const Posts: CollectionConfig<'posts'> = {
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },
-  // versions: {
-  //   drafts: {
-  //     autosave: {
-  //       interval: 100, // We set this interval for optimal live preview
-  //     },
-  //   },
-  //   maxPerDoc: 50,
-  // },
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 100000, // We set this interval for optimal live preview
+      },
+    },
+    maxPerDoc: 1,
+  },
 }
