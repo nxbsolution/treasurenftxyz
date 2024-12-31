@@ -627,7 +627,6 @@ export interface Contribution {
   uid: string;
   uplineName: string;
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
-  amount: number;
   depositAddress: 'TRC-20' | 'BEP-20';
   transactionId: string;
   screenShot: number | Media;
@@ -1042,7 +1041,6 @@ export interface ContributionsSelect<T extends boolean = true> {
   uid?: T;
   uplineName?: T;
   star?: T;
-  amount?: T;
   depositAddress?: T;
   transactionId?: T;
   screenShot?: T;
