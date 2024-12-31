@@ -363,7 +363,7 @@ export default function ContributionForm() {
               className="max-sm:full text-lg  lg:col-span-2 font-bold  mx-auto w-1/2 max-sm:w-full"
               disabled={isSubmitting}
             >
-              Submit
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
         </Form>
