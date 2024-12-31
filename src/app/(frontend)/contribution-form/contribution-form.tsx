@@ -45,7 +45,9 @@ const FormSchema = z.object({
   mobile: z.string().min(10, 'Mobile number is invalid.'),
   cityName: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
-  star: z.string().min(1, 'Please select a star.'),
+  star: z.enum(['1star', '2star', '3star', '4star', '5star', '6star'], {
+    required_error: 'Please select a star.',
+  }),
   amount: z.number().positive(),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
@@ -99,7 +101,7 @@ export default function ContributionForm() {
       } else {
         formData.append(key, String(value))
       }
-    })
+    });
 
     try {
       const result = await sendFormData(formData)

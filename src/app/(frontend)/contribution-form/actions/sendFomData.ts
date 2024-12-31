@@ -62,25 +62,28 @@ const payMedia = await payload.create({
 	file: payFile,
 })
 
-// ------------------------------------------------------
+// ------------------- Create contribution Now ------------------------------
+	type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star";
+	type depositAddress = "TRC-20" | "BEP-20";
+
 	try {
 			const contributionData = {
-					realName: formData.get('realName'),
-					nft_username: formData.get('nft_username'),
-					uid: formData.get('uid'),
-					mobile: formData.get('mobile'),
-					cityName: formData.get('cityName'),
-					uplineName: formData.get('uplineName'),
-					star: formData.get('star'),
-					amount: formData.get('amount'),
-					depositAddress: formData.get('depositAddress'),
-					transactionId: formData.get('transactionId'),
+					realName: formData.get('realName') as string,
+					nft_username: formData.get('nft_username') as string,
+					uid: formData.get('uid') as string,
+					mobile: formData.get('mobile') as string,
+					cityName: formData.get('cityName') as string,
+					uplineName: formData.get('uplineName') as string,
+					amount: Number(formData.get('amount')),
+					transactionId: formData.get('transactionId') as string,
+					star: formData.get('star') as StarRating,
+					depositAddress: formData.get('depositAddress') as depositAddress,
 			}
-			// const verify: "PENDING" | "APPROVED" | "REJECTED" = 'PENDING';
+
 			const uploadStarCertificate = certificateMedia.id;
 			const screenShot = payMedia.id;
 
-	const row = await payload.create({
+	const newContribution = await payload.create({
 			collection: 'contributions',
 			data: {
 				...contributionData, 
@@ -89,24 +92,11 @@ const payMedia = await payload.create({
 			},
 	})
 
-	console.log('Created contribution:', row)
+	console.log('New Contribution:', newContribution)
 
-	return { success: true, data: row }
-} catch (error) {
-	console.error('Error creating donation:', error)
-	return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
+	return { success: true, data: newContribution }
+	} catch (error) {
+		console.error('Error creating donation:', error)
+		return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
+	}
 }
-}
-
-// async function handleFileUpload(payload: any, file: File) {
-//     const media = await payload.create({
-//         collection: 'media',
-//         data: {
-//             alt: file.name,
-//         },
-//         file,
-//     })
-
-//     return media
-// }
-
