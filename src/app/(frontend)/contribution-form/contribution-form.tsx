@@ -78,16 +78,7 @@ export default function ContributionForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    // defaultValues: {
-    //   realName: '',
-    //   nft_username: '',
-    //   uid: '',
-    //   mobile: '',
-    //   cityName: '',
-    //   uplineName: '',
-    //   amount: 200,
-    //   transactionId: '',
-    // },
+    defaultValues: {},
   })
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
@@ -107,14 +98,13 @@ export default function ContributionForm() {
       if (result.success) {
         console.log('Donation submitted successfully:', result.data)
         form.reset()
-        console.log()
+        console.log(result.data);
+        router.push('/success');
       } else {
         console.error('Failed to submit donation:', result.error)
-        console.log()
       }
     } catch (error) {
       console.error('Error submitting donation:', error)
-      console.log()
     } finally {
       setIsSubmitting(false)
     }
@@ -371,6 +361,7 @@ export default function ContributionForm() {
             <Button
               type="submit"
               className="max-sm:full text-lg  lg:col-span-2 font-bold  mx-auto w-1/2 max-sm:w-full"
+              disabled={isSubmitting}
             >
               Submit
             </Button>
