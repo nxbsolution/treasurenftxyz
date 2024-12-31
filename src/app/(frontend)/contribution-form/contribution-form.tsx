@@ -78,17 +78,16 @@ export default function ContributionForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      realName: '',
-      nft_username: '',
-      uid: '',
-      mobile: '',
-      cityName: '',
-      uplineName: '',
-      star: '',
-      amount: 200,
-      transactionId: '',
-    },
+    // defaultValues: {
+    //   realName: '',
+    //   nft_username: '',
+    //   uid: '',
+    //   mobile: '',
+    //   cityName: '',
+    //   uplineName: '',
+    //   amount: 200,
+    //   transactionId: '',
+    // },
   })
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
