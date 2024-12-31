@@ -606,19 +606,19 @@ export interface Form {
  */
 export interface Contribution {
   id: number;
+  verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
   realName: string;
-  nft_username: string;
-  uid: string;
   mobile: string;
   cityName: string;
+  nft_username: string;
+  uid: string;
   uplineName: string;
   star?: ('1star' | '2star' | '3star' | '4star' | '5star' | '6star') | null;
   amount: number;
   depositAddress: 'TRC-20' | 'BEP-20';
   transactionId: string;
-  verify: 'PENDING' | 'APPROVED' | 'REJECTED';
-  screenShot?: (number | null) | Media;
-  uploadStarCertificate?: (number | null) | Media;
+  screenShot: number | Media;
+  uploadStarCertificate: number | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -1022,17 +1022,17 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "contributions_select".
  */
 export interface ContributionsSelect<T extends boolean = true> {
+  verify?: T;
   realName?: T;
-  nft_username?: T;
-  uid?: T;
   mobile?: T;
   cityName?: T;
+  nft_username?: T;
+  uid?: T;
   uplineName?: T;
   star?: T;
   amount?: T;
   depositAddress?: T;
   transactionId?: T;
-  verify?: T;
   screenShot?: T;
   uploadStarCertificate?: T;
   updatedAt?: T;

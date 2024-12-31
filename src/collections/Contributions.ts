@@ -16,7 +16,27 @@ export const Contributions: CollectionConfig = {
   defaultSort: "-createdAt",
   fields: [
     {
+      name: "verify",
+      type: "select",
+      defaultValue: "PENDING",
+      options: [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    {
       name: "realName",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "mobile",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "cityName",
       type: "text",
       required: true,
     },
@@ -29,16 +49,6 @@ export const Contributions: CollectionConfig = {
     {
       name: "uid",
       label: "UID",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "mobile",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "cityName",
       type: "text",
       required: true,
     },
@@ -84,27 +94,16 @@ export const Contributions: CollectionConfig = {
       required: true,
     },
     {
-      name: "verify",
-      type: "select",
-      defaultValue: "PENDING",
-      required: true,
-      options: [
-        "PENDING",
-        "APPROVED",
-        "REJECTED"
-      ]
-    },
-    {
       name: "screenShot",
       type: "upload",
       relationTo: "media",
-      // required: true,
+      required: true,
     },
     {
       name: "uploadStarCertificate",
       type: "upload",
       relationTo: "media",
-      // required: true,
+      required: true,
     }
   ],
 }

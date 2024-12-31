@@ -4,56 +4,98 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 export async function sendFormData(formData: FormData) {
-    const payload = await getPayload({ config })
-    console.log('formdata received in form action: ', Object.fromEntries(formData))
+const payload = await getPayload({ config })
 
-    try {
-        const contributionData = {
-            realName: formData.get('realName'),
-            nft_username: formData.get('nft_username'),
-            uid: formData.get('uid'),
-            mobile: formData.get('mobile'),
-            cityName: formData.get('cityName'),
-            uplineName: formData.get('uplineName'),
-            star: formData.get('star'),
-            amount: formData.get('amount'),
-            depositAddress: formData.get('depositAddress'),
-            transactionId: formData.get('transactionId'),
-            verify: 'PENDING'
-        }
-        console.log('Contribution data in form action:', contributionData)
+// --------------------- Upload Start Certificate File ---------------------
+	const certificateFormDataEntryValue = formData.get('uploadStarCertificate') ;
+	let certificateFile: { 
+			data: Buffer; 
+			name: string; 
+			mimetype: string; 
+			size: number;
+		} | undefined = undefined;
 
-        const certificateFormDataEntryValue = formData.get('uploadStarCertificate') ;
-        let certificateFileData: { 
-            data: Buffer; 
-            name: string; 
-            mimetype: string; 
-            size: number;} | undefined = undefined;
+	if (certificateFormDataEntryValue instanceof File) {
+			const buffer = Buffer.from(await certificateFormDataEntryValue.arrayBuffer())
+			
+			certificateFile = {
+					data: buffer,
+					size: buffer.byteLength,
+					name: certificateFormDataEntryValue.name,
+					mimetype: certificateFormDataEntryValue.type
+			}
+	}
 
-        if (certificateFormDataEntryValue instanceof File) {
-            const buffer = Buffer.from(await certificateFormDataEntryValue.arrayBuffer())
-            
-            certificateFileData = {
-                data: buffer,
-                size: buffer.byteLength,
-                name: certificateFormDataEntryValue.name,
-                mimetype: certificateFormDataEntryValue.type
-            }
-        }
+	const certificateMedia = await payload.create({
+		collection: 'media',
+		data: {
+			alt: `Star Certificate`,
+		},
+		file: certificateFile,
+	})
 
-        const createdDonation = await payload.create({
-            collection: 'contributions',
-            data: {...contributionData},
-            file: certificateFileData
-        })
+// --------------------- Upload Payment Screenshot File ---------------------
+const payFormDataEntryValue = formData.get('screenShot') ;
+let payFile: { 
+		data: Buffer; 
+		name: string; 
+		mimetype: string; 
+		size: number;
+	} | undefined = undefined;
 
-        console.log('Created donation:', createdDonation)
+if (payFormDataEntryValue instanceof File) {
+		const buffer = Buffer.from(await payFormDataEntryValue.arrayBuffer())
+		
+		payFile = {
+				data: buffer,
+				size: buffer.byteLength,
+				name: payFormDataEntryValue.name,
+				mimetype: payFormDataEntryValue.type
+		}
+}
 
-        return { success: true, data: createdDonation }
-    } catch (error) {
-        console.error('Error creating donation:', error)
-        return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
-    }
+const payMedia = await payload.create({
+	collection: 'media',
+	data: {
+		alt: `payment screenshot`,
+	},
+	file: payFile,
+})
+
+// ------------------------------------------------------
+	try {
+			const contributionData = {
+					realName: formData.get('realName'),
+					nft_username: formData.get('nft_username'),
+					uid: formData.get('uid'),
+					mobile: formData.get('mobile'),
+					cityName: formData.get('cityName'),
+					uplineName: formData.get('uplineName'),
+					star: formData.get('star'),
+					amount: formData.get('amount'),
+					depositAddress: formData.get('depositAddress'),
+					transactionId: formData.get('transactionId'),
+			}
+			// const verify: "PENDING" | "APPROVED" | "REJECTED" = 'PENDING';
+			const uploadStarCertificate = certificateMedia.id;
+			const screenShot = payMedia.id;
+
+	const row = await payload.create({
+			collection: 'contributions',
+			data: {
+				...contributionData, 
+				uploadStarCertificate,
+				screenShot
+			},
+	})
+
+	console.log('Created contribution:', row)
+
+	return { success: true, data: row }
+} catch (error) {
+	console.error('Error creating donation:', error)
+	return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
+}
 }
 
 // async function handleFileUpload(payload: any, file: File) {
