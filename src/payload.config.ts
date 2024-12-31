@@ -8,9 +8,9 @@ import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
-import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
-import { Categories } from './collections/Categories'
+// import { Pages } from './collections/Pages'
+// import { Posts } from './collections/Posts'
+// import { Categories } from './collections/Categories'
 import { Contributions } from './collections/Contributions'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -65,7 +65,8 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Media, Pages, Users, Posts, Categories, Contributions],
+  // collections: [Media, Pages, Users, Posts, Categories, Contributions],
+  collections: [Media, Users, Contributions],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
