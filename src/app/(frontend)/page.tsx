@@ -4,7 +4,7 @@
 
 // old form
 import ContributionForm from './contribution-form/contribution-form'
-import NewContributionForm from './contribution-form/new-contribution-form'
+// import NewContributionForm from './contribution-form/new-contribution-form'
 
 export default function Page() {
   return (
