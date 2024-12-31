@@ -27,14 +27,15 @@ export function CopyToClipboard({ text, displayText }: CopyToClipboardProps) {
   }
 
   return (
-    <TooltipProvider>
+    <div>
+    <TooltipProvider >
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger asChild >
           <Button
             variant="outline"
             size="sm"
             onClick={copyToClipboard}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-black "
             type="button" // Explicitly set the button type to "button"
           >
             {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
@@ -43,9 +44,10 @@ export function CopyToClipboard({ text, displayText }: CopyToClipboardProps) {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isCopied ? 'Copied!' : 'Click to copy'}</p>
+          <p >{isCopied ? 'Copied!' : 'Click to copy'}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+    </div>
   )
 }
