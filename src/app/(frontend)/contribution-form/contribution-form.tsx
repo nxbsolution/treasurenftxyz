@@ -282,7 +282,7 @@ export default function ContributionForm() {
                 <FormItem>
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input placeholder="Amount" readOnly {...field} />
+                    <Input placeholder="Amount" {...field} />
                   </FormControl>
                   <FormDescription>Amount in USDT</FormDescription>
                   <FormMessage />
