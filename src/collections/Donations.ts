@@ -1,12 +1,13 @@
+import { authenticated } from "@/access/authenticated";
 import type { CollectionConfig } from "payload";
 
 export const Donations: CollectionConfig = {
   slug: 'donations',
   access: {
-    read: () => true,
+    read: authenticated,
+    update: authenticated,
+    delete: authenticated,
     create: () => true,
-    update: () => true,
-    delete: () => true,
   },
   admin: {
     useAsTitle: "realName",
@@ -22,34 +23,34 @@ export const Donations: CollectionConfig = {
     {
       name: "realName",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "nft_username",
       label: "NFT Username",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "uid",
       label: "UID",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "mobile",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "cityName",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "uplineName",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "star",
@@ -64,7 +65,7 @@ export const Donations: CollectionConfig = {
       name: "depositAddress",
       label: "Select USDT Deposit Address",
       type: "radio",
-      // required: true,
+      required: true,
       options: [
         {
           label: "TRC-20",
@@ -79,7 +80,7 @@ export const Donations: CollectionConfig = {
     {
       name: "transactionId",
       type: "text",
-      // required: true,
+      required: true,
     },
     {
       name: "screenShot",
@@ -91,7 +92,7 @@ export const Donations: CollectionConfig = {
       name: "verify",
       type: "select",
       defaultValue: "PENDING",
-      // required: true,
+      required: true,
       options: [
         "PENDING",
         "APPROVED",
