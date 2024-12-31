@@ -8,13 +8,14 @@ import { getServerSideURL } from './getURL'
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
 
-  let url = serverUrl + '/website-template-OG.webp'
+  const url = serverUrl + '/website-template-OG.webp'
+  // let url = serverUrl + '/website-template-OG.webp'
 
-  if (image && typeof image === 'object' && 'url' in image) {
-    const ogUrl = image.sizes?.og?.url
+  // if (image && typeof image === 'object' && 'url' in image) {
+  //   const ogUrl = image.sizes?.og?.url
 
-    url = ogUrl ? serverUrl + ogUrl : serverUrl + image.url
-  }
+  //   url = ogUrl ? serverUrl + ogUrl : serverUrl + image.url
+  // }
 
   return url
 }
