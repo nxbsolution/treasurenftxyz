@@ -606,7 +606,6 @@ export interface Form {
  */
 export interface Contribution {
   id: number;
-  uploadStarCertificate?: (number | null) | Media;
   realName: string;
   nft_username: string;
   uid: string;
@@ -617,8 +616,9 @@ export interface Contribution {
   amount: number;
   depositAddress: 'TRC-20' | 'BEP-20';
   transactionId: string;
-  screenShot?: (number | null) | Media;
   verify: 'PENDING' | 'APPROVED' | 'REJECTED';
+  screenShot?: (number | null) | Media;
+  uploadStarCertificate?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -1022,7 +1022,6 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "contributions_select".
  */
 export interface ContributionsSelect<T extends boolean = true> {
-  uploadStarCertificate?: T;
   realName?: T;
   nft_username?: T;
   uid?: T;
@@ -1033,8 +1032,9 @@ export interface ContributionsSelect<T extends boolean = true> {
   amount?: T;
   depositAddress?: T;
   transactionId?: T;
-  screenShot?: T;
   verify?: T;
+  screenShot?: T;
+  uploadStarCertificate?: T;
   updatedAt?: T;
   createdAt?: T;
 }

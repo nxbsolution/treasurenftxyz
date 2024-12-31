@@ -39,33 +39,32 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 const ACCEPTED_DOCUMENT_TYPES = ['application/pdf']
 
 const FormSchema = z.object({
-  uploadStarCertificate: z
-    .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-    .refine(
-      (file) =>
-        ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
-      'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
-    ).optional(),
   nft_username: z.string().min(2, 'NFT Username must be at least 2 characters.'),
   realName: z.string().min(2, 'Real Name must be at least 2 characters.'),
   uid: z.string().min(2, 'UID must be at least 2 characters.'),
-  // mobileNumber: z.string().regex(/^\d{9}$/, 'Mobile number is invalid.'),
   mobile: z.string().min(10, 'Mobile number is invalid.'),
   cityName: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
   star: z.string().min(1, 'Please select a star.'),
   amount: z.number().min(0, "amount cannot less then 0."),
+  transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
   }),
-  transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   screenShot: z
     .instanceof(File)
     .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png and .webp formats are supported.',
+    ).optional(),
+    uploadStarCertificate: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .refine(
+      (file) =>
+        ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
+      'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     ).optional(),
 })
 
@@ -119,15 +118,6 @@ export default function ContributionForm() {
       setIsSubmitting(false)
     }
   }
-
-  // async function onSubmit(data: FormValues) {
-  //   try {
-  //     await PostForm({ data })
-  //     router.push('/success')
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
 
   return (
     <>

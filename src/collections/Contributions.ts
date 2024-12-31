@@ -16,12 +16,6 @@ export const Contributions: CollectionConfig = {
   defaultSort: "-createdAt",
   fields: [
     {
-      name: "uploadStarCertificate",
-      type: "upload",
-      relationTo: "media",
-      // required: true,
-    },
-    {
       name: "realName",
       type: "text",
       required: true,
@@ -90,12 +84,6 @@ export const Contributions: CollectionConfig = {
       required: true,
     },
     {
-      name: "screenShot",
-      type: "upload",
-      relationTo: "media",
-      // required: true,
-    },
-    {
       name: "verify",
       type: "select",
       defaultValue: "PENDING",
@@ -105,6 +93,18 @@ export const Contributions: CollectionConfig = {
         "APPROVED",
         "REJECTED"
       ]
+    },
+    {
+      name: "screenShot",
+      type: "upload",
+      relationTo: "media",
+      // required: true,
+    },
+    {
+      name: "uploadStarCertificate",
+      type: "upload",
+      relationTo: "media",
+      // required: true,
     }
   ],
 }
