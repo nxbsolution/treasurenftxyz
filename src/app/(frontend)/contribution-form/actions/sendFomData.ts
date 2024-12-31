@@ -21,59 +21,30 @@ export async function sendFormData(formData: FormData) {
             transactionId: formData.get('transactionId'),
             verify: 'PENDING'
         }
-
         console.log('Contribution data in form action:', contributionData)
 
         const certificateFormDataEntryValue = formData.get('uploadStarCertificate') ;
-        
-        let certificateFileData: { data: Buffer; filename: string; mimeType: string; } | undefined = undefined;
+        let certificateFileData: { 
+            data: Buffer; 
+            name: string; 
+            mimetype: string; 
+            size: number;} | undefined = undefined;
 
-        let certificateFile: File | undefined = undefined;
-
-        let temp: { data: Buffer; name: string; mimetype: string; size: number} | undefined = undefined;
-        
         if (certificateFormDataEntryValue instanceof File) {
-
             const buffer = Buffer.from(await certificateFormDataEntryValue.arrayBuffer())
             
             certificateFileData = {
                 data: buffer,
-                filename: certificateFormDataEntryValue.name,
-                mimeType: certificateFormDataEntryValue.type,
-            }
-
-            certificateFile =  new File([certificateFileData.data], certificateFileData.filename, {
-                type: certificateFileData.mimeType
-            });
-
-           temp = {
-                data: certificateFileData.data,
-                name: certificateFileData.filename,
-                mimetype: certificateFileData.mimeType,
-                size: 10000
+                size: buffer.byteLength,
+                name: certificateFormDataEntryValue.name,
+                mimetype: certificateFormDataEntryValue.type
             }
         }
-
-        console.log(certificateFileData);
-        console.log(certificateFile);
-        
-        // const paymentFile = formData.get('screenShot');
-        // let paymentFileData: { data: Buffer; filename: string; mimeType: string; } | null = null;
-        // if (paymentFile instanceof File) {
-        //     const buffer = Buffer.from(await paymentFile.arrayBuffer())
-        //     paymentFileData = {
-        //         data: buffer,
-        //         filename: paymentFile.name,
-        //         mimeType: paymentFile.type,
-        //     }
-        // }
 
         const createdDonation = await payload.create({
             collection: 'contributions',
             data: {...contributionData},
-            // file: certificateFile,
-            // file: certificateFileData
-            file: temp
+            file: certificateFileData
         })
 
         console.log('Created donation:', createdDonation)
