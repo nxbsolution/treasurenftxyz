@@ -27,7 +27,7 @@ export function CopyToClipboard({ text, displayText }: CopyToClipboardProps) {
   }
 
   return (
-    <div >
+    <div>
     <TooltipProvider >
       <Tooltip>
         <TooltipTrigger asChild >
