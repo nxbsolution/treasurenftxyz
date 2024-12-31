@@ -90,7 +90,7 @@ export default function DonationForm() {
   async function onSubmit(data: FormValues) {
     try {
       // await PostForm({data})
-      await PostForm()
+      // await PostForm()
       // router.push('/success')
     } catch (error) {
       console.error(error)
