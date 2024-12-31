@@ -74,7 +74,7 @@ const payMedia = await payload.create({
 					mobile: formData.get('mobile') as string,
 					cityName: formData.get('cityName') as string,
 					uplineName: formData.get('uplineName') as string,
-					amount: Number(formData.get('amount')),
+					// amount: Number(formData.get('amount')),
 					transactionId: formData.get('transactionId') as string,
 					star: formData.get('star') as StarRating,
 					depositAddress: formData.get('depositAddress') as depositAddress,

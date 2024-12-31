@@ -9,9 +9,13 @@ export const Contributions: CollectionConfig = {
     delete: authenticated,
     create: () => true,
   },
+  // admin: {
+  //   useAsTitle: "realName",
+  //   defaultColumns: ["verify", "realName", "mobile", "cityName", "transactionId", "star", "amount", "createdAt"]
+  // },
   admin: {
     useAsTitle: "realName",
-    defaultColumns: ["verify", "realName", "mobile", "cityName", "transactionId", "star", "amount", "createdAt"]
+    defaultColumns: ["verify", "realName", "mobile", "cityName", "transactionId", "star", "createdAt"]
   },
   defaultSort: "-createdAt",
   fields: [
@@ -67,12 +71,12 @@ export const Contributions: CollectionConfig = {
         "1star", "2star", "3star", "4star", "5star", "6star"
       ]
     },
-    {
-      name: "amount",
-      type: "number",
-      min: 0,
-      required: true
-    },
+    // {
+    //   name: "amount",
+    //   type: "number",
+    //   min: 0,
+    //   required: true
+    // },
     {
       name: "depositAddress",
       label: "Select USDT Deposit Address",

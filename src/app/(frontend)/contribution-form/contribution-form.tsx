@@ -48,7 +48,7 @@ const FormSchema = z.object({
   star: z.enum(['1star', '2star', '3star', '4star', '5star', '6star'], {
     required_error: 'Please select a star.',
   }),
-  amount: z.number().positive(),
+  // amount: z.number().positive(),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
@@ -265,20 +265,20 @@ export default function ContributionForm() {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="amount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input placeholder="Amount" {...field} />
+                    <Input placeholder="Amount" type="number" {...field} />
                   </FormControl>
                   <FormDescription>Amount in USDT</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
