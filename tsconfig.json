@@ -45,7 +45,7 @@
     "redirects.js",
     "next.config.js",
     "next-sitemap.config.cjs"
-, "src/app/(frontend)/donation-form/page.jsx", "src/app/(frontend)/donation-form/PostForm.js"  ],
+, "src/app/(frontend)/contribution-form/page.jsx", "src/app/(frontend)/contribution-form/PostForm.js"  ],
   "exclude": [
     "node_modules"
   ]

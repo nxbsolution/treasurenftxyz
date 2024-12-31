@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CopyToClipboard } from './CopyToClipboard'
 import Image from 'next/image'
 import { useForm, Controller } from 'react-hook-form'
+import { useState } from "react"
 import { z } from 'zod'
 import img from './img.jpg'
 import img1 from './img1.jpg'
 
-import PostForm from './PostForm'
+// import PostForm from './PostForm'
+import { sendFormData } from "./actions/sendFomData"
 
 import { Button } from '@/components/ui/button'
 import {
@@ -53,6 +55,7 @@ const FormSchema = z.object({
   cityName: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
   star: z.string().min(1, 'Please select a star.'),
+  amount: z.number().min(0, "amount cannot less then 0."),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
   }),
@@ -68,7 +71,9 @@ const FormSchema = z.object({
 
 export type FormValues = z.infer<typeof FormSchema>
 
-export default function DonationForm() {
+export default function ContributionForm() {
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
 
@@ -82,18 +87,49 @@ export default function DonationForm() {
       cityName: '',
       uplineName: '',
       star: '',
+      amount: 200,
       transactionId: '',
     },
   })
 
-  async function onSubmit(data: FormValues) {
+  async function onSubmit(values: z.infer<typeof FormSchema>) {
+    setIsSubmitting(true)
+    const formData = new FormData()
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value instanceof File) {
+        formData.append(key, value)
+      } else {
+        formData.append(key, String(value))
+      }
+    })
+
     try {
-      await PostForm({data})
-      router.push('/success')
+      const result = await sendFormData(formData)
+      if (result.success) {
+        console.log('Donation submitted successfully:', result.data)
+        form.reset()
+        console.log()
+      } else {
+        console.error('Failed to submit donation:', result.error)
+        console.log()
+      }
     } catch (error) {
-      console.error(error)
+      console.error('Error submitting donation:', error)
+      console.log()
+    } finally {
+      setIsSubmitting(false)
     }
   }
+
+  // async function onSubmit(data: FormValues) {
+  //   try {
+  //     await PostForm({ data })
+  //     router.push('/success')
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
   return (
     <>
@@ -245,6 +281,21 @@ export default function DonationForm() {
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your star level.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upline Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Amount" readOnly {...field} />
+                  </FormControl>
+                  <FormDescription>Amount in USDT</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

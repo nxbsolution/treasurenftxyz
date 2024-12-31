@@ -1,8 +1,8 @@
 import { authenticated } from "@/access/authenticated";
 import type { CollectionConfig } from "payload";
 
-export const Donations: CollectionConfig = {
-  slug: 'donations',
+export const Contributions: CollectionConfig = {
+  slug: 'contributions',
   access: {
     read: authenticated,
     update: authenticated,
@@ -11,8 +11,9 @@ export const Donations: CollectionConfig = {
   },
   admin: {
     useAsTitle: "realName",
-    defaultColumns: ["realName", "transactionId", "star", "verify"],
+    defaultColumns: ["verify", "realName", "mobile", "cityName", "transactionId", "star", "amount", "createdAt"]
   },
+  defaultSort: "-createdAt",
   fields: [
     {
       name: "uploadStarCertificate",
@@ -60,6 +61,12 @@ export const Donations: CollectionConfig = {
       options: [
         "1star", "2star", "3star", "4star", "5star", "6star"
       ]
+    },
+    {
+      name: "amount",
+      type: "number",
+      min: 0,
+      required: true
     },
     {
       name: "depositAddress",
