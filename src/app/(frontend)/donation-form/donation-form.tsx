@@ -8,6 +8,8 @@ import { z } from 'zod'
 import img from './img.jpg'
 import img1 from './img1.jpg'
 
+import PostForm from './PostForm'
+
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -43,29 +45,29 @@ const FormSchema = z.object({
       (file) =>
         ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
-    ),
-  NFTUsername: z.string().min(2, 'NFT Username must be at least 2 characters.'),
-  RealName: z.string().min(2, 'Real Name must be at least 2 characters.'),
-  UID: z.string().min(2, 'UID must be at least 2 characters.'),
+    ).optional(),
+  nft_username: z.string().min(2, 'NFT Username must be at least 2 characters.'),
+  realName: z.string().min(2, 'Real Name must be at least 2 characters.'),
+  uid: z.string().min(2, 'UID must be at least 2 characters.'),
   // mobileNumber: z.string().regex(/^\d{9}$/, 'Mobile number is invalid.'),
-  mobileNumber: z.string().min(10, 'Mobile number is invalid.'),
+  mobile: z.string().min(10, 'Mobile number is invalid.'),
   cityName: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
-  selectedStar: z.string().min(1, 'Please select a star.'),
-  usdtDepositAddress: z.enum(['Tron (TRC20)', 'BNB Smart Chain (BEP20)'], {
+  star: z.string().min(1, 'Please select a star.').optional(),
+  depositAddress: z.enum(['Tron (TRC20)', 'BNB Smart Chain (BEP20)'], {
     required_error: 'Please select a USDT deposit address.',
-  }),
+  }).optional(),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
-  screenshot: z
+  screenShot: z
     .instanceof(File)
     .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png and .webp formats are supported.',
-    ),
+    ).optional(),
 })
 
-type FormValues = z.infer<typeof FormSchema>
+export type FormValues = z.infer<typeof FormSchema>
 
 export default function DonationForm() {
   const router = useRouter()
@@ -73,29 +75,44 @@ export default function DonationForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      NFTUsername: '',
-      RealName: '',
-      UID: '',
-      mobileNumber: '',
+      realName: '',
+      nft_username: '',
+      uid: '',
+      mobile: '',
       cityName: '',
       uplineName: '',
-      selectedStar: '',
+      star: '',
       transactionId: '',
     },
   })
   const { toast } = useToast()
-  function onSubmit(data: FormValues) {
-    router.push('/success')
 
-    // toast({
-    //   title: 'You submitted the following values:',
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+  async function onSubmit(data: FormValues) {
+    try {
+      // await PostForm({data})
+      await PostForm()
+      // router.push('/success')
+    } catch (error) {
+      console.error(error)
+      // Handle error appropriately
+    }
   }
+
+  // function onSubmit(data: FormValues) {
+
+  //   router.push('/success')
+  //   console.log(data)
+  //   PostForm({data})
+
+  //   // toast({
+  //   //   title: 'You submitted the following values:',
+  //   //   description: (
+  //   //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //   //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+  //   //     </pre>
+  //   //   ),
+  //   // })
+  // }
 
   return (
     <>
@@ -137,7 +154,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="RealName"
+              name="realName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Real Name</FormLabel>
@@ -152,7 +169,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="NFTUsername"
+              name="nft_username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>NFT Username</FormLabel>
@@ -167,7 +184,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="UID"
+              name="uid"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>UID</FormLabel>
@@ -182,7 +199,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="mobileNumber"
+              name="mobile"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Mobile Number</FormLabel>
@@ -227,7 +244,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="selectedStar"
+              name="star"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Select Your Star</FormLabel>
@@ -254,7 +271,7 @@ export default function DonationForm() {
 
             <FormField
               control={form.control}
-              name="usdtDepositAddress"
+              name="depositAddress"
               render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>Select USDT Deposit Address:</FormLabel>
@@ -308,7 +325,7 @@ export default function DonationForm() {
 
             <Controller
               control={form.control}
-              name="screenshot"
+              name="screenShot"
               render={({ field: { onChange, value, ...field } }) => (
                 <FormItem>
                   <FormLabel>Screenshot</FormLabel>
