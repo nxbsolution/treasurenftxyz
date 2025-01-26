@@ -47,8 +47,8 @@ const page = () => {
     }
 
     return (
-        <div className='border shadow-lg p-10 rounded-lg w-96 mx-auto space-y-4 bg-card mt-10'>
-            <h1 className='text-3xl text-center font-bold'>Login Here </h1>
+        <div className='border shadow-lg p-10 max-sm:p-4 rounded-lg w-96 max-sm:w-11/12 mx-auto space-y-4 bg-card mt-10'>
+            <h1 className='text-3xl text-center font-bold max-sm:text-2xl max-sm:font-semibold'>Login Here </h1>
             <Form {...form} >
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
