@@ -22,7 +22,7 @@ const NavBar = ({ }) => {
                 <Link href="/" aria-label='home'>
                     <div className='w-48 max-sm:w-36 aspect-[4/1] relative mr-4'>
                         <Image
-                            src=''
+                            src='/logo.jpg'
                             alt='logo'
                             fill
                             className='object-contain' />
@@ -49,7 +49,7 @@ const NavBar = ({ }) => {
                     <CircleUser size={34} className='text-background' />
                 ) : (
                     <Link href={'/login'}>
-                        <Button className='border-2 rounded-xl text-lg max-sm:text-base p-6 max-sm:p-4 hover:bg-card hover:text-foreground focus-visible:ring-card focus-visible:ring-0'>Login</Button>
+                        <Button className='border-2 rounded-xl text-lg max-sm:text-base p-6 text-card max-sm:p-4 hover:bg-card hover:text-foreground focus-visible:ring-card focus-visible:ring-0'>Login</Button>
                     </Link>
                 )}
             </div>
