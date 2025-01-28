@@ -1,10 +1,15 @@
 "use client"
 import React from 'react'
-
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 // import { toast } from "@/components/hooks/use-toast"
 import { Button } from "@/components/ui/button"
@@ -20,13 +25,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
+import { FieldsDrawer } from 'node_modules/@payloadcms/richtext-lexical/dist/utilities/fieldsDrawer/Drawer'
 
 const FormSchema = z.object({
+    country: z.string().min(1, {
+        message: "Please select a country.",
+    }),
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
-    accountname: z.string().min(2, {
-        message: "Account Name must be at least 2 characters.",
+    uplineUid: z.string().min(2, {
+        message: "uli must be at least 2 characters.",
     }),
     uid: z.string().min(2, {
         message: "UID must be at least 2 characters.",
@@ -50,8 +59,9 @@ const MemberDetails = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
+            country: "",
             name: "",
-            accountname: "",
+            uplineUid: "",
             uid: "",
             uplinename: "",
             cityname: "",
@@ -68,13 +78,6 @@ const MemberDetails = () => {
             description: "Enter your Username."
         },
         {
-            name: "accountname",
-            label: "Account Name",
-            type: "text",
-            placeholder: "Demo123",
-            description: "Enter your Account Name."
-        },
-        {
             name: "uid",
             label: "UID",
             type: "text",
@@ -87,6 +90,13 @@ const MemberDetails = () => {
             type: "text",
             placeholder: "Demo123",
             description: "Enter your Upline Name."
+        },
+        {
+            name: "uplineUid",
+            label: "Upline UID",
+            type: "text",
+            placeholder: "uplineUid",
+            description: "Enter your uplineUid."
         },
         {
             name: "cityname",
@@ -120,6 +130,30 @@ const MemberDetails = () => {
         <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg w-1/2 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-10'>
             <Form {...form} >
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col">
+                    <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Select Your Country</FormLabel>
+                                <FormControl>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <SelectTrigger>
+                                            <SelectValue>{field.value || "Select Country"}</SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="bangladesh">Bangladesh</SelectItem>
+                                            <SelectItem value="india" >India</SelectItem>
+                                            <SelectItem value="pakistan" >Pakistan</SelectItem>
+                                            <SelectItem value="uae" >UAE</SelectItem>
+                                            <SelectItem value="others" >Others</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     {formFields.map((field) => (
                         <FormField
                             key={field.name}
