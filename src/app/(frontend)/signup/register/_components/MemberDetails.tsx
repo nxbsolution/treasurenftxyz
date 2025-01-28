@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useCallback } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -25,11 +25,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
-import { FieldsDrawer } from 'node_modules/@payloadcms/richtext-lexical/dist/utilities/fieldsDrawer/Drawer'
+
+
+import { useAuth } from '@/provider/Auth'
+import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const FormSchema = z.object({
-    country: z.string().min(1, {
-        message: "Please select a country.",
+    country: z.enum(["india", "pakistan", "uae", "bangladesh", "others"], {
+        required_error: "Please select a country.",
     }),
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
@@ -40,7 +44,7 @@ const FormSchema = z.object({
     uid: z.string().min(2, {
         message: "UID must be at least 2 characters.",
     }),
-    uplinename: z.string().min(2, {
+    uplineName: z.string().min(2, {
         message: "Upline Name must be at least 2 characters.",
     }),
     cityname: z.string().min(2, {
@@ -56,14 +60,17 @@ const FormSchema = z.object({
 
 const MemberDetails = () => {
 
+    const { registerMember, user } = useAuth()
+    const router = useRouter()
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            country: "",
+            country: "india",
             name: "",
             uplineUid: "",
             uid: "",
-            uplinename: "",
+            uplineName: "",
             cityname: "",
             mobilenumber: "",
         },
@@ -85,7 +92,7 @@ const MemberDetails = () => {
             description: "Enter your UID."
         },
         {
-            name: "uplinename",
+            name: "uplineName",
             label: "Upline Name",
             type: "text",
             placeholder: "Demo123",
@@ -114,17 +121,26 @@ const MemberDetails = () => {
         },
     ]
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
-        // toast({
-        //     title: "You submitted the following values:",
-        //     description: (
-        //         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        //             <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        //         </pre>
-        //     ),
-        // })
-    }
+    const onSubmit = useCallback(
+        async (data: z.infer<typeof FormSchema>) => {
+            try {
+                await registerMember({ user: user?.id || 0, ...data })
+                toast({
+                    title: 'Success',
+                    description: 'User registered successfully.',
+                    variant: 'default',
+                })
+                router.push('/dashboard')
+            } catch (error: any) {
+                toast({
+                    title: 'Error',
+                    description: error?.message || 'An error occurred',
+                    variant: 'destructive',
+                })
+            }
+        },
+        [registerMember, router],
+    )
 
     return (
         <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg w-1/2 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-10'>
