@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,6 +17,9 @@ import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { toast } from '@/hooks/use-toast'
+
+import { useAuth } from '@/provider/Auth'
 
 
 const FormSchema = z.object({
@@ -38,10 +41,14 @@ const FormSchema = z.object({
 });
 
 const Page = () => {
+
+    const { create } = useAuth()
+
     const [showPassword, setShowPassword] = useState({
         password: false,
         confirmPassword: false
     })
+
 
     const router = useRouter()
 
@@ -55,18 +62,34 @@ const Page = () => {
         },
     })
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
-        router.push('/signup/register')
-        // toast({
-        //   title: "You submitted the following values:",
-        //   description: (
-        //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        //     </pre>
-        //   ),
-        // })
-    }
+    const onSubmit = useCallback(
+        async (data: z.infer<typeof FormSchema>) => {
+
+            const userData = {
+                email: data.email,
+                username: data.name,
+                password: data.password,
+            }
+
+            try {
+                const createdUser = await create(userData)
+                console.log(createdUser)
+                toast({
+                    title: 'Success',
+                    description: 'Successfully created user',
+                    variant: 'default',
+                })
+                router.push('/signup/register')
+            } catch (error: any) {
+                toast({
+                    title: 'Error',
+                    description: error?.message || 'An error occurred',
+                    variant: 'destructive',
+                })
+            }
+        },
+        [create, router],
+    )
 
     const formFields = [
         {

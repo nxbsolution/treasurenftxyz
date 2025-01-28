@@ -26,7 +26,7 @@ export const Users: CollectionConfig = {
   },
   access: {
     read: authenticated, // only admin and above can read users collection
-    create: admin, // any except user in superadmin role
+    create: () => true, // any except user in superadmin role
     update: admin, // everyone can update self row, admins can update any user except superadmin, superadmin can update any user
     delete: superAdmin, // admin can delete all except superadmin, superadmin can delete any user
     admin: ({ req: { user } }) => checkRole(['superadmin', 'admin'], user),
@@ -43,7 +43,7 @@ export const Users: CollectionConfig = {
       name: 'roles',
       type: 'select',
       hasMany: true,
-      defaultValue: ['superadmin', 'member'],
+      defaultValue: ['member'],
       saveToJWT: true,
       // hooks: {
       //   beforeChange: [protectRoles], // apply above update access rules here

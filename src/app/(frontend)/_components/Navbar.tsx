@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useAuth } from '@/provider/Auth'
 // import logo from '@/app/(frontend)/_assets/logo/reverse-logo.png'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, ChevronsDown, Menu, CircleUser } from 'lucide-react'
@@ -12,6 +13,10 @@ import SideBar from './SideBar'
 const NavBar = ({ }) => {
     // const [open, setOpen] = useState(false)
     // const [dropdownOpen, setDropdownOpen] = useState(false)
+    const { user } = useAuth()
+    useEffect(() => {
+        setIsLoggedIn(user ? true : false)
+    }, [user])
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -20,7 +25,7 @@ const NavBar = ({ }) => {
     return (
         <div className='flex sticky justify-between top-0 bg-primary items-center z-50 px-16 max-md:px-10 max-sm:px-8 max-xs:px-2 py-4'>
             <div className='flex items-center gap-6'>
-                <SideBar />
+                <SideBar isLoggedIn={isLoggedIn} />
                 <div className=''>
                     <Link href="/" aria-label='home'>
                         <div className='w-48 max-sm:w-36 aspect-[4/1] relative mr-4'>
@@ -33,9 +38,11 @@ const NavBar = ({ }) => {
                     </Link>
                 </div>
             </div>
-            <div className='space-x-4 hidden lg:block'>
+            <div className='space-x-4'>
                 {isLoggedIn ? (
-                    <CircleUser size={34} className='text-background' />
+                    <Link href={'/dashboard'}>
+                        <CircleUser size={34} className='text-background' />
+                    </Link>
                 ) : (
                     <Link href={'/login'}>
                         <Button className='border-2 rounded-xl text-lg max-sm:text-base p-6 text-card max-sm:p-4 hover:bg-card hover:text-foreground focus-visible:ring-card focus-visible:ring-0'>Login</Button>
