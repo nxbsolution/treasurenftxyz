@@ -37,7 +37,7 @@ const FormSchema = z.object({
     path: ["confirmPassword"], // path of error
 });
 
-const page = () => {
+const Page = () => {
     const [showPassword, setShowPassword] = useState({
         password: false,
         confirmPassword: false
@@ -168,4 +168,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

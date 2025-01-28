@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, ChevronsDown, Menu, CircleUser } from 'lucide-react'
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
+import SideBar from './SideBar'
 
 
 const NavBar = ({ }) => {
@@ -18,33 +19,21 @@ const NavBar = ({ }) => {
 
     return (
         <div className='flex sticky justify-between top-0 bg-primary items-center z-50 px-16 max-md:px-10 max-sm:px-8 max-xs:px-2 py-4'>
-            <div className='flex gap-6'>
-                <Link href="/" aria-label='home'>
-                    <div className='w-48 max-sm:w-36 aspect-[4/1] relative mr-4'>
-                        <Image
-                            src='/logo.jpg'
-                            alt='logo'
-                            fill
-                            className='object-contain' />
-                    </div>
-                </Link>
-                {/* <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-                    <DropdownMenuTrigger asChild className='max-lg:hidden'>
-                        <Button className='border-2 rounded-xl text-lg p-6 hover:bg-card focus-visible:ring-card focus-visible:ring-0 hover:text-foreground'>Explore Courses <ChevronsDown strokeWidth={3} /></Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className='w-72 space-y-2 p-4 rounded-xl  bg-card font-openSans' onClick={() => setDropdownOpen(false)}>
-                        {departments.map(({slug,title}) => (
-                            <Link href={`/departments/${slug}`} key={title}>
-                                <DropdownMenuLabel className='hover:text-card hover:bg-primary-400 group cursor-pointer p-4 rounded-xl text-base text-muted-foreground flex justify-between'>
-                                    {title}
-                                    <ArrowRight strokeWidth={2} className='invisible group-hover:visible' />
-                                </DropdownMenuLabel>
-                            </Link>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu> */}
+            <div className='flex items-center gap-6'>
+                <SideBar />
+                <div className=''>
+                    <Link href="/" aria-label='home'>
+                        <div className='w-48 max-sm:w-36 aspect-[4/1] relative mr-4'>
+                            <Image
+                                src='/logo.jpg'
+                                alt='logo'
+                                fill
+                                className='object-contain' />
+                        </div>
+                    </Link>
+                </div>
             </div>
-            <div className='space-x-4'>
+            <div className='space-x-4 hidden lg:block'>
                 {isLoggedIn ? (
                     <CircleUser size={34} className='text-background' />
                 ) : (

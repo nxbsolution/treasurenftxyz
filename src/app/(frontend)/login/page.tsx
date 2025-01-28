@@ -27,7 +27,7 @@ const FormSchema = z.object({
     }),
 })
 
-const page = () => {
+const Page = () => {
     const [showPassword, setShowPassword] = useState(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -117,7 +117,7 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
 
 
 
