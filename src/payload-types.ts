@@ -12,6 +12,10 @@ export interface Config {
   };
   collections: {
     users: User;
+    members: Member;
+    contributions: Contribution;
+    salary: Salary;
+    star: Star;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -20,6 +24,10 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    members: MembersSelect<false> | MembersSelect<true>;
+    contributions: ContributionsSelect<false> | ContributionsSelect<true>;
+    salary: SalarySelect<false> | SalarySelect<true>;
+    star: StarSelect<false> | StarSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -40,22 +48,34 @@ export interface Config {
   };
 }
 export interface UserAuthOperations {
-  forgotPassword: {
-    email: string;
-    password: string;
-  };
-  login: {
-    email: string;
-    password: string;
-  };
+  forgotPassword:
+    | {
+        email: string;
+      }
+    | {
+        username: string;
+      };
+  login:
+    | {
+        email: string;
+        password: string;
+      }
+    | {
+        password: string;
+        username: string;
+      };
   registerFirstUser: {
-    email: string;
     password: string;
-  };
-  unlock: {
+    username: string;
     email: string;
-    password: string;
   };
+  unlock:
+    | {
+        email: string;
+      }
+    | {
+        username: string;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -63,9 +83,12 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  blocked?: boolean | null;
+  roles?: ('superadmin' | 'admin' | 'member')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
+  username: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
   salt?: string | null;
@@ -73,6 +96,40 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members".
+ */
+export interface Member {
+  id: number;
+  user: number | User;
+  country: 'india' | 'pakistan' | 'uae' | 'bangladesh' | 'others';
+  realName?: string | null;
+  mobile?: string | null;
+  city?: string | null;
+  depositAddress: 'TRC-20' | 'BEP-20';
+  uid: string;
+  uplineName: string;
+  uplineUid?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contributions".
+ */
+export interface Contribution {
+  id: number;
+  verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
+  member: number | Member;
+  nft_username: string;
+  star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  transactionId: string;
+  screenShot: number | Media;
+  uploadStarCertificate: number | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -95,6 +152,37 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary".
+ */
+export interface Salary {
+  id: number;
+  member: number | Member;
+  monthlyProgressReport?: (number | null) | Media;
+  starCertificate?: (number | null) | Media;
+  star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  PersonAdded: {
+    A: number;
+    B: number;
+    C: number;
+  };
+  TotalPersonAdded?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "star".
+ */
+export interface Star {
+  id: number;
+  member: number | Member;
+  totalReport?: (number | null) | Media;
+  oldStarCard?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -103,6 +191,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'members';
+        value: number | Member;
+      } | null)
+    | ({
+        relationTo: 'contributions';
+        value: number | Contribution;
+      } | null)
+    | ({
+        relationTo: 'salary';
+        value: number | Salary;
+      } | null)
+    | ({
+        relationTo: 'star';
+        value: number | Star;
       } | null)
     | ({
         relationTo: 'media';
@@ -155,15 +259,81 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  blocked?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
+  username?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "members_select".
+ */
+export interface MembersSelect<T extends boolean = true> {
+  user?: T;
+  country?: T;
+  realName?: T;
+  mobile?: T;
+  city?: T;
+  depositAddress?: T;
+  uid?: T;
+  uplineName?: T;
+  uplineUid?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contributions_select".
+ */
+export interface ContributionsSelect<T extends boolean = true> {
+  verify?: T;
+  member?: T;
+  nft_username?: T;
+  star?: T;
+  transactionId?: T;
+  screenShot?: T;
+  uploadStarCertificate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary_select".
+ */
+export interface SalarySelect<T extends boolean = true> {
+  member?: T;
+  monthlyProgressReport?: T;
+  starCertificate?: T;
+  star?: T;
+  PersonAdded?:
+    | T
+    | {
+        A?: T;
+        B?: T;
+        C?: T;
+      };
+  TotalPersonAdded?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "star_select".
+ */
+export interface StarSelect<T extends boolean = true> {
+  member?: T;
+  totalReport?: T;
+  oldStarCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

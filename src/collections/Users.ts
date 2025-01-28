@@ -1,3 +1,7 @@
+import { superAdmin } from '@/access/superAdmin'
+import { admin } from '@/access/admin'
+import { checkRole } from '@/access/checkRole'
+import { authenticated } from '@/access/authenticated'
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
@@ -5,9 +9,59 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  auth: {
+    tokenExpiration: 28800, // 28800 secs = 8 hours
+    verify: false, // Require email verification before being allowed to authenticate
+    maxLoginAttempts: 5, // Automatically lock a user out after X amount of failed logins. Set to 0 to disable.
+    lockTime: 600 * 1000, // Time period to allow the max login attempts. time (in milliseconds)
+    loginWithUsername: {
+      allowEmailLogin: true, // default: false. If set to true, users can log in with either their username or email address. If set to false, users can only log in with their username.
+      requireEmail: true, // default: false. If set to true, an email address is required when creating a new user. If set to false, email is not required upon creation
+    },
+    cookies: {
+      sameSite: 'None',
+      secure: true,
+      domain: process.env.COOKIE_DOMAIN,
+    },
+  },
+  access: {
+    read: authenticated, // only admin and above can read users collection
+    create: admin, // any except user in superadmin role
+    update: admin, // everyone can update self row, admins can update any user except superadmin, superadmin can update any user
+    delete: superAdmin, // admin can delete all except superadmin, superadmin can delete any user
+    admin: ({ req: { user } }) => checkRole(['superadmin', 'admin'], user),
+  },
   fields: [
     // Email added by default
     // Add more fields as needed
+    {
+      name: 'blocked',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
+      name: 'roles',
+      type: 'select',
+      hasMany: true,
+      defaultValue: ['superadmin', 'member'],
+      saveToJWT: true,
+      // hooks: {
+      //   beforeChange: [protectRoles], // apply above update access rules here
+      // },
+      options: [
+        {
+          label: 'Super Admin',
+          value: 'superadmin',
+        },
+        {
+          label: 'Admin',
+          value: 'admin',
+        },
+        {
+          label: 'Member',
+          value: 'member',
+        },
+      ],
+    },
   ],
 }
