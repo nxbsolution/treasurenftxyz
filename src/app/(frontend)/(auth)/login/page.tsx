@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 import Link from 'next/link'
-import Loader from '../_components/Loader'
+import Loader from '../../_components/Loader'
 
 
 const FormSchema = z.object({
