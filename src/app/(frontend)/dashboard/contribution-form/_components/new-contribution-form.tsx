@@ -3,11 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CopyToClipboard } from './CopyToClipboard'
-import Image from 'next/image'
+import { CopyToClipboard } from "@/app/(frontend)/_components/CopyToClipboard"
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-import img1 from './img1.jpg'
 import { Star, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -31,9 +29,10 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
-import { Toaster } from '@/components/ui/toaster'
 
-import { sendFormData } from "./actions/sendFomData"
+import { useAuth } from '@/provider/Auth'
+
+import { sendFormData } from '../actions/sendFormData'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -53,8 +52,9 @@ const FormSchema = z.object({
   realName: z.string().min(2, 'Real Name must be at least 2 characters.'),
   uid: z.string().min(2, 'UID must be at least 2 characters.'),
   mobile: z.string().min(10, 'Mobile number is invalid.'),
-  cityName: z.string().min(2, 'City name must be at least 2 characters.'),
+  city: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
+  uplineUid: z.string().min(2, 'Upline UID must be at least 2 characters.'),
   star: z.string().min(1, 'Please select a star.'),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
@@ -74,20 +74,24 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 export default function ContributionForm() {
-  const router = useRouter()
 
-  const [selectedStar, setSelectedStar] = useState('0')
+  const { member } = useAuth()
+
+  const [selectedStar, setSelectedStar] = useState("0")
   const [isSubmiting, setIsSubmitting] = useState(false)
+
+
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       nft_username: '',
-      realName: '',
-      uid: '',
-      mobile: '',
-      cityName: '',
-      uplineName: '',
+      realName: member?.realName || '123',
+      uid: member?.uid ?? '',
+      mobile: member?.mobile ?? '',
+      city: member?.city ?? "",
+      uplineName: member?.uplineName ?? '',
+      uplineUid: member?.uplineUid ?? '',
       star: '',
       transactionId: '',
     },
@@ -97,9 +101,20 @@ export default function ContributionForm() {
 
     setIsSubmitting(true)
 
+    const { uploadStarCertificate, screenShot, transactionId, star, nft_username } = values
+
+    const data = {
+      member: member?.id,
+      uploadStarCertificate,
+      screenShot,
+      transactionId,
+      star,
+      nft_username
+    }
+
     const formData = new FormData()
 
-    Object.entries(values).forEach(([key, value]) => {
+    Object.entries(data).forEach(([key, value]) => {
       if (value instanceof File) {
         formData.append(key, value)
       } else {
@@ -109,63 +124,57 @@ export default function ContributionForm() {
 
     try {
       const result = await sendFormData(formData)
-
       if (result.success) {
-        console.log('Donation submitted successfully:', result.data)
         form.reset()
-        console.log(result.data);
-        router.push('/success');
+        toast({
+          variant: 'success',
+          title: 'Contribution submitted successfully',
+          description: "Thank you for your contribution!",
+        })
       }
       else {
-        console.error('Failed to submit contribution:', result.error)
+        console.log('Failed to submit contribution:', result.error)
       }
 
-
-    } catch (error) {
+    } catch (error: any) {
       toast({
-        style: {
-          backgroundColor: '#fbebec',
-          borderRadius: '10px',
-          border: '2px solid #f93333',
-          opacity: 60,
-        },
+        variant: 'destructive',
         description: <div>
           <h1 className='font-bold text-lg'>Failed to submit Contribution</h1>
-          <span>{error.message}</span>
+          <span>{error?.message}</span>
         </div>,
       })
     } finally {
       setIsSubmitting(false)
     }
   }
-  const StarAmount = {
-    '1star': 25,
-    '2star': 60,
-    '3star': 90,
-    '4star': 180,
-    '5star': 380,
-    '6star': 580,
+
+  interface StarAmount {
+    '1star': string
+    '2star': string
+    '3star': string
+    '4star': string
+    '5star': string
+    '6star': string
+  }
+
+  const StarAmount: StarAmount = {
+    '1star': "25",
+    '2star': "60",
+    '3star': "90",
+    '4star': "180",
+    '5star': "380",
+    '6star': "580",
   }
 
   return (
-    <div className="bg-gray-50 mb-8">
-      <Toaster />
-      <div className="mx-auto container max-w-2xl">
-        <div className="flex max-sm:flex-col p-4 gap-20 max-sm:gap-4  mx-auto items-center justify-center">
-          <div className="relative w-32 max-sm:w-24 bg-red-900 aspect-[489/232] rounded-full overflow-hidden">
-            <Image
-              src={img1}
-              fill
-              alt="img"
-              loading="lazy"
-              className="object-cover"
-              sizes="(max-width: 640px) 90px,128px"
-            />
-          </div>
-          <h1 className="text-3xl  font-semibold grow  py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
-            Contribution Form
-          </h1>
-        </div>
+    <div className="bg-gray-50 mb-8 pt-4">
+      <div className="mx-auto container max-w-2xl space-y-4">
+
+        <h1 className="text-3xl text-center font-semibold   py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
+          Contribution Form
+        </h1>
+
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -178,7 +187,7 @@ export default function ContributionForm() {
                   <FormItem>
                     <FormLabel>Select Your Star</FormLabel>
                     <Select
-                      onValueChange={(value) => {
+                      onValueChange={(value: keyof StarAmount) => {
                         field.onChange(value)
                         setSelectedStar(StarAmount[value])
                       }}
@@ -346,6 +355,21 @@ export default function ContributionForm() {
 
               <FormField
                 control={form.control}
+                name="uplineUid"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upline UID</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Upline UID" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your UID.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="mobile"
                 render={({ field }) => (
                   <FormItem>
@@ -361,7 +385,7 @@ export default function ContributionForm() {
 
               <FormField
                 control={form.control}
-                name="cityName"
+                name="city"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>City Name</FormLabel>
@@ -486,7 +510,7 @@ export default function ContributionForm() {
               <Button
                 disabled={isSubmiting}
                 type="submit"
-                className={`max-sm:w-full  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
+                className={`max-sm:w-full text-background  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
               >
                 {isSubmiting ? (
                   <div>
