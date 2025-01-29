@@ -2,7 +2,9 @@
 
 import { useRouter, usePathname } from "next/navigation"
 
-export default function ContributionVerifyCell({ cellData, rowData, link }) {
+type cellData = "PENDING" | "APPROVED" | "REJECTED"
+
+export default function ContributionVerifyCell({ cellData, rowData, link }: { cellData: cellData, rowData: any, link?: boolean }) {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -33,13 +35,13 @@ export default function ContributionVerifyCell({ cellData, rowData, link }) {
   }
 
   return (
-      <span
-        style={{ ...generalStyle, ...backgroundColor[cellData], ...link && linkStyle }}
-        onClick={() => {
-          link && router.push(`${pathname}/${rowData.id}`)
-        }}
-      >
-        {cellData}
-      </span>
+    <span
+      style={{ ...generalStyle, ...backgroundColor[cellData], ...link && linkStyle }}
+      onClick={() => {
+        link && router.push(`${pathname}/${rowData.id}`)
+      }}
+    >
+      {cellData}
+    </span>
   )
 };
