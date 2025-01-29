@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CopyToClipboard } from './CopyToClipboard'
-import Image from 'next/image'
+import { CopyToClipboard } from "@/app/(frontend)/_components/CopyToClipboard"
+// import Image from 'next/image'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-import img1 from './img1.jpg'
+// import img1 from './img1.jpg'
 import { Star, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -33,7 +33,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
 import { Toaster } from '@/components/ui/toaster'
 
-import { sendFormData } from "./actions/sendFomData"
+// import { sendFormData } from "./actions/sendFomData"
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -97,47 +97,57 @@ export default function ContributionForm() {
 
     setIsSubmitting(true)
 
-    const formData = new FormData()
+    // const formData = new FormData()
 
-    Object.entries(values).forEach(([key, value]) => {
-      if (value instanceof File) {
-        formData.append(key, value)
-      } else {
-        formData.append(key, String(value))
-      }
-    });
+    // Object.entries(values).forEach(([key, value]) => {
+    //   if (value instanceof File) {
+    //     formData.append(key, value)
+    //   } else {
+    //     formData.append(key, String(value))
+    //   }
+    // });
 
-    try {
-      const result = await sendFormData(formData)
+    // try {
+    //   // const result = await sendFormData(formData)
 
-      if (result.success) {
-        console.log('Donation submitted successfully:', result.data)
-        form.reset()
-        console.log(result.data);
-        router.push('/success');
-      }
-      else {
-        console.error('Failed to submit contribution:', result.error)
-      }
+    //   if (result.success) {
+    //     console.log('Donation submitted successfully:', result.data)
+    //     form.reset()
+    //     console.log(result.data);
+    //     router.push('/success');
+    //   }
+    //   else {
+    //     console.error('Failed to submit contribution:', result.error)
+    //   }
 
-    } catch (error) {
-      toast({
-        style: {
-          backgroundColor: '#fbebec',
-          borderRadius: '10px',
-          border: '2px solid #f93333',
-          opacity: 60,
-        },
-        description: <div>
-          <h1 className='font-bold text-lg'>Failed to submit Contribution</h1>
-          <span>{error.message}</span>
-        </div>,
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    // } catch (error) {
+    //   toast({
+    //     style: {
+    //       backgroundColor: '#fbebec',
+    //       borderRadius: '10px',
+    //       border: '2px solid #f93333',
+    //       opacity: 60,
+    //     },
+    //     description: <div>
+    //       <h1 className='font-bold text-lg'>Failed to submit Contribution</h1>
+    //       <span>{error.message}</span>
+    //     </div>,
+    //   })
+    // } finally {
+    //   setIsSubmitting(false)
+    // }
   }
-  const StarAmount = {
+
+  interface StarAmount {
+    '1star': number
+    '2star': number
+    '3star': number
+    '4star': number
+    '5star': number
+    '6star': number
+  }
+
+  const StarAmount: StarAmount = {
     '1star': 25,
     '2star': 60,
     '3star': 90,
@@ -151,16 +161,6 @@ export default function ContributionForm() {
       <Toaster />
       <div className="mx-auto container max-w-2xl">
         <div className="flex max-sm:flex-col p-4 gap-20 max-sm:gap-4  mx-auto items-center justify-center">
-          <div className="relative w-32 max-sm:w-24 bg-red-900 aspect-[489/232] rounded-full overflow-hidden">
-            <Image
-              src={img1}
-              fill
-              alt="img"
-              loading="lazy"
-              className="object-cover"
-              sizes="(max-width: 640px) 90px,128px"
-            />
-          </div>
           <h1 className="text-3xl  font-semibold grow  py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
             Contribution Form
           </h1>
