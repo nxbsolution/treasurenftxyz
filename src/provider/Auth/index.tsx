@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
           setMember(response)
           console.log(response)
         } else {
-          router.push('/signup/register')
+          router.push('/register')
         }
       }
 
