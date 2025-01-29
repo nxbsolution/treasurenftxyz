@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const config = {
-  protectedPaths: ['/admin', '/dashboard', "/register"],
+  protectedPaths: ['/dashboard', "/register"], // '/admin'
   loginPath: '/login',
-  logoutPath: '/logout',
+  // logoutPath: '/logout',
   defaultPath: '/',
   apiMeEndpoint: '/api/users/me',
 }

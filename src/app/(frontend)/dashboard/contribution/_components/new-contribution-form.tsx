@@ -310,7 +310,7 @@ export default function ContributionForm() {
 
             <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
               <h2 className="font-semibold text-center text-bold text-lg">
-                Transection Information
+                Transaction Information
               </h2>
               <FormField
                 control={form.control}
