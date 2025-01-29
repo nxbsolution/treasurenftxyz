@@ -76,7 +76,7 @@ type FormValues = z.infer<typeof FormSchema>
 export default function ContributionForm() {
   const router = useRouter()
 
-  const [selectedStar, setSelectedStar] = useState('0')
+  const [selectedStar, setSelectedStar] = useState("0")
   const [isSubmiting, setIsSubmitting] = useState(false)
 
   const form = useForm<FormValues>({
@@ -139,32 +139,32 @@ export default function ContributionForm() {
   }
 
   interface StarAmount {
-    '1star': number
-    '2star': number
-    '3star': number
-    '4star': number
-    '5star': number
-    '6star': number
+    '1star': string
+    '2star': string
+    '3star': string
+    '4star': string
+    '5star': string
+    '6star': string
   }
 
   const StarAmount: StarAmount = {
-    '1star': 25,
-    '2star': 60,
-    '3star': 90,
-    '4star': 180,
-    '5star': 380,
-    '6star': 580,
+    '1star': "25",
+    '2star': "60",
+    '3star': "90",
+    '4star': "180",
+    '5star': "380",
+    '6star': "580",
   }
 
   return (
-    <div className="bg-gray-50 mb-8">
+    <div className="bg-gray-50 mb-8 pt-4">
       <Toaster />
-      <div className="mx-auto container max-w-2xl">
-        <div className="flex max-sm:flex-col p-4 gap-20 max-sm:gap-4  mx-auto items-center justify-center">
-          <h1 className="text-3xl  font-semibold grow  py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
-            Contribution Form
-          </h1>
-        </div>
+      <div className="mx-auto container max-w-2xl space-y-4">
+
+        <h1 className="text-3xl text-center font-semibold   py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
+          Contribution Form
+        </h1>
+
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -177,7 +177,7 @@ export default function ContributionForm() {
                   <FormItem>
                     <FormLabel>Select Your Star</FormLabel>
                     <Select
-                      onValueChange={(value) => {
+                      onValueChange={(value: keyof StarAmount) => {
                         field.onChange(value)
                         setSelectedStar(StarAmount[value])
                       }}
@@ -485,7 +485,7 @@ export default function ContributionForm() {
               <Button
                 disabled={isSubmiting}
                 type="submit"
-                className={`max-sm:w-full  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
+                className={`max-sm:w-full text-background  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
               >
                 {isSubmiting ? (
                   <div>
