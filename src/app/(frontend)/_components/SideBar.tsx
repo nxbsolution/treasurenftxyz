@@ -24,7 +24,7 @@ export default function SideBar({ isLoggedIn }: { isLoggedIn: boolean }) {
                     </SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-2 py-4">
-                    <Link href={'/contribution-form'} aria-label="go to contribution form">
+                    <Link href={'/dashboard/contribution-form'} aria-label="go to contribution form">
                         <span className=''>Contribution Form</span>
                     </Link>
                     <hr className="bg-foreground" />
