@@ -1,4 +1,3 @@
-import next from 'next'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -12,12 +11,6 @@ const config = {
   apiMeEndpoint: '/api/users/me',
 }
 
-// Types
-type AllowedPath = {
-  path: string
-}
-
-
 type User = {
   roles?: string[]
 }
@@ -28,9 +21,9 @@ const isProtectedPath = (path: string): boolean =>
 
 const getAllowedPaths = (user: User): string[] => {
   if (user?.roles?.includes("superadmin") || user?.roles?.includes("admin")) {
-    return ['/admin', '/dashboard']
+    return config.protectedPaths
   }
-  return ['/dashboard', '/signup/register']
+  return config.protectedPaths.filter((path) => path !== "/admin")
 }
 
 const isAllowedPath = (requestedPath: string, allowedPaths: string[]): boolean => {
