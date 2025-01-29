@@ -1,12 +1,12 @@
 "use client";
-import { useState } from 'react'
+import { useState, JSX } from 'react'
 import Rules from './_components/Rules'
 import NewIssue from './_components/NewIssue'
 import ExistingUpdate from './_components/ExistingUpdate'
 
 export default function Page() {
 
-    const object = {
+    const object: { [key: string]: JSX.Element } = {
         "Rules": <Rules />,
         "New Issue": <NewIssue />,
         "Existing update": <ExistingUpdate />
@@ -14,7 +14,7 @@ export default function Page() {
     console.log(object)
 
     const tabs = ["Rules", "New Issue", "Existing update"]
-    const [activeTab, setActiveTab] = useState("")
+    const [activeTab, setActiveTab] = useState<keyof typeof object | "">("")
     return (
         <div className='mt-6'>
 
