@@ -14,8 +14,6 @@ export interface Config {
     users: User;
     members: Member;
     contributions: Contribution;
-    salary: Salary;
-    star: Star;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -26,8 +24,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     contributions: ContributionsSelect<false> | ContributionsSelect<true>;
-    salary: SalarySelect<false> | SalarySelect<true>;
-    star: StarSelect<false> | StarSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -152,37 +148,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "salary".
- */
-export interface Salary {
-  id: number;
-  member: number | Member;
-  monthlyProgressReport?: (number | null) | Media;
-  starCertificate?: (number | null) | Media;
-  star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
-  PersonAdded: {
-    A: number;
-    B: number;
-    C: number;
-  };
-  TotalPersonAdded?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "star".
- */
-export interface Star {
-  id: number;
-  member: number | Member;
-  totalReport?: (number | null) | Media;
-  oldStarCard?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -199,14 +164,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contributions';
         value: number | Contribution;
-      } | null)
-    | ({
-        relationTo: 'salary';
-        value: number | Salary;
-      } | null)
-    | ({
-        relationTo: 'star';
-        value: number | Star;
       } | null)
     | ({
         relationTo: 'media';
@@ -301,37 +258,6 @@ export interface ContributionsSelect<T extends boolean = true> {
   transactionId?: T;
   screenShot?: T;
   uploadStarCertificate?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "salary_select".
- */
-export interface SalarySelect<T extends boolean = true> {
-  member?: T;
-  monthlyProgressReport?: T;
-  starCertificate?: T;
-  star?: T;
-  PersonAdded?:
-    | T
-    | {
-        A?: T;
-        B?: T;
-        C?: T;
-      };
-  TotalPersonAdded?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "star_select".
- */
-export interface StarSelect<T extends boolean = true> {
-  member?: T;
-  totalReport?: T;
-  oldStarCard?: T;
   updatedAt?: T;
   createdAt?: T;
 }

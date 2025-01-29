@@ -8,7 +8,7 @@ import Link from 'next/link'
 import SideBar from './SideBar'
 
 
-const NavBar = ({ }) => {
+const Header = ({ }) => {
     const { user } = useAuth()
     useEffect(() => {
         setIsLoggedIn(user ? true : false)
@@ -34,15 +34,18 @@ const NavBar = ({ }) => {
                     </Link>
                 </div>
             </div>
-            <div className='space-x-4'>
-                {isLoggedIn ? (<div className='flex'>
+            <div className='flex space-x-4'>
+                {user?.roles?.includes('admin') ? (<Link href={'/admin'}>
+                    <Button className='text-lg text-card hover:underline'>Admin</Button>
+                </Link>) : null}
+                {isLoggedIn ? (<>
                     <Link href={'/logout'}>
                         <Button className='text-lg text-card hover:underline'>Log Out</Button>
                     </Link>
                     <Link href={'/dashboard'}>
                         <CircleUser size={34} className='text-background' />
                     </Link>
-                </div>
+                </>
                 ) : (<>
                     <Link href={'/signup'}>
                         <Button className='text-lg text-card hover:underline'>Sign Up</Button>
@@ -57,4 +60,4 @@ const NavBar = ({ }) => {
     )
 }
 
-export default NavBar
+export default Header

@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from '@/hooks/use-toast'
 
 import { useAuth } from '@/provider/Auth'
-import Loader from '../_components/Loader'
+import Loader from '@/app/(frontend)/_components/Loader'
 
 
 const FormSchema = z.object({
@@ -75,7 +75,7 @@ const Page = () => {
 
             try {
                 await create(userData)
-                router.push('/signup/register')
+                router.push('/register')
                 toast({
                     title: 'Success',
                     description: 'Successfully created user',

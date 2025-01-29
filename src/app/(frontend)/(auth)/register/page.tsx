@@ -9,7 +9,8 @@ const Page = () => {
     const [selectedTeam, setSelectedTeam] = useState('')
     return (
         <>
-            <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg w-1/2 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-10'>
+            <h1 className='m-5 text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Register Yourself </h1>
+            <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg w-1/2 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card'>
                 <h1 className="text-center font-semibold text-2xl">Select Your Team</h1>
                 <RadioGroup defaultValue="" onValueChange={(value) => setSelectedTeam(value)}>
                     <div className="flex items-center space-x-2">

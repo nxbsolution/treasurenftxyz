@@ -62,9 +62,11 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 
   useEffect(() => {
 
-    if (!user) void setMember(null)
+    if (!user) {
+      return setMember(null)
+    }
 
-    if (user?.id) {
+    if (user.id) {
       async function fetchMember() {
 
         const response = await getMemberByUserId(user?.id)

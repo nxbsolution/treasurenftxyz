@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
-import config from '../../../payload.config'
+import config from '@/payload.config'
 import { LogoutPage } from './LogoutPage'
 
 export default async function Logout() {

@@ -126,13 +126,19 @@ const MemberDetails = () => {
         async (data: z.infer<typeof FormSchema>) => {
             setIsSubmitting(true)
             try {
-                await registerMember({ user: user?.id || 0, ...data })
+                if (!user) {
+                    throw new Error('User not found')
+                }
+
+                await registerMember({ user: user.id || 0, ...data })
                 router.push('/dashboard')
+
                 toast({
                     title: 'Success',
                     description: 'User registered successfully.',
                     variant: 'success',
                 })
+
             } catch (error: any) {
                 toast({
                     title: 'Error',
@@ -143,7 +149,7 @@ const MemberDetails = () => {
                 setIsSubmitting(false)
             }
         },
-        [registerMember, router],
+        [registerMember, user, router],
     )
 
     return (
