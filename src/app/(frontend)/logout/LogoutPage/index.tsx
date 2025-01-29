@@ -20,6 +20,7 @@ export const LogoutPage: React.FC = () => {
         toast({
           title: 'Success',
           description: 'Logged out successfully.',
+          variant: 'success',
         })
       } catch (_) {
         toast({
@@ -31,7 +32,6 @@ export const LogoutPage: React.FC = () => {
         setIsLoggingOut(false)
       }
     }
-
     void performLogout()
   }, [logout, toast])
 

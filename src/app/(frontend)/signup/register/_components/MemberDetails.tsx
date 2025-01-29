@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -30,6 +30,7 @@ import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
 import { useAuth } from '@/provider/Auth'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import Loader from '@/app/(frontend)/_components/Loader'
 
 const FormSchema = z.object({
     country: z.enum(["india", "pakistan", "uae", "bangladesh", "others"], {
@@ -59,7 +60,7 @@ const FormSchema = z.object({
 })
 
 const MemberDetails = () => {
-
+    const [isSubmiting, setIsSubmitting] = useState(false)
     const { registerMember, user } = useAuth()
     const router = useRouter()
 
@@ -123,12 +124,13 @@ const MemberDetails = () => {
 
     const onSubmit = useCallback(
         async (data: z.infer<typeof FormSchema>) => {
+            setIsSubmitting(true)
             try {
                 await registerMember({ user: user?.id || 0, ...data })
                 toast({
                     title: 'Success',
                     description: 'User registered successfully.',
-                    variant: 'default',
+                    variant: 'success',
                 })
                 router.push('/dashboard')
             } catch (error: any) {
@@ -137,6 +139,8 @@ const MemberDetails = () => {
                     description: error?.message || 'An error occurred',
                     variant: 'destructive',
                 })
+            } finally {
+                setIsSubmitting(false)
             }
         },
         [registerMember, router],
@@ -231,7 +235,16 @@ const MemberDetails = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className='w-1/2 max-md:w-full text-lg self-center rounded-xl text-card hover:bg-primary-foreground'>Submit</Button>
+                    <Button
+                        disabled={isSubmiting}
+                        type="submit"
+                        className={`w-1/2 max-md:w-full text-lg self-center rounded-xl text-card hover:bg-primary-foreground ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}`}>
+                        {isSubmiting ? (
+                            <Loader />
+                        ) : (
+                            'Submit'
+                        )}
+                    </Button>
                 </form>
             </Form >
 

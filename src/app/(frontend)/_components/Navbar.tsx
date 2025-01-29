@@ -2,17 +2,13 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/provider/Auth'
-// import logo from '@/app/(frontend)/_assets/logo/reverse-logo.png'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, ChevronsDown, Menu, CircleUser } from 'lucide-react'
-// import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { CircleUser } from 'lucide-react'
 import Link from 'next/link'
 import SideBar from './SideBar'
 
 
 const NavBar = ({ }) => {
-    // const [open, setOpen] = useState(false)
-    // const [dropdownOpen, setDropdownOpen] = useState(false)
     const { user } = useAuth()
     useEffect(() => {
         setIsLoggedIn(user ? true : false)
@@ -39,14 +35,22 @@ const NavBar = ({ }) => {
                 </div>
             </div>
             <div className='space-x-4'>
-                {isLoggedIn ? (
+                {isLoggedIn ? (<div className='flex'>
+                    <Link href={'/logout'}>
+                        <Button className='text-lg text-card hover:underline'>Log Out</Button>
+                    </Link>
                     <Link href={'/dashboard'}>
                         <CircleUser size={34} className='text-background' />
                     </Link>
-                ) : (
+                </div>
+                ) : (<>
+                    <Link href={'/signup'}>
+                        <Button className='text-lg text-card hover:underline'>Sign Up</Button>
+                    </Link>
                     <Link href={'/login'}>
                         <Button className='border-2 rounded-xl text-lg max-sm:text-base p-6 text-card max-sm:p-4 hover:bg-card hover:text-foreground focus-visible:ring-card focus-visible:ring-0'>Login</Button>
                     </Link>
+                </>
                 )}
             </div>
         </div>
