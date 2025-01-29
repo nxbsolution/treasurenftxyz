@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from '@/hooks/use-toast'
 
 import { useAuth } from '@/provider/Auth'
+import Loader from '../_components/Loader'
 
 
 const FormSchema = z.object({
@@ -43,6 +44,7 @@ const FormSchema = z.object({
 const Page = () => {
 
     const { create } = useAuth()
+    const [isSubmiting, setIsSubmitting] = useState(false)
 
     const [showPassword, setShowPassword] = useState({
         password: false,
@@ -64,7 +66,7 @@ const Page = () => {
 
     const onSubmit = useCallback(
         async (data: z.infer<typeof FormSchema>) => {
-
+            setIsSubmitting(true)
             const userData = {
                 email: data.email,
                 username: data.username,
@@ -85,6 +87,8 @@ const Page = () => {
                     description: error?.message || 'An error occurred',
                     variant: 'destructive',
                 })
+            } finally {
+                setIsSubmitting(false)
             }
         },
         [create, router],
@@ -177,7 +181,16 @@ const Page = () => {
                             )}
                         />
                     ))}
-                    <Button type="submit" className='w-1/2 max-md:w-full text-lg self-center rounded-xl text-card hover:bg-primary-foreground'>Sign Up</Button>
+                    <Button
+                        disabled={isSubmiting}
+                        type="submit"
+                        className={`w-1/2 max-md:w-full text-lg self-center rounded-xl text-card hover:bg-primary-foreground ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}`}>
+                        {isSubmiting ? (
+                            <Loader />
+                        ) : (
+                            'Sign Up'
+                        )}
+                    </Button>
                     <div className='flex justify-center text-primary'>
                         <Link href={"/login"}>
                             <span className='text-foreground'>Already have Account?</span>
