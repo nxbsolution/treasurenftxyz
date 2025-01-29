@@ -120,6 +120,7 @@ export default function ContributionForm() {
         console.error('Failed to submit contribution:', result.error)
       }
 
+
     } catch (error) {
       toast({
         style: {
