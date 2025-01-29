@@ -32,8 +32,8 @@ export default function SideBar({ isLoggedIn }: { isLoggedIn: boolean }) {
                         <span>Star</span>
                     </Link>
                     <hr className="bg-foreground" />
-                    <Link href={'/sallery'} aria-label="go to sallery">
-                        <span>Sallery</span>
+                    <Link href={'/salary'} aria-label="go to sallery">
+                        <span>Salary</span>
                     </Link>
                 </div>
             </SheetContent>
