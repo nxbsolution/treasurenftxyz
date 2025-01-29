@@ -77,7 +77,7 @@ const Page = () => {
                 toast({
                     title: 'Success',
                     description: 'Successfully created user',
-                    variant: 'default',
+                    variant: 'success',
                 })
             } catch (error: any) {
                 toast({

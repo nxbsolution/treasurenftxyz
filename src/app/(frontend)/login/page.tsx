@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 import Link from 'next/link'
+import Loader from '../_components/Loader'
 
 
 const FormSchema = z.object({
@@ -31,6 +32,7 @@ const FormSchema = z.object({
 })
 
 const Page = () => {
+    const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const searchParams = useSearchParams()
     const redirect = useRef(searchParams.get('redirect'))
@@ -47,12 +49,13 @@ const Page = () => {
 
     const onSubmit = useCallback(
         async (data: z.infer<typeof FormSchema>) => {
+            setIsSubmitting(true)
             try {
                 await login(data)
                 toast({
                     title: 'Success',
                     description: 'User is successfully logged in',
-                    variant: 'default',
+                    variant: 'success',
                 })
                 if (redirect?.current) {
                     router.push(redirect.current)
@@ -65,6 +68,8 @@ const Page = () => {
                     description: error?.message || 'An error occurred',
                     variant: 'destructive',
                 })
+            } finally {
+                setIsSubmitting(false)
             }
         },
         [login, router],
@@ -136,7 +141,16 @@ const Page = () => {
                             <Button variant="ghost" size="sm">Sign Up</Button>
                         </Link>
                     </div>
-                    <Button type="submit" className='w-full text-card hover:bg-primary-foreground'>Log In</Button>
+                    <Button
+                        disabled={isSubmiting}
+                        type="submit"
+                        className={`w-full text-card hover:bg-primary-foreground ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'} `}>
+                        {isSubmiting ? (
+                            <Loader />
+                        ) : (
+                            'Log In'
+                        )}
+                    </Button>
                 </form>
             </Form>
         </div>
