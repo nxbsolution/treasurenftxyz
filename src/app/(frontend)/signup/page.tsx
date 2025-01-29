@@ -23,7 +23,7 @@ import { useAuth } from '@/provider/Auth'
 
 
 const FormSchema = z.object({
-    name: z.string().min(2, {
+    username: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
     email: z.string().email({
@@ -36,7 +36,7 @@ const FormSchema = z.object({
         message: "Password must be at least 8 characters.",
     }),
 }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Password doesn't match",
     path: ["confirmPassword"], // path of error
 });
 
@@ -55,7 +55,7 @@ const Page = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            name: "",
+            username: "",
             email: "",
             password: "",
             confirmPassword: "",
@@ -67,19 +67,18 @@ const Page = () => {
 
             const userData = {
                 email: data.email,
-                username: data.name,
+                username: data.username,
                 password: data.password,
             }
 
             try {
-                const createdUser = await create(userData)
-                console.log(createdUser)
+                await create(userData)
+                router.push('/signup/register')
                 toast({
                     title: 'Success',
                     description: 'Successfully created user',
                     variant: 'success',
                 })
-                router.push('/signup/register')
             } catch (error: any) {
                 toast({
                     title: 'Error',
@@ -93,7 +92,7 @@ const Page = () => {
 
     const formFields = [
         {
-            name: "name",
+            name: "username",
             label: "User Name",
             type: "text",
             placeholder: "Demo123",

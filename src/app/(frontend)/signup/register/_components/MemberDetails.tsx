@@ -36,7 +36,7 @@ const FormSchema = z.object({
     country: z.enum(["india", "pakistan", "uae", "bangladesh", "others"], {
         required_error: "Please select a country.",
     }),
-    name: z.string().min(2, {
+    realName: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
     uplineUid: z.string().min(2, {
@@ -48,10 +48,10 @@ const FormSchema = z.object({
     uplineName: z.string().min(2, {
         message: "Upline Name must be at least 2 characters.",
     }),
-    cityname: z.string().min(2, {
+    city: z.string().min(2, {
         message: "City Name must be at least 2 characters.",
     }),
-    mobilenumber: z.string().min(11, {
+    mobile: z.string().min(11, {
         message: "Mobile Number must be at least 11 characters.",
     }),
     depositAddress: z.enum(['TRC-20', 'BEP-20'], {
@@ -68,18 +68,18 @@ const MemberDetails = () => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             country: "india",
-            name: "",
+            realName: "",
             uplineUid: "",
             uid: "",
             uplineName: "",
-            cityname: "",
-            mobilenumber: "",
+            city: "",
+            mobile: "",
         },
     })
 
     const formFields = [
         {
-            name: "name",
+            name: "realName",
             label: "Real Name",
             type: "text",
             placeholder: "Demo123",
@@ -107,14 +107,14 @@ const MemberDetails = () => {
             description: "Enter your uplineUid."
         },
         {
-            name: "cityname",
+            name: "city",
             label: "City Name",
             type: "text",
             placeholder: "Demo123",
             description: "Enter your City Name."
         },
         {
-            name: "mobilenumber",
+            name: "mobile",
             label: "Mobile Number",
             type: "number",
             placeholder: "03001234567",
@@ -127,12 +127,12 @@ const MemberDetails = () => {
             setIsSubmitting(true)
             try {
                 await registerMember({ user: user?.id || 0, ...data })
+                router.push('/dashboard')
                 toast({
                     title: 'Success',
                     description: 'User registered successfully.',
                     variant: 'success',
                 })
-                router.push('/dashboard')
             } catch (error: any) {
                 toast({
                     title: 'Error',
