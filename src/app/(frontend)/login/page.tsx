@@ -1,6 +1,6 @@
 "use client"
-import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState, useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useState, useCallback } from 'react'
 import { useAuth } from '@/provider/Auth'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -34,8 +34,7 @@ const FormSchema = z.object({
 const Page = () => {
     const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
-    const searchParams = useSearchParams()
-    const redirect = useRef(searchParams.get('redirect'))
+
     const { login } = useAuth()
     const router = useRouter()
 
@@ -57,11 +56,9 @@ const Page = () => {
                     description: 'User is successfully logged in',
                     variant: 'success',
                 })
-                if (redirect?.current) {
-                    router.push(redirect.current)
-                } else {
-                    router.push('/dashboard')
-                }
+
+                router.push('/dashboard/contribution-form')
+
             } catch (error: any) {
                 toast({
                     title: 'Error',

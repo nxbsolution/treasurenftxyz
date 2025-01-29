@@ -38,7 +38,9 @@ export default function ContributionVerifyCell({ cellData, rowData, link }: { ce
     <span
       style={{ ...generalStyle, ...backgroundColor[cellData], ...link && linkStyle }}
       onClick={() => {
-        link && router.push(`${pathname}/${rowData.id}`)
+        if (link) {
+          router.push(`${pathname}/${rowData.id}`)
+        }
       }}
     >
       {cellData}
