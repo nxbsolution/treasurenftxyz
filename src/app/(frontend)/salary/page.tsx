@@ -102,30 +102,16 @@ export default function Page() {
             </h1>
             <Form {...form} >
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className='bg-card rounded-lg shadow-lg shadow-foreground p-6 space-y-6'>
-                        <FormField
-                            control={form.control}
-                            name="uid"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>UID</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="Enter UID" {...field} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Enter UID.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
+                    <div className='bg-card rounded-lg shadow-md shadow-foreground p-6 space-y-6'>
+
                         <FormField
                             control={form.control}
                             name="depositAddress" //depositAddress
                             render={({ field }) => (
                                 <FormItem className="space-y-6 ">
                                     <FormLabel className="text-lg  font-semibold text-center justify-center mx-auto w-full block">
-                                        Select USDT Deposit Address
+                                        Your USDT Deposit Address
                                     </FormLabel>
                                     <FormControl>
                                         <RadioGroup
@@ -165,6 +151,26 @@ export default function Page() {
                                 </FormItem>
                             )}
                         />
+                    </div>
+
+                    <div className='bg-card rounded-lg shadow-md shadow-foreground p-6 space-y-6'>
+                        <FormField
+                            control={form.control}
+                            name="uid"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>UID</FormLabel>
+                                    <FormControl>
+                                        <Input type="text" placeholder="Enter UID" {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Enter UID.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
 
                         <Controller
                             control={form.control}
@@ -368,14 +374,15 @@ export default function Page() {
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+
 
                     <div className="flex justify-center">
                         <Button
                             disabled={isSubmiting}
                             type="submit"
-                            className={`max-sm:w-full  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
+                            className={`max-sm:w-full text-background  text-lg rounded-xl  lg:col-span-2 font-bold ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}  w-1/2  hover:bg-blue-500   shadow-md shadow-black  hover:shadow-[2px_2px_0px_rgb(255,165,0)] duration-300 `}
                         >
                             {isSubmiting ? (
                                 <div>
@@ -405,6 +412,6 @@ export default function Page() {
             </Form>
 
 
-        </div>
+        </div >
     )
 }
