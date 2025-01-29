@@ -2,11 +2,7 @@ import React from 'react'
 import ContributionForm from './_components/new-contribution-form'
 
 function Page() {
-    return (
-        <div>
-            <ContributionForm />
-        </div>
-    )
+    return <ContributionForm />
 }
 
 export default Page

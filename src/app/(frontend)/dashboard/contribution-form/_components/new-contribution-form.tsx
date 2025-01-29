@@ -4,10 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CopyToClipboard } from "@/app/(frontend)/_components/CopyToClipboard"
-// import Image from 'next/image'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-// import img1 from './img1.jpg'
 import { Star, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -31,9 +29,10 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
-import { Toaster } from '@/components/ui/toaster'
 
-// import { sendFormData } from "./actions/sendFomData"
+import { useAuth } from '@/provider/Auth'
+
+import { sendFormData } from '../actions/sendFormData'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -53,8 +52,9 @@ const FormSchema = z.object({
   realName: z.string().min(2, 'Real Name must be at least 2 characters.'),
   uid: z.string().min(2, 'UID must be at least 2 characters.'),
   mobile: z.string().min(10, 'Mobile number is invalid.'),
-  cityName: z.string().min(2, 'City name must be at least 2 characters.'),
+  city: z.string().min(2, 'City name must be at least 2 characters.'),
   uplineName: z.string().min(2, 'Upline name must be at least 2 characters.'),
+  uplineUid: z.string().min(2, 'Upline UID must be at least 2 characters.'),
   star: z.string().min(1, 'Please select a star.'),
   depositAddress: z.enum(['TRC-20', 'BEP-20'], {
     required_error: 'Please select a USDT deposit address.',
@@ -74,20 +74,24 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 export default function ContributionForm() {
-  const router = useRouter()
+
+  const { member } = useAuth()
 
   const [selectedStar, setSelectedStar] = useState("0")
   const [isSubmiting, setIsSubmitting] = useState(false)
+
+
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       nft_username: '',
-      realName: '',
-      uid: '',
-      mobile: '',
-      cityName: '',
-      uplineName: '',
+      realName: member?.realName || '123',
+      uid: member?.uid ?? '',
+      mobile: member?.mobile ?? '',
+      city: member?.city ?? "",
+      uplineName: member?.uplineName ?? '',
+      uplineUid: member?.uplineUid ?? '',
       star: '',
       transactionId: '',
     },
@@ -97,45 +101,52 @@ export default function ContributionForm() {
 
     setIsSubmitting(true)
 
-    // const formData = new FormData()
+    const { uploadStarCertificate, screenShot, transactionId, star, nft_username } = values
 
-    // Object.entries(values).forEach(([key, value]) => {
-    //   if (value instanceof File) {
-    //     formData.append(key, value)
-    //   } else {
-    //     formData.append(key, String(value))
-    //   }
-    // });
+    const data = {
+      member: member?.id,
+      uploadStarCertificate,
+      screenShot,
+      transactionId,
+      star,
+      nft_username
+    }
 
-    // try {
-    //   // const result = await sendFormData(formData)
+    const formData = new FormData()
 
-    //   if (result.success) {
-    //     console.log('Donation submitted successfully:', result.data)
-    //     form.reset()
-    //     console.log(result.data);
-    //     router.push('/success');
-    //   }
-    //   else {
-    //     console.error('Failed to submit contribution:', result.error)
-    //   }
+    Object.entries(data).forEach(([key, value]) => {
+      if (value instanceof File) {
+        formData.append(key, value)
+      } else {
+        formData.append(key, String(value))
+      }
+    });
 
-    // } catch (error) {
-    //   toast({
-    //     style: {
-    //       backgroundColor: '#fbebec',
-    //       borderRadius: '10px',
-    //       border: '2px solid #f93333',
-    //       opacity: 60,
-    //     },
-    //     description: <div>
-    //       <h1 className='font-bold text-lg'>Failed to submit Contribution</h1>
-    //       <span>{error.message}</span>
-    //     </div>,
-    //   })
-    // } finally {
-    //   setIsSubmitting(false)
-    // }
+    try {
+      const result = await sendFormData(formData)
+      if (result.success) {
+        form.reset()
+        toast({
+          variant: 'success',
+          title: 'Contribution submitted successfully',
+          description: "Thank you for your contribution!",
+        })
+      }
+      else {
+        console.log('Failed to submit contribution:', result.error)
+      }
+
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        description: <div>
+          <h1 className='font-bold text-lg'>Failed to submit Contribution</h1>
+          <span>{error?.message}</span>
+        </div>,
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   interface StarAmount {
@@ -158,7 +169,6 @@ export default function ContributionForm() {
 
   return (
     <div className="bg-gray-50 mb-8 pt-4">
-      <Toaster />
       <div className="mx-auto container max-w-2xl space-y-4">
 
         <h1 className="text-3xl text-center font-semibold   py-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-900 to-blue-500 ">
@@ -345,6 +355,21 @@ export default function ContributionForm() {
 
               <FormField
                 control={form.control}
+                name="uplineUid"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upline UID</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Upline UID" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your UID.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="mobile"
                 render={({ field }) => (
                   <FormItem>
@@ -360,7 +385,7 @@ export default function ContributionForm() {
 
               <FormField
                 control={form.control}
-                name="cityName"
+                name="city"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>City Name</FormLabel>

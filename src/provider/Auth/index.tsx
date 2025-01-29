@@ -20,6 +20,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
   api = 'rest',
   children,
 }) => {
+
   const [user, setUser] = useState<null | User>()
   const [member, setMember] = useState<null | Member>()
   // const [permissions, setPermissions] = useState<null | Permissions>(null)
