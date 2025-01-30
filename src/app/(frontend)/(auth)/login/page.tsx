@@ -149,15 +149,15 @@ const Page = () => {
                                 'Log In'
                             )}
                         </Button>
-                        <Button
-                            disabled={isSubmiting}
-                            variant={"outline"}
-                            onClick={() => router.push("/signup")}
-                            className={`w-full border-blue-500 bg-white text-blue-500 hover:bg-blue-500 hover:text-white`}>
-                            Sign Up
-                        </Button>
                     </form>
                 </Form>
+                <Button
+                    disabled={isSubmiting}
+                    variant={"outline"}
+                    onClick={() => router.push("/signup")}
+                    className={`w-full border-blue-500 bg-white text-blue-500 hover:bg-blue-500 hover:text-white`}>
+                    Sign Up
+                </Button>
             </div>
         </div>
     )
