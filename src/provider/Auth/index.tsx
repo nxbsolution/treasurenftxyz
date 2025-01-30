@@ -4,13 +4,13 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
-import type { User, Member } from '../../payload-types'
+import type { User } from '../../payload-types'
 import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword } from './types'
 
 import { gql, USER } from './gql'
 import { rest } from './rest'
 
-import { getMemberByUserId } from './getMemberByUserId'
+// import { getMemberByUserId } from './getMemberByUserId'
 import { createMember, createUser } from './createMember'
 import { redirect } from 'next/navigation'
 
@@ -22,10 +22,10 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 }) => {
 
   const [user, setUser] = useState<null | User>()
-  const [member, setMember] = useState<null | Member>()
+  // const [member, setMember] = useState<null | Member>()
   // const [permissions, setPermissions] = useState<null | Permissions>(null)
 
-  useEffect(() => { console.log({ AuthProvider: "AuthProvider", user, member }) }, [user, member]);
+  useEffect(() => { console.log({ AuthProvider: "AuthProvider", user }) }, [user]);
 
   // On mount, get user and set
   useEffect(() => {
@@ -38,10 +38,10 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
             method: 'GET',
           },
         )
+        if (!user) {
+          setTimeout(() => redirect("/login"), 1000)
+        }
         setUser(user)
-
-        const member = await getMemberByUserId(user?.id || 0)
-        setMember(member)
       }
 
       if (api === 'gql') {
@@ -65,8 +65,8 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
     async (args) => {
       const { username, password, email, ...rest } = args
       const createdUser = await createUser({ username, password, email })
-      const createdMember = await createMember({ ...rest, user: createdUser?.id || 0 })
-      setMember(createdMember)
+      await createMember({ ...rest, user: createdUser?.id || 0 })
+
       setUser(createdUser)
       return createdUser
 
@@ -113,7 +113,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
     if (api === 'rest') {
       await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`)
       setUser(null)
-      setMember(null)
       return
     }
 
@@ -187,7 +186,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
         resetPassword,
         setUser,
         user,
-        member,
+        // member,
       }}
     >
       {children}
@@ -195,6 +194,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
   )
 }
 
-type UseAuth<T = User> = () => AuthContext
+type UseAuth = () => AuthContext
 
 export const useAuth: UseAuth = () => useContext(Context)

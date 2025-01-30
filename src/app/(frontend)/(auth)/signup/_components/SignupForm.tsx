@@ -139,7 +139,7 @@ export default function SignupForm() {
       label: "User Name",
       type: "text",
       placeholder: "Demo123",
-      description: "Enter your Username."
+      description: "Create your unique username, must contain 6 characters."
     },
     {
       name: "email",

@@ -5,7 +5,7 @@ import config from "@/payload.config"
 
 export const getMemberByUserId = async (userId?: number) => {
   try {
-    if (!userId) return null
+    if (!userId) return undefined
     const payload = await getPayload({ config })
     const getMember = payload.find({
       collection: 'members',

@@ -24,11 +24,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
 
-import { useAuth } from '@/provider/Auth'
-
 import { sendFormData } from '../actions/sendFormData'
 import Loader from '@/app/(frontend)/_components/Loader'
+import { Member } from '@/payload-types'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -60,20 +60,13 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export default function ContributionForm() {
+export default function ContributionForm({ member }: { member: Member }) {
 
-  const { member } = useAuth()
-
-  if (!member) {
-    setTimeout(() => {
-      router.refresh()
-    }, 3000)
-  }
-
-  const router = useRouter()
 
   const [selectedStar, setSelectedStar] = useState("0")
   const [isSubmiting, setIsSubmitting] = useState(false)
+
+  const router = useRouter()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -91,7 +84,7 @@ export default function ContributionForm() {
     const { uploadStarCertificate, screenShot, transactionId, star, nft_username } = values
 
     const data = {
-      member: member?.id,
+      member: member.id,
       uploadStarCertificate,
       screenShot,
       transactionId,
@@ -170,11 +163,21 @@ export default function ContributionForm() {
 
   return (
     <div className="mb-8 pt-4">
-      <div className="mx-auto container p-4 max-w-2xl space-y-4">
 
-        <h1 className="text-3xl text-center font-semibold py-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground ">
-          Contribution Form
+      <div className='flex max-xs:flex-col justify-center items-center gap-2'>
+        <div className='w-28 aspect-[319/196] relative'>
+          <Image
+            src='/img1.jpg'
+            alt='logo'
+            fill
+            className='object-contain  rounded-lg' />
+        </div>
+        <h1 className="text-3xl text-center font-bold py-2">
+          <span className='bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>Welcome To The Team of Ninjas </span>🥷
         </h1>
+      </div>
+
+      <div className="mx-auto container p-4 max-w-2xl space-y-4">
 
         <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
           <h2 className="font-semibold text-center text-bold text-lg">User Information</h2>
