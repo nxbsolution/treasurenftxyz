@@ -42,9 +42,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 
         const member = await getMemberByUserId(user?.id || 0)
         setMember(member)
-        if (member) {
-          redirect('/dashboard')
-        }
       }
 
       if (api === 'gql') {

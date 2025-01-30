@@ -28,6 +28,7 @@ import { useAuth } from '@/provider/Auth'
 
 import { sendFormData } from '../actions/sendFormData'
 import Loader from '@/app/(frontend)/_components/Loader'
+import { useRouter } from 'next/navigation'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -62,6 +63,8 @@ type FormValues = z.infer<typeof FormSchema>
 export default function ContributionForm() {
 
   const { member } = useAuth()
+
+  const router = useRouter()
 
   const [selectedStar, setSelectedStar] = useState("0")
   const [isSubmiting, setIsSubmitting] = useState(false)
@@ -103,12 +106,15 @@ export default function ContributionForm() {
     try {
       const result = await sendFormData(formData)
       if (result.success) {
+
         form.reset()
         toast({
           variant: 'success',
           title: 'Contribution submitted successfully',
           description: "Thank you for your contribution!",
         })
+
+        router.push("/dashboard")
       }
       else {
         console.log('Failed to submit contribution:', result.error)
