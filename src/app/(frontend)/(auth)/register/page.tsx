@@ -11,9 +11,9 @@ const Page = () => {
     const [selectedTeam, setSelectedTeam] = useState('')
     const { member } = useAuth()
 
-    // if (!member) {
-    //     redirect('/dashboard')
-    // }
+    if (!member) {
+        redirect('/dashboard')
+    }
 
     return (
         <>
