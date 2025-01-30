@@ -57,7 +57,7 @@ const Page = () => {
                     variant: 'success',
                 })
 
-                router.push('/dashboard/contribution')
+                router.push('/dashboard')
 
             } catch (error: any) {
                 toast({

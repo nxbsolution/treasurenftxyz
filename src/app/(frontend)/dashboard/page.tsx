@@ -11,7 +11,7 @@ export default function Page() {
             <div className="flex flex-col bg-card  items-center justify-center  space-y-8 shadow-lg rounded-xl p-8 ">
                 <h1 className="font-bold text-lg text-center ">Welcome to the Team of Ninjas</h1>
                 <p className="text-center">User Email: {user?.email}</p>
-                <Link href="/" className="bg-primary text-white px-4 py-2 rounded-lg">Pay Contribution</Link>
+                <Link href="/dashboard/contribution" className="bg-primary text-white px-4 py-2 rounded-lg">Pay Contribution</Link>
             </div>
         </div>
     )
