@@ -64,6 +64,12 @@ export default function ContributionForm() {
 
   const { member } = useAuth()
 
+  if (!member) {
+    setTimeout(() => {
+      router.refresh()
+    }, 3000)
+  }
+
   const router = useRouter()
 
   const [selectedStar, setSelectedStar] = useState("0")
