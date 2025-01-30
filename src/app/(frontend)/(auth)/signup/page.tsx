@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-import MemberDetails from "./_components/SignupForm"
+import SignupForm from "./_components/SignupForm"
 import NotAllowed from "./_components/NotAllowed"
 
 const Page = () => {
@@ -29,7 +29,7 @@ const Page = () => {
             </div>
             <div>
                 {
-                    selectedTeam && (selectedTeam === 'ninja' ? <MemberDetails /> : <NotAllowed />)
+                    selectedTeam && (selectedTeam === 'ninja' ? <SignupForm /> : <NotAllowed />)
                 }
             </div>
 

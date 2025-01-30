@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { useAuth } from "@/provider/Auth"
 
-export default function page() {
+export default function Page() {
 
     const { user } = useAuth()
 
