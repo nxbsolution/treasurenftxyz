@@ -24,7 +24,7 @@ const Header = ({ }) => {
                 <SideBar isLoggedIn={isLoggedIn} />
                 <div className=''>
                     <Link href="/" aria-label='home'>
-                        <div className='w-48 max-sm:w-36 aspect-[4/1] relative mr-4'>
+                        <div className='w-48 max-xs:w-28 max-sm:w-36 aspect-[4/1] relative sm:mr-4'>
                             <Image
                                 src='/logo.jpg'
                                 alt='logo'
@@ -34,9 +34,9 @@ const Header = ({ }) => {
                     </Link>
                 </div>
             </div>
-            <div className='flex space-x-4'>
+            <div className='flex space-x-3'>
                 {user?.roles?.includes('admin') ? (<Link href={'/admin'}>
-                    <Button className='text-lg text-card hover:underline'>Admin</Button>
+                    <Button className='text-lg text-card hover:underline max-sm:hidden'>Admin</Button>
                 </Link>) : null}
                 {isLoggedIn ? (<>
                     <Link href={'/logout'}>

@@ -159,7 +159,7 @@ export default function ContributionForm() {
 
   return (
     <div className="mb-8 pt-4">
-      <div className="mx-auto container max-w-2xl space-y-4">
+      <div className="mx-auto container p-4 max-w-2xl space-y-4">
 
         <h1 className="text-3xl text-center font-semibold py-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground ">
           Contribution Form

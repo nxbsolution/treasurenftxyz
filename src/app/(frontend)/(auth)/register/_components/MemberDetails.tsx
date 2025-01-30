@@ -153,7 +153,7 @@ const MemberDetails = () => {
     )
 
     return (
-        <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg w-1/2 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-10'>
+        <div className='border shadow-lg p-8 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-10'>
             <Form {...form} >
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col">
                     <FormField
@@ -203,37 +203,46 @@ const MemberDetails = () => {
                             )}
                         />
                     ))}
+
                     <FormField
                         control={form.control}
-                        name="depositAddress"
+                        name="depositAddress" //depositAddress
                         render={({ field }) => (
-                            <FormItem className="space-y-3">
-                                <FormLabel>Select USDT Deposit Address:</FormLabel>
+                            <FormItem className="space-y-6 ">
+                                <FormLabel>
+                                    Your USDT Deposit Address
+                                </FormLabel>
                                 <FormControl>
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
-                                        className="flex flex-col space-y-1"
+                                        className="flex max-xl:flex-col justify-between space-y-4"
                                     >
-                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormItem className="flex items-center justify-start space-x-3">
                                             <FormControl>
                                                 <RadioGroupItem value="TRC-20" />
                                             </FormControl>
-                                            <FormLabel className="font-normal space-y-2">
-                                                Tron (TRC20)
-                                                <br />
-                                                <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
-                                            </FormLabel>
+                                            <div className="bg-gray-50   flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
+                                                <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold">
+                                                    Tron (TRC20)
+                                                </FormLabel>
+                                                <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
+                                                    <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
+                                                </div>
+                                            </div>
                                         </FormItem>
-                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormItem className="flex items-center justify-start space-x-3">
                                             <FormControl>
                                                 <RadioGroupItem value="BEP-20" />
                                             </FormControl>
-                                            <FormLabel className="font-normal space-y-2">
-                                                BNB Smart Chain (BEP20)
-                                                <br />
-                                                <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
-                                            </FormLabel>
+                                            <div className="bg-gray-50  flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
+                                                <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold ">
+                                                    BNB Smart Chain (BEP20)
+                                                </FormLabel>
+                                                <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
+                                                    <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
+                                                </div>
+                                            </div>
                                         </FormItem>
                                     </RadioGroup>
                                 </FormControl>
@@ -241,6 +250,8 @@ const MemberDetails = () => {
                             </FormItem>
                         )}
                     />
+                    {/* </div> */}
+
                     <Button
                         disabled={isSubmiting}
                         type="submit"
