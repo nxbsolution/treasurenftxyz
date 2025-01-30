@@ -31,3 +31,28 @@ export const createMember = async (args: Data) => {
   }
 
 }
+
+interface UserData {
+  email: string;
+  username: string;
+  password: string;
+}
+
+
+
+export const createUser = async (args: UserData) => {
+  try {
+    const payload = await getPayload({ config })
+    const getUser = payload.create({
+      collection: 'users',
+      data: {
+        ...args
+      }
+    })
+
+    return await getUser
+  } catch (error) {
+    console.log(error)
+  }
+
+}

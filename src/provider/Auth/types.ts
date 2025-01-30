@@ -15,6 +15,14 @@ export type Create = (args: {
   email: string
   username: string
   password: string
+  country: 'india' | 'pakistan' | 'uae' | 'bangladesh' | 'others';
+  realName?: string | null;
+  mobile?: string | null;
+  city?: string | null;
+  depositAddress: 'TRC-20' | 'BEP-20';
+  uid: string;
+  uplineName: string;
+  uplineUid?: string | null;
 }) => Promise<User>
 
 export type Login = (args: { email: string; password: string }) => Promise<User>
@@ -32,17 +40,4 @@ export interface AuthContext {
   setUser: (user: null | User) => void
   user?: null | User
   member?: null | Member
-  registerMember: Register
 }
-
-export type Register = (args: {
-  user: number;
-  country: 'india' | 'pakistan' | 'uae' | 'bangladesh' | 'others';
-  realName?: string | null;
-  mobile?: string | null;
-  city?: string | null;
-  depositAddress: 'TRC-20' | 'BEP-20';
-  uid: string;
-  uplineName: string;
-  uplineUid?: string | null;
-}) => Promise<Member | undefined>

@@ -25,7 +25,7 @@ export const Users: CollectionConfig = {
     },
   },
   access: {
-    read: authenticated, // only admin and above can read users collection
+    read: () => true, // only admin and above can read users collection
     create: () => true, // any except user in superadmin role
     update: admin, // everyone can update self row, admins can update any user except superadmin, superadmin can update any user
     delete: superAdmin, // admin can delete all except superadmin, superadmin can delete any user

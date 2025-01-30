@@ -5,14 +5,14 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import type { User, Member } from '../../payload-types'
-import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword, Register } from './types'
+import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword } from './types'
 
 import { gql, USER } from './gql'
 import { rest } from './rest'
 
 import { getMemberByUserId } from './getMemberByUserId'
-import { useRouter } from 'next/navigation'
-import { createMember } from './createMember'
+import { createMember, createUser } from './createMember'
+import { redirect } from 'next/navigation'
 
 const Context = createContext({} as AuthContext)
 
@@ -25,9 +25,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
   const [member, setMember] = useState<null | Member>()
   // const [permissions, setPermissions] = useState<null | Permissions>(null)
 
-  const router = useRouter()
-
-  useEffect(() => { console.log({ AuthProvider: "AuthProvider", user }) }, [user]);
+  useEffect(() => { console.log({ AuthProvider: "AuthProvider", user, member }) }, [user, member]);
 
   // On mount, get user and set
   useEffect(() => {
@@ -41,6 +39,9 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
           },
         )
         setUser(user)
+
+        const member = await getMemberByUserId(user?.id || 0)
+        setMember(member)
       }
 
       if (api === 'gql') {
@@ -60,45 +61,14 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
     void fetchMe()
   }, [api])
 
-  useEffect(() => {
-
-    if (!user) {
-      return setMember(null)
-    }
-
-    if (user.id) {
-      async function fetchMember() {
-
-        const response = await getMemberByUserId(user?.id)
-
-        if (response) {
-          setMember(response)
-          console.log(response)
-        } else {
-          router.push('/register')
-        }
-      }
-
-      void fetchMember()
-    }
-  }, [user])
-
-  const registerMember = useCallback<Register>(
-    async (args) => {
-      const createdMember = await createMember(args)
-      setMember(createdMember)
-      return createdMember
-    },
-    [],
-  )
-
   const create = useCallback<Create>(
     async (args) => {
-      if (api === 'rest') {
-        const user = await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users`, args)
-        setUser(user)
-        return user
-      }
+      const { username, password, email, ...rest } = args
+      const createdUser = await createUser({ username, password, email })
+      const createdMember = await createMember({ ...rest, user: createdUser?.id || 0 })
+      setMember(createdMember)
+      setUser(createdUser)
+      return createdUser
 
       if (api === 'gql') {
         const { createUser: user } = await gql(`mutation {
@@ -143,6 +113,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
     if (api === 'rest') {
       await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`)
       setUser(null)
+      setMember(null)
       return
     }
 
@@ -217,7 +188,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
         setUser,
         user,
         member,
-        registerMember,
       }}
     >
       {children}

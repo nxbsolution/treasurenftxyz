@@ -2,8 +2,8 @@
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useState } from "react"
-import MemberDetails from "./_components/MemberDetails"
-import NotAllowed from "./_components/NotAllowed"
+import MemberDetails from "../signup/_components/MemberDetails"
+import NotAllowed from "../signup/_components/NotAllowed"
 import { useAuth } from '@/provider/Auth'
 import { redirect } from "next/navigation"
 

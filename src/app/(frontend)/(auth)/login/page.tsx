@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
-import Link from 'next/link'
+// import Link from 'next/link'
 import Loader from '../../_components/Loader'
 
 
@@ -35,7 +35,7 @@ const Page = () => {
     const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
-    const { login } = useAuth()
+    const { login, user } = useAuth()
     const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -78,11 +78,6 @@ const Page = () => {
                 <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Login Here </h1>
                 <Form {...form} >
                     <form onSubmit={form.handleSubmit(onSubmit)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                form.handleSubmit(onSubmit)();
-                            }
-                        }}
                         className="space-y-6">
                         <FormField
                             control={form.control}

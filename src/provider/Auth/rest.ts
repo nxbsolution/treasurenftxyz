@@ -1,8 +1,8 @@
-import type { User } from '../..//payload-types'
+import type { User } from '@/payload-types'
 
 export const rest = async (
   url: string,
-  args?: any,
+  args?: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   options?: RequestInit,
 ): Promise<null | undefined | User> => {
   const method = options?.method || 'POST'

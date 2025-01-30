@@ -5,6 +5,7 @@ import React from 'react'
 
 import config from '@/payload.config'
 import { LogoutPage } from './LogoutPage'
+import { Button } from '@/components/ui/button'
 
 export default async function Logout() {
   const headers = await getHeaders()
@@ -16,17 +17,11 @@ export default async function Logout() {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
         <div className="max-w-md w-full space-y-8 p-10 bg-white dark:bg-gray-900 shadow-md rounded-lg text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">You are already logged out.</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            What would you like to do next?{' '}
-            <Link href="/" className="text-blue-600 hover:underline">
-              Go to the home page
-            </Link>{' '}
-            or{' '}
-            <Link href="/login" className="text-blue-600 hover:underline">
-              log back in
-            </Link>
-            .
-          </p>
+          <Link href={"/login"}>
+            <Button
+              variant={"outline"}
+              className={`w-full border-blue-500 bg-white text-blue-500 hover:bg-blue-500 hover:text-white`}>Login</Button>
+          </Link>
         </div>
       </div>
     )

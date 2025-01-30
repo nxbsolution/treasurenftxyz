@@ -155,7 +155,6 @@ export default function ContributionForm() {
     { label: "Upline Name", value: member?.uplineName },
     { label: "Upline UID", value: member?.uplineUid }
   ];
-  console.log(member)
 
   return (
     <div className="mb-8 pt-4">
