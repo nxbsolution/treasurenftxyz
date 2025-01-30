@@ -23,7 +23,7 @@ const Header = ({ }) => {
             <div className='flex items-center gap-6'>
                 <SideBar isLoggedIn={isLoggedIn} />
                 <div className=''>
-                    <Link href="/" aria-label='home'>
+                    <Link href="/dashboard" aria-label='home'>
                         <div className='w-48 max-xs:w-28 max-sm:w-36 aspect-[4/1] relative sm:mr-4'>
                             <Image
                                 src='/logo.jpg'

@@ -72,6 +72,10 @@ const Page = () => {
         [login, router],
     )
 
+    if (user) {
+        router.push('/dashboard')
+    }
+
     return (
         <div className='flex justify-center items-center h-screen'>
             <div className='border shadow-lg p-10 max-sm:p-4 rounded-lg w-96 max-sm:w-11/12 mx-auto space-y-4 bg-card'>
