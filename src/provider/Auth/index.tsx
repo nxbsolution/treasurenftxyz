@@ -11,7 +11,7 @@ import { gql, USER } from './gql'
 import { rest } from './rest'
 
 // import { getMemberByUserId } from './getMemberByUserId'
-import { createMember, createUser, deleteUser } from './createMember'
+import { createMember, createUser } from './createMember'
 import { redirect } from 'next/navigation'
 
 const Context = createContext({} as AuthContext)
@@ -63,29 +63,12 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 
   const create = useCallback<Create>(
     async (args) => {
-      try {
-        const { password, email, ...rest } = args
+      const { password, email, ...rest } = args
+      const createdUser = await createUser({ password, email })
+      await createMember({ user: (await createdUser)?.id || 0, ...rest })
 
-        const createdUser = await createUser({ password, email })
-
-        if (!createdUser?.id) {
-          throw new Error('Failed to create user')
-        }
-
-        try {
-          await createMember({ user: createdUser.id, ...rest })
-        } catch (memberError) {
-          // Clean up the created user since member creation failed
-          await deleteUser(createdUser.id)
-          throw new Error('Failed to create member profile')
-        }
-
-        setUser(createdUser)
-        return createdUser
-
-      } catch (error) {
-        throw error
-      }
+      setUser(createdUser)
+      return createdUser
 
       if (api === 'gql') {
         const { createUser: user } = await gql(`mutation {
