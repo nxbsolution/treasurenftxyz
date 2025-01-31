@@ -13,15 +13,47 @@ export const Members: CollectionConfig = {
       required: true,
     },
     {
+      name: "uid",
+      label: "UID",
+      type: "text",
+      required: true,
+      unique: true,
+    },
+    {
+      name: "nft_username",
+      label: "NFT User Name",
+      type: "text",
+      required: true,
+    },
+    {
       name: "country",
       type: "select",
       options: [
-        "india",
-        "pakistan",
-        "uae",
-        "bangladesh",
-        "others"
+        "india", "pakistan",
+        "bangladesh", "rusia",
+        "italy", "australia",
+        "dubai", "saudiArabia",
+        "afghanistan", "others"
       ],
+      required: true,
+    },
+    {
+      name: "level",
+      type: "select",
+      options: [
+        "level1", "level2", "level3",
+        "level4", "level5", "level6"
+      ],
+      required: true,
+    },
+    {
+      name: "uplineName",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "uplineUid",
+      type: "text",
       required: true,
     },
     {
@@ -38,35 +70,28 @@ export const Members: CollectionConfig = {
     },
     {
       name: "depositAddress",
-      label: "Select USDT Deposit Address",
-      type: "radio",
-      required: true,
-      options: [
+      label: "USDT Deposit Address",
+      type: "group",
+      fields: [
         {
-          label: "TRC-20",
-          value: "TRC-20"
+          name: "TRC-20",
+          type: "text",
+          required: true,
         },
         {
-          label: "BEP-20",
-          value: "BEP-20"
+          name: "BEP-20",
+          type: "text",
+          required: true,
         }
       ]
     },
     {
-      name: "uid",
-      label: "UID",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "uplineName",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "uplineUid",
-      type: "text",
-      // required: true,
+      name: "star",
+      type: "select",
+      options: [
+        "star1", "star2", "star3",
+        "star4", "star5", "star6"
+      ],
     }
   ],
 }

@@ -23,8 +23,8 @@ import Loader from '../../_components/Loader'
 
 
 const FormSchema = z.object({
-    password: z.string().min(8, {
-        message: "Password must be at least 8 characters",
+    password: z.string().min(6, {
+        message: "Password must be at least 6 characters",
     }),
     email: z.string().email({
         message: "Please enter a valid email address",
@@ -87,7 +87,7 @@ const Page = () => {
                                 <FormItem>
                                     <FormLabel className='required'>Email</FormLabel>
                                     <FormControl>
-                                        <Input type="email" placeholder="abc@gmail.com" required {...field} />
+                                        <Input type="email" placeholder="e.g. name@example.com" required {...field} />
                                     </FormControl>
                                     <FormDescription>
                                         Enter your account email
@@ -121,7 +121,7 @@ const Page = () => {
                                         </div>
                                     </FormControl>
                                     <FormDescription>
-                                        Password must be at least 8 characters
+                                        Password must be at least 6 characters
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>

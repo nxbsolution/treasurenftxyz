@@ -37,9 +37,13 @@ export const Contributions: CollectionConfig = {
       required: true,
     },
     {
-      name: "nft_username",
-      label: "NFT Username",
-      type: "text",
+      name: "depositAddress",
+      label: "Deposit Address",
+      type: "radio",
+      options: [
+        "TRC-20",
+        "BEP-20",
+      ],
       required: true,
     },
     {

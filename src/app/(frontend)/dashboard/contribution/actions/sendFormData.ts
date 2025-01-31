@@ -68,7 +68,7 @@ export async function sendFormData(formData: FormData) {
 	try {
 		const contributionData = {
 			member: Number(formData.get('member')),
-			nft_username: formData.get('nft_username') as string,
+			depositAddress: formData.get('depositAddress') as "TRC-20" | "BEP-20",
 			transactionId: formData.get('transactionId') as string,
 			star: formData.get('star') as StarRating,
 		}

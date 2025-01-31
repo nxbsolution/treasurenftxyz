@@ -12,9 +12,10 @@ export default function LoadingSkeleton() {
             fill
             className='object-contain  rounded-lg' />
         </div>
-        <h1 className="text-3xl text-center font-bold py-2">
-          <span className='bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>Welcome To The Team of Ninjas </span>🥷
-        </h1>
+        <div className='gap-2 text-center font-bold py-2'>
+          <h1 className=' text-3xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>TEAM OF NINJAS</h1>
+          <h1 className=' text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>REGISTERATION</h1>
+        </div>
       </div>
       <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
         <h2 className="font-semibold text-center text-bold text-lg">User Information</h2>

@@ -100,14 +100,30 @@ export interface User {
 export interface Member {
   id: number;
   user: number | User;
-  country: 'india' | 'pakistan' | 'uae' | 'bangladesh' | 'others';
+  uid: string;
+  nft_username: string;
+  country:
+    | 'india'
+    | 'pakistan'
+    | 'bangladesh'
+    | 'rusia'
+    | 'italy'
+    | 'australia'
+    | 'dubai'
+    | 'saudiArabia'
+    | 'afghanistan'
+    | 'others';
+  level: 'level1' | 'level2' | 'level3' | 'level4' | 'level5' | 'level6';
+  uplineName: string;
+  uplineUid: string;
   realName?: string | null;
   mobile?: string | null;
   city?: string | null;
-  depositAddress: 'TRC-20' | 'BEP-20';
-  uid: string;
-  uplineName: string;
-  uplineUid?: string | null;
+  depositAddress: {
+    'TRC-20': string;
+    'BEP-20': string;
+  };
+  star?: ('star1' | 'star2' | 'star3' | 'star4' | 'star5' | 'star6') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -119,7 +135,7 @@ export interface Contribution {
   id: number;
   verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
   member: number | Member;
-  nft_username: string;
+  depositAddress: 'TRC-20' | 'BEP-20';
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
   transactionId: string;
   screenShot: number | Media;
@@ -236,14 +252,22 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MembersSelect<T extends boolean = true> {
   user?: T;
+  uid?: T;
+  nft_username?: T;
   country?: T;
+  level?: T;
+  uplineName?: T;
+  uplineUid?: T;
   realName?: T;
   mobile?: T;
   city?: T;
-  depositAddress?: T;
-  uid?: T;
-  uplineName?: T;
-  uplineUid?: T;
+  depositAddress?:
+    | T
+    | {
+        'TRC-20'?: T;
+        'BEP-20'?: T;
+      };
+  star?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -254,7 +278,7 @@ export interface MembersSelect<T extends boolean = true> {
 export interface ContributionsSelect<T extends boolean = true> {
   verify?: T;
   member?: T;
-  nft_username?: T;
+  depositAddress?: T;
   star?: T;
   transactionId?: T;
   screenShot?: T;

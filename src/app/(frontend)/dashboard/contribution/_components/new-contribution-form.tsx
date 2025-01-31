@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-import { Star, Upload } from 'lucide-react'
+import { Star, Terminal, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
 
@@ -29,6 +30,8 @@ import Loader from '@/app/(frontend)/_components/Loader'
 import { Member } from '@/payload-types'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -44,7 +47,9 @@ const FormSchema = z.object({
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
     .refine((file) => file.size > 0, 'Star certificate is required'),
-  nft_username: z.string().min(2, 'NFT Username must be at least 2 characters.'),
+  depositAddress: z.enum(["TRC-20", "BEP-20"], {
+    required_error: 'Please select a deposit address.',
+  }),
   star: z.string().min(1, 'Please select a star.'),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   screenShot: z
@@ -63,7 +68,7 @@ type FormValues = z.infer<typeof FormSchema>
 export default function ContributionForm({ member }: { member: Member }) {
 
 
-  const [selectedStar, setSelectedStar] = useState("0")
+  const [selectedStar, setSelectedStar] = useState<any>({ key: '1', value: '25' })
   const [isSubmiting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
@@ -71,7 +76,7 @@ export default function ContributionForm({ member }: { member: Member }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      nft_username: '',
+      depositAddress: undefined,
       star: '',
       transactionId: '',
     },
@@ -81,7 +86,7 @@ export default function ContributionForm({ member }: { member: Member }) {
 
     setIsSubmitting(true)
 
-    const { uploadStarCertificate, screenShot, transactionId, star, nft_username } = values
+    const { uploadStarCertificate, screenShot, transactionId, star, depositAddress } = values
 
     const data = {
       member: member.id,
@@ -89,7 +94,7 @@ export default function ContributionForm({ member }: { member: Member }) {
       screenShot,
       transactionId,
       star,
-      nft_username
+      depositAddress
     }
 
     const formData = new FormData()
@@ -133,32 +138,54 @@ export default function ContributionForm({ member }: { member: Member }) {
   }
 
   interface StarAmount {
-    '1star': string
-    '2star': string
-    '3star': string
-    '4star': string
-    '5star': string
-    '6star': string
+    '1star': {
+      key: string
+      label: string
+    }
+    '2star': {
+      key: string
+      label: string
+    }
+    '3star': {
+      key: string
+      label: string
+    }
+    '4star': {
+      key: string
+      label: string
+    }
+    '5star': {
+      key: string
+      label: string
+    }
+    '6star': {
+      key: string
+      label: string
+    }
   }
 
   const StarAmount: StarAmount = {
-    '1star': "25",
-    '2star': "60",
-    '3star': "90",
-    '4star': "180",
-    '5star': "380",
-    '6star': "580",
+    '1star': { key: "1 Star", label: "25" },
+    '2star': { key: "2 Star", label: "60" },
+    '3star': { key: "3 Star", label: "90" },
+    '4star': { key: "4 Star", label: "180" },
+    '5star': { key: "5 Star", label: "380" },
+    '6star': { key: "6 Star", label: "580" }
   }
 
   const memberDetails = [
-    { label: "Name", value: member?.realName },
-    { label: "Country", value: member?.country },
-    { label: "City", value: member?.city },
-    { label: "Mobile", value: member?.mobile },
     { label: "UID", value: member?.uid },
-    { label: "Deposit Address", value: member?.depositAddress },
+    { label: "NFT Username", value: member?.nft_username },
+    { label: "Country", value: member?.country.toUpperCase() },
+    { label: "Level", value: member?.level },
+    { label: "Real Name", value: member?.realName },
+    { label: "Upline UID", value: member?.uplineUid },
     { label: "Upline Name", value: member?.uplineName },
-    { label: "Upline UID", value: member?.uplineUid }
+    { label: "Mobile Number", value: member?.mobile },
+    { label: "City", value: member?.city ?? "".toUpperCase() },
+    { label: "TRC-20 Deposit Address ", value: member?.depositAddress['TRC-20'] },
+    { label: "BEP-20 Deposit Address ", value: member?.depositAddress['BEP-20'] },
+    { label: "Star", value: member?.star || "Not Have a Star Yet" },
   ];
 
   return (
@@ -172,15 +199,16 @@ export default function ContributionForm({ member }: { member: Member }) {
             fill
             className='object-contain  rounded-lg' />
         </div>
-        <h1 className="text-3xl text-center font-bold py-2">
-          <span className='bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>Welcome To The Team of Ninjas </span>🥷
-        </h1>
+        <div className='gap-2 text-center font-bold py-2'>
+          <h1 className=' text-3xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>TEAM OF NINJAS</h1>
+          <h1 className=' text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>REGISTERATION</h1>
+        </div>
       </div>
 
       <div className="mx-auto container p-4 max-w-2xl space-y-4">
 
         <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
-          <h2 className="font-semibold text-center text-bold text-lg">User Information</h2>
+          <h2 className="font-semibold text-center text-bold text-lg">Your Information</h2>
           {memberDetails.map((item, index) => (
             <div key={index} className="space-y-4">
               <p className="flex justify-between bg-muted">
@@ -190,8 +218,19 @@ export default function ContributionForm({ member }: { member: Member }) {
           ))}
         </div>
 
+        <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary animate-pulse ">
+          <Alert variant={'destructive'} className='border-2'>
+            <Terminal className="h-4 w-4" />
+            <AlertTitle className='font-bold'>REMEMBER!</AlertTitle>
+            <AlertDescription className='font-semibold'>
+              You will not get next month salary if you do not submit your contribution before the 10th of the month.
+            </AlertDescription>
+          </Alert>
+        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
             <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
               <h2 className="font-semibold text-center text-bold text-lg">Star Information</h2>
               <FormField
@@ -199,7 +238,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 name="star"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Select Your Star</FormLabel>
+                    <FormLabel className='required'>Select Your Star</FormLabel>
                     <Select
                       onValueChange={(value: keyof StarAmount) => {
                         field.onChange(value)
@@ -289,8 +328,8 @@ export default function ContributionForm({ member }: { member: Member }) {
                 )}
               />
               <div className="bg-card shadow-inner p-4 space-y-2 rounded-xl">
-                <h2 className="text-center font-bold text-lg text-blue-900">Star Amount</h2>
-                <span className="text-xl font-bold mx-auto block text-center text-blue-400">{`${selectedStar} USDT`}</span>
+                <h2 className="text-center font-bold text-lg text-blue-900">You are {selectedStar.key} Ambassador </h2>
+                <span className="text-xl font-bold mx-auto block text-center text-blue-400">{`Your Contribution is ${selectedStar.label} USDT`}</span>
               </div>
 
               <Controller
@@ -298,7 +337,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 name="uploadStarCertificate"
                 render={({ field: { onChange, value, ...field } }) => (
                   <FormItem className="relative">
-                    <FormLabel>Upload Star Certificate</FormLabel>
+                    <FormLabel className='required'>Upload Star Certificate</FormLabel>
                     <Upload className=" absolute top-8 right-4" />
                     <FormControl className="relative">
                       <Input
@@ -321,31 +360,71 @@ export default function ContributionForm({ member }: { member: Member }) {
 
             </div>
 
+            <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
+              <h2 className="font-semibold text-center text-bold text-lg">
+                Deposit Address
+              </h2>
+
+
+              <FormField
+                control={form.control}
+                name="depositAddress" //depositAddress
+                render={({ field }) => (
+                  <FormItem className="space-y-6 ">
+                    <FormLabel className='required'>
+                      USDT Deposit Address
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col items-center justify-between space-y-4"
+                      >
+                        <FormItem className="flex items-center justify-start space-x-3">
+                          <FormControl>
+                            <RadioGroupItem value="TRC-20" />
+                          </FormControl>
+                          <div className="bg-gray-50   flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
+                            <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold">
+                              Tron (TRC20)
+                            </FormLabel>
+                            <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
+                              <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
+                            </div>
+                          </div>
+                        </FormItem>
+                        <FormItem className="flex items-center justify-start space-x-3">
+                          <FormControl>
+                            <RadioGroupItem value="BEP-20" />
+                          </FormControl>
+                          <div className="bg-gray-50  flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
+                            <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold ">
+                              BNB Smart Chain (BEP20)
+                            </FormLabel>
+                            <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
+                              <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
+                            </div>
+                          </div>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
               <h2 className="font-semibold text-center text-bold text-lg">
                 Transaction Information
               </h2>
-              <FormField
-                control={form.control}
-                name="nft_username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>NFT Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="NFT username" {...field} />
-                    </FormControl>
-                    <FormDescription>Enter your NFT username.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="transactionId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Transaction ID</FormLabel>
+                    <FormLabel className='required'>Transaction ID</FormLabel>
                     <FormControl>
                       <Input placeholder="Transaction ID" {...field} />
                     </FormControl>
@@ -360,7 +439,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 name="screenShot"
                 render={({ field: { onChange, value, ...field } }) => (
                   <FormItem>
-                    <FormLabel>Screenshot</FormLabel>
+                    <FormLabel className='required'>Screenshot</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -379,6 +458,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 )}
               />
             </div>
+
             <div className="flex justify-center">
               <Button
                 disabled={isSubmiting}
@@ -395,6 +475,6 @@ export default function ContributionForm({ member }: { member: Member }) {
           </form>
         </Form>
       </div>
-    </div>
+    </div >
   )
 }

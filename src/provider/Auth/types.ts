@@ -13,16 +13,19 @@ export type ForgotPassword = (args: { email: string }) => Promise<User>
 
 export type Create = (args: {
   email: string
-  username: string
   password: string
-  country: 'india' | 'pakistan' | 'uae' | 'bangladesh' | 'others';
-  realName?: string | null;
-  mobile?: string | null;
-  city?: string | null;
-  depositAddress: 'TRC-20' | 'BEP-20';
+  mobile: string;
+  city: string;
   uid: string;
+  nft_username: string;
+  level: "level1" | "level2" | "level3" | "level4" | "level5" | "level6";
+  star?: "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
+  country: "india" | "pakistan" | "bangladesh" | "rusia" | "italy" | "australia" | "dubai" | "saudiArabia" | "afghanistan" | "others";
+  realName: string;
   uplineName: string;
-  uplineUid?: string | null;
+  uplineUid: string;
+  "TRC-20": string;
+  "BEP-20": string;
 }) => Promise<User>
 
 export type Login = (args: { email: string; password: string }) => Promise<User>
