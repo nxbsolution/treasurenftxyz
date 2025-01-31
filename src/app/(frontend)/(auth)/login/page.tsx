@@ -24,10 +24,10 @@ import Loader from '../../_components/Loader'
 
 const FormSchema = z.object({
     password: z.string().min(8, {
-        message: "Password must be at least 8 characters.",
+        message: "Password must be at least 8 characters",
     }),
     email: z.string().email({
-        message: "Please enter a valid email address.",
+        message: "Please enter a valid email address",
     }),
 })
 
@@ -35,11 +35,12 @@ const Page = () => {
     const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
-    const { login, user } = useAuth()
+    const { login } = useAuth()
     const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
+        mode: "onBlur",
         defaultValues: {
             password: "",
             email: "",
@@ -84,12 +85,12 @@ const Page = () => {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel className='required'>Email</FormLabel>
                                     <FormControl>
-                                        <Input type="email" placeholder="Email or Phone" {...field} />
+                                        <Input type="email" placeholder="abc@gmail.com" required {...field} />
                                     </FormControl>
                                     <FormDescription>
-                                        This is your public display email.
+                                        Enter your account email
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -100,7 +101,7 @@ const Page = () => {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel className='required'>Password</FormLabel>
                                     <FormControl>
                                         <div className='relative'>
                                             <Input

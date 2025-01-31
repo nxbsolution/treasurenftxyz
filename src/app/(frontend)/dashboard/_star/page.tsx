@@ -14,7 +14,7 @@ export default function Page() {
     console.log(object)
 
     const tabs = ["Rules", "New Issue", "Existing update"]
-    const [activeTab, setActiveTab] = useState<keyof typeof object | "">("")
+    const [activeTab, setActiveTab] = useState<keyof typeof object | "">("Rules")
     return (
         <div className='mt-6'>
 

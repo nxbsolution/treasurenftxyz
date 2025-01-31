@@ -275,7 +275,7 @@ export default function SignupForm() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="bangladesh">Bangladesh</SelectItem>
-                      <SelectItem value="india" >India</SelectItem>
+                      <SelectItem value="india">India</SelectItem>
                       <SelectItem value="pakistan" >Pakistan</SelectItem>
                       <SelectItem value="uae" >UAE</SelectItem>
                       <SelectItem value="others" >Others</SelectItem>
