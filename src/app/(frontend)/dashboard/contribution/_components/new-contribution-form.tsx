@@ -329,7 +329,7 @@ export default function ContributionForm({ member }: { member: Member }) {
               />
               <div className="bg-card shadow-inner p-4 space-y-2 rounded-xl">
                 <h2 className="text-center font-bold text-lg text-blue-900">You are {selectedStar?.key || "1 star"} Ambassador </h2>
-                <span className="text-xl font-bold mx-auto block text-center text-blue-400">{`Your Contribution is ${selectedStar.label || "25"} USDT`}</span>
+                <span className="text-xl font-bold mx-auto block text-center text-blue-400">{`Your Contribution is ${selectedStar?.label || "25"} USDT`}</span>
               </div>
 
               <Controller

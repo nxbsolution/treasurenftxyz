@@ -242,8 +242,8 @@ export const cardFields = [
         label: "Mobile Number:",
         type: "text",
         required: true,
-        placeholder: "Enter without country code",
-        description: "Exclude country code (e.g., +91 for India)"
+        placeholder: "Enter with country code",
+        description: "Include country code (e.g., +91 for India)"
       },
       {
         name: "city",
