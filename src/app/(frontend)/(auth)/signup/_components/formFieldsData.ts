@@ -51,7 +51,7 @@ export const FormSchema = z.object({
 
 export const cardFields = [
   {
-    title: "Account Security",
+    title: "Account Information",
     fields: [
       {
         name: "email",
@@ -209,14 +209,6 @@ export const cardFields = [
     title: "Upline Information",
     fields: [
       {
-        name: "realName",
-        label: "Legal Name:",
-        type: "text",
-        required: true,
-        placeholder: "Enter your full legal name",
-        description: "Name as per official documents (i.e. passport, Aadhar, CNIC, etc.)"
-      },
-      {
         name: "uplineName",
         label: "Upline Name:",
         type: "text",
@@ -237,6 +229,14 @@ export const cardFields = [
   {
     title: "Contact & Wallet Details",
     fields: [
+      {
+        name: "realName",
+        label: "Your Real Name:",
+        type: "text",
+        required: true,
+        placeholder: "Enter your full real name",
+        description: "Name as per official documents (i.e. passport, Aadhar, CNIC, etc.)"
+      },
       {
         name: "mobile",
         label: "Mobile Number:",
