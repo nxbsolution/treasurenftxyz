@@ -207,6 +207,16 @@ export default function ContributionForm({ member }: { member: Member }) {
 
       <div className="mx-auto container p-4 max-w-2xl space-y-4">
 
+        <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary animate-pulse ">
+          <Alert variant={'destructive'} className='border-2'>
+            <Terminal className="h-4 w-4" />
+            <AlertTitle className='font-bold'>REMEMBER!</AlertTitle>
+            <AlertDescription className='font-semibold'>
+              You will not get next month salary if you do not submit your contribution before the 10th of the month.
+            </AlertDescription>
+          </Alert>
+        </div>
+
         <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
           <h2 className="font-semibold text-center text-bold text-lg">Your Information</h2>
           {memberDetails.map((item, index) => (
@@ -216,16 +226,6 @@ export default function ContributionForm({ member }: { member: Member }) {
               </p>
             </div>
           ))}
-        </div>
-
-        <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary animate-pulse ">
-          <Alert variant={'destructive'} className='border-2'>
-            <Terminal className="h-4 w-4" />
-            <AlertTitle className='font-bold'>REMEMBER!</AlertTitle>
-            <AlertDescription className='font-semibold'>
-              You will not get next month salary if you do not submit your contribution before the 10th of the month.
-            </AlertDescription>
-          </Alert>
         </div>
 
         <Form {...form}>
