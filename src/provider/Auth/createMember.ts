@@ -71,8 +71,8 @@ export const createUser = async (args: UserData) => {
     })
 
     return await getUser
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    throw new Error(error)
   }
 
 }
