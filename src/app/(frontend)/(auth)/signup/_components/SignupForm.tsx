@@ -141,7 +141,7 @@ export default function SignupForm() {
                             {field.type === "password" ?
                               <PasswordField field={field as CustomFields} formField={formField as any} />
                               : field.type === "select" ? <SelectField field={field as CustomFields} formField={formField as any} />
-                                : field.name === "mobile" ? <Input placeholder={field.placeholder} /> //onChange={handleMobileChange} value={formField.value || phonePrefix} minLength={phonePrefix.length + 1}
+                                : field.name === "mobile" ? <Input {...formField} placeholder={field.placeholder} /> //onChange={handleMobileChange} value={formField.value || phonePrefix} minLength={phonePrefix.length + 1}
                                   : <Input placeholder={field.placeholder} {...formField} />
                             }
                           </FormControl>
