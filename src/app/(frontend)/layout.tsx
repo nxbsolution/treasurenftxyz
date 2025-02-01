@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata = {
   title: 'Ninja Team | Treasure NFT',
-  description: 'A project of Nexusberry',
+  description: 'A Project of TreasureNFT by TeamOfNinjas',
 }
 
 export default function RootLayout({
