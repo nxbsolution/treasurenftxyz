@@ -25,9 +25,7 @@ export const FormSchema = z.object({
   uplineName: z.string().min(3, {
     message: "Upline Name must be at least 3 characters.",
   }),
-  uplineUid: z.string().min(3, {
-    message: "uli must be at least 3 characters.",
-  }),
+  uplineUid: z.string().optional(),
   city: z.string().min(3, {
     message: "City Name must be at least 3 characters.",
   }),
@@ -220,7 +218,6 @@ export const cardFields = [
         name: "uplineUid",
         label: "Upline UID:",
         type: "text",
-        required: true,
         placeholder: "Enter referrer's UID",
         description: "Unique identifier of your referrer"
       },

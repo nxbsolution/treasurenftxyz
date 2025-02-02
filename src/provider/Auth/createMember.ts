@@ -72,7 +72,7 @@ export const createUser = async (args: UserData) => {
 
     return await getUser
   } catch (error: any) {
-    throw new Error(error)
+    throw new Error("Email already exists")
   }
 
 }

@@ -75,10 +75,10 @@ export default function SignupForm() {
   const onSubmit = useCallback(
     async (data: z.infer<typeof FormSchema>) => {
       setIsSubmitting(true)
-      const { confirmPassword, ...rest } = data
+      const { confirmPassword, uplineUid = "Not Available", ...rest } = data
 
       try {
-        await create(rest)
+        await create({ ...rest, uplineUid })
         router.push('/dashboard')
         toast({
           title: 'Success',
