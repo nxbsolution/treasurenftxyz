@@ -21,7 +21,7 @@ export async function sendFormData(formData: FormData) {
 		certificateFile = {
 			data: buffer,
 			size: buffer.byteLength,
-			name: certificateFormDataEntryValue.name,
+			name: certificateFormDataEntryValue.name.replace(/[^a-zA-Z0-9_.-]/g, '_'),
 			mimetype: certificateFormDataEntryValue.type
 		}
 	}
@@ -49,7 +49,7 @@ export async function sendFormData(formData: FormData) {
 		payFile = {
 			data: buffer,
 			size: buffer.byteLength,
-			name: payFormDataEntryValue.name,
+			name: payFormDataEntryValue.name.replace(/[^a-zA-Z0-9_.-]/g, '_'),
 			mimetype: payFormDataEntryValue.type
 		}
 	}
