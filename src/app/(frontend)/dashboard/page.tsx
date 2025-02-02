@@ -22,7 +22,6 @@ export default function Page() {
                 <Link href="/dashboard/contribution" className="bg-primary text-white px-4 py-2 rounded-lg">Pay Contribution</Link>
                 <Link href="/dashboard/coming-soon" className="bg-primary text-white px-4 py-2 rounded-lg">Apply For Salary</Link>
                 <Link href="/dashboard/coming-soon" className="bg-primary text-white px-4 py-2 rounded-lg text-center w-36">Apply For Star Ambassador Certificate</Link>
-                <Link href="/dashboard/coming-soon" className="bg-primary text-white px-4 py-2 rounded-lg">Zoom Meetings</Link>
                 <Link href="/dashboard/coming-soon" className="bg-primary text-white px-4 py-2 rounded-lg">Online Trainings</Link>
             </div>
         </div>
