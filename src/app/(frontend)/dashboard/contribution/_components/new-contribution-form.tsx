@@ -33,14 +33,16 @@ import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const ACCEPTED_DOCUMENT_TYPES = ['application/pdf']
 
 const FormSchema = z.object({
   uploadStarCertificate: z
-    .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .custom<File>((value) => value instanceof File, {
+      message: 'Please upload a screenshot.',
+    })
+    .refine((file) => file.size <= MAX_FILE_SIZE, `File size must be less than 2MB. Please compress your image or choose a smaller file.`)
     .refine(
       (file) =>
         ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
@@ -56,7 +58,7 @@ const FormSchema = z.object({
     .custom<File>((value) => value instanceof File, {
       message: 'Please upload a screenshot.',
     })
-    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `File size must be less than 2MB. Please compress your image or choose a smaller file.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png and .webp formats are supported.',
@@ -75,6 +77,7 @@ export default function ContributionForm({ member }: { member: Member }) {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
+    mode: 'onChange',
     defaultValues: {
       depositAddress: undefined,
       star: '',
@@ -332,7 +335,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 <span className="text-xl font-bold mx-auto block text-center text-blue-400">{`Your Contribution is ${selectedStar?.label || "25"} USDT`}</span>
               </div>
 
-              <Controller
+              <FormField
                 control={form.control}
                 name="uploadStarCertificate"
                 render={({ field: { onChange, value, ...field } }) => (
@@ -434,7 +437,7 @@ export default function ContributionForm({ member }: { member: Member }) {
                 )}
               />
 
-              <Controller
+              <FormField
                 control={form.control}
                 name="screenShot"
                 render={({ field: { onChange, value, ...field } }) => (

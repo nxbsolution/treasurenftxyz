@@ -23,6 +23,11 @@ export default buildConfig({
     },
   },
   collections,
+  upload: {
+    limits: {
+      fileSize: 2 * 1024 * 1024, // 2MB, written in bytes
+    },
+  },
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
