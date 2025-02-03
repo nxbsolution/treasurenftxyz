@@ -19,7 +19,7 @@ export default function LoadingSkeleton() {
       </div>
       <div className="lg:col-span-2 p-6 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
         <h2 className="font-semibold text-center text-bold text-lg">User Information</h2>
-        {Array(7).fill(1).map((_, i) => <Skeleton key={i} className='h-8 rounded-xl w-full bg-gray-200' />)}
+        {Array(3).fill(1).map((_, i) => <Skeleton key={i} className='h-8 rounded-xl w-full bg-gray-200' />)}
       </div>
     </div>
   </div>

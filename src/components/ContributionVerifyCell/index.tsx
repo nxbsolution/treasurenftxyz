@@ -14,7 +14,7 @@ export default function ContributionVerifyCell({ cellData, rowData, link }: { ce
       backgroundColor: "orange"
     },
     APPROVED: {
-      backgroundColor: "green"
+      backgroundColor: "#03c04a"
     },
     REJECTED: {
       backgroundColor: "red"

@@ -27,25 +27,25 @@ import Loader from '@/app/(frontend)/_components/Loader'
 import { FormSchema, cardFields } from './formFieldsData'
 import { CustomFields, PasswordField, SelectField } from './FormFields'
 
-const countryPhoneCodes = {
-  india: "+91",
-  pakistan: "+92",
-  bangladesh: "+880",
-  rusia: "+7",
-  italy: "+39",
-  australia: "+61",
-  dubai: "+971", // Part of UAE
-  saudiArabia: "+966",
-  afghanistan: "+93",
-  others: "+" // Default placeholder for other countries
-}
+// const countryPhoneCodes = {
+//   india: "+91",
+//   pakistan: "+92",
+//   bangladesh: "+880",
+//   rusia: "+7",
+//   italy: "+39",
+//   australia: "+61",
+//   dubai: "+971", // Part of UAE
+//   saudiArabia: "+966",
+//   afghanistan: "+93",
+//   others: "+" // Default placeholder for other countries
+// }
 
 
 export default function SignupForm() {
 
   const { create } = useAuth()
   const [isSubmiting, setIsSubmitting] = useState(false)
-  const [phonePrefix, setPhonePrefix] = useState("")
+  // const [phonePrefix, setPhonePrefix] = useState("")
 
 
   const router = useRouter()
@@ -56,29 +56,43 @@ export default function SignupForm() {
       email: '',
       password: '',
       confirmPassword: '',
-      country: undefined,
-      city: '',
+      // country: undefined,
+      // city: '',
       uid: '',
-      nft_username: '',
-      level: undefined,
+      // nft_username: '',
+      // level: undefined,
       realName: '',
-      uplineName: '',
-      uplineUid: '',
+      // uplineName: '',
+      // uplineUid: '',
       mobile: '',
-      "TRC-20": '',
-      "BEP-20": '',
-      star: undefined,
+      // "TRC-20": '',
+      // "BEP-20": '',
+      // star: undefined,
     }
   })
-
 
   const onSubmit = useCallback(
     async (data: z.infer<typeof FormSchema>) => {
       setIsSubmitting(true)
-      const { confirmPassword, uplineUid = "Not Available", ...rest } = data
+
+      const refinedData = {
+        email: data.email,
+        password: data.password,
+        uid: data.uid,
+        realName: data.realName,
+        mobile: data.mobile,
+        city: "N/A",
+        nft_username: "N/A",
+        level: "level1" as const,
+        country: "others" as const,
+        uplineName: "N/A",
+        uplineUid: "N/A",
+        "TRC-20": "N/A",
+        "BEP-20": "N/A",
+      }
 
       try {
-        await create({ ...rest, uplineUid })
+        await create(refinedData)
         router.push('/dashboard')
         toast({
           title: 'Success',
@@ -98,16 +112,16 @@ export default function SignupForm() {
     [create, router],
   )
 
-  const watchCountry = form.watch("country")
+  // const watchCountry = form.watch("country")
 
 
-  useEffect(() => {
-    if (watchCountry) {
-      const newPrefix = countryPhoneCodes[watchCountry as keyof typeof countryPhoneCodes]
-      setPhonePrefix(newPrefix)
-      form.setValue("mobile", newPrefix)
-    }
-  }, [watchCountry, form])
+  // useEffect(() => {
+  //   if (watchCountry) {
+  //     const newPrefix = countryPhoneCodes[watchCountry as keyof typeof countryPhoneCodes]
+  //     setPhonePrefix(newPrefix)
+  //     form.setValue("mobile", newPrefix)
+  //   }
+  // }, [watchCountry, form])
 
   // const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const value = e.target.value

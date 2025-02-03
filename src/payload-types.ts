@@ -135,6 +135,7 @@ export interface Contribution {
   id: number;
   verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
   member: number | Member;
+  uid?: string | null;
   depositAddress: 'TRC-20' | 'BEP-20';
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
   transactionId: string;
@@ -278,6 +279,7 @@ export interface MembersSelect<T extends boolean = true> {
 export interface ContributionsSelect<T extends boolean = true> {
   verify?: T;
   member?: T;
+  uid?: T;
   depositAddress?: T;
   star?: T;
   transactionId?: T;

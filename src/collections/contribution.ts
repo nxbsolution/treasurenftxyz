@@ -37,6 +37,32 @@ export const Contributions: CollectionConfig = {
       required: true,
     },
     {
+      name: "uid",
+      type: "text",
+      virtual: true,
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        afterRead: [
+          async ({ data, req }) => {
+            if (data?.member) {
+              const populatedMember = await req.payload.findByID({
+                collection: 'members',
+                id: data.member,
+                select: {
+                  uid: true,
+                }
+              });
+              return populatedMember.uid
+            } else {
+              return "Not Found"
+            }
+          }
+        ]
+      }
+    },
+    {
       name: "depositAddress",
       label: "Deposit Address",
       type: "radio",

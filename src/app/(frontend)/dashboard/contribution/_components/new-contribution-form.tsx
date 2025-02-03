@@ -178,17 +178,17 @@ export default function ContributionForm({ member }: { member: Member }) {
 
   const memberDetails = [
     { label: "UID", value: member?.uid },
-    { label: "NFT Username", value: member?.nft_username },
-    { label: "Country", value: member?.country.toUpperCase() },
-    { label: "Level", value: member?.level },
+    // { label: "NFT Username", value: member?.nft_username },
+    // { label: "Country", value: member?.country.toUpperCase() },
+    // { label: "Level", value: member?.level },
     { label: "Real Name", value: member?.realName },
-    { label: "Upline UID", value: member?.uplineUid },
-    { label: "Upline Name", value: member?.uplineName },
+    // { label: "Upline UID", value: member?.uplineUid },
+    // { label: "Upline Name", value: member?.uplineName },
     { label: "Mobile Number", value: member?.mobile },
-    { label: "City", value: member?.city ?? "".toUpperCase() },
-    { label: "TRC-20 Deposit Address ", value: member?.depositAddress['TRC-20'] },
-    { label: "BEP-20 Deposit Address ", value: member?.depositAddress['BEP-20'] },
-    { label: "Star", value: member?.star || "Not Have a Star Yet" },
+    // { label: "City", value: member?.city ?? "".toUpperCase() },
+    // { label: "TRC-20 Deposit Address ", value: member?.depositAddress['TRC-20'] },
+    // { label: "BEP-20 Deposit Address ", value: member?.depositAddress['BEP-20'] },
+    // { label: "Star", value: member?.star || "Not Have a Star Yet" },
   ];
 
   return (
