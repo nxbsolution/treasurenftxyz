@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -142,7 +142,7 @@ export default function SignupForm() {
               <div key={index} className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card m-6'>
                 <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>{card.title}</h1>
 
-                {card.fields.map((field, i) => {
+                {card.fields.map((field) => {
                   return (
                     <FormField
                       key={field.name}

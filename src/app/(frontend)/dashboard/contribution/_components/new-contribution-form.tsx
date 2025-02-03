@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Star, Terminal, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'

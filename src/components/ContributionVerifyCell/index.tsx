@@ -11,7 +11,7 @@ export default function ContributionVerifyCell({ cellData, rowData, link }: { ce
 
   const backgroundColor = {
     PENDING: {
-      backgroundColor: "orange"
+      backgroundColor: "orange",
     },
     APPROVED: {
       backgroundColor: "#03c04a"
@@ -22,6 +22,7 @@ export default function ContributionVerifyCell({ cellData, rowData, link }: { ce
   }
 
   const generalStyle = {
+    color: "white",
     padding: "4px",
     borderRadius: "5px",
     fontWeight: "bold",
