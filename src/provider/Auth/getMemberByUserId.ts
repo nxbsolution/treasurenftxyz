@@ -16,7 +16,7 @@ export const getMemberByUserId = async (userId?: number) => {
       }
     })
 
-    return (await getMember).docs[0]
+    return (await getMember)
   } catch (error) {
     console.log(error)
   }

@@ -28,7 +28,7 @@ export const Users: CollectionConfig = {
     read: () => true, // only admin and above can read users collection
     create: () => true, // any except user in superadmin role
     update: admin, // everyone can update self row, admins can update any user except superadmin, superadmin can update any user
-    delete: superAdmin, // admin can delete all except superadmin, superadmin can delete any user
+    delete: () => true, // admin can delete all except superadmin, superadmin can delete any user
     admin: ({ req: { user } }) => checkRole(['superadmin', 'admin'], user),
   },
   fields: [
