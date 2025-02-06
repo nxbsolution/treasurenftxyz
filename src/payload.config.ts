@@ -1,7 +1,7 @@
 // storage-adapter-import-placeholder
-import { s3Storage } from '@payloadcms/storage-s3';
-import { postgresAdapter } from '@payloadcms/db-postgres'
-// import { sqliteAdapter } from '@payloadcms/db-sqlite'
+// import { s3Storage } from '@payloadcms/storage-s3';
+// import { postgresAdapter } from '@payloadcms/db-postgres'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 // import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -33,36 +33,36 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // db: sqliteAdapter({
-  //   client: {
-  //     url: process.env.DATABASE_URI || '',
-  //   },
-  // }),
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URI || '',
+  db: sqliteAdapter({
+    client: {
+      url: process.env.DATABASE_URI || '',
     },
   }),
+  // db: postgresAdapter({
+  //   pool: {
+  //     connectionString: process.env.POSTGRES_URI || '',
+  //   },
+  // }),
   sharp,
   plugins: [
     // payloadCloudPlugin(),
-    s3Storage({
-      collections: {
-        media: {
-          prefix: 'media',
-        },
-      },
-      bucket: process.env.S3_BUCKET!,
-      config: {
-        forcePathStyle: true,
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-        },
-        region: process.env.S3_REGION!,
-        endpoint: process.env.S3_ENDPOINT!,
-      },
-    })
+    // s3Storage({
+    //   collections: {
+    //     media: {
+    //       prefix: 'media',
+    //     },
+    //   },
+    //   bucket: process.env.S3_BUCKET!,
+    //   config: {
+    //     forcePathStyle: true,
+    //     credentials: {
+    //       accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+    //       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+    //     },
+    //     region: process.env.S3_REGION!,
+    //     endpoint: process.env.S3_ENDPOINT!,
+    //   },
+    // })
   ],
   async onInit(payload) {
     const existingUsers = await payload.find({
