@@ -72,3 +72,6 @@
     color: red;
   }
 }
+.bgImg{
+  background-image:linear-gradient(90deg,rgba(153,188,237,.2),rgba(153,248,207,.5),rgba(255,214,199,.5))
+}
