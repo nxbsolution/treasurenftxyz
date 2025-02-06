@@ -1,6 +1,4 @@
 import React from 'react'
-import { Penguin, iconT, logo } from '../_assets/images'
-import Image from 'next/image'
 import TopCollectionGrid from './TopCollectionGrid'
 import TopCollectionsList from './TopCollectionsList'
 
