@@ -38,9 +38,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
             method: 'GET',
           },
         )
-        if (!user) {
-          setTimeout(() => redirect("/login"), 1000)
-        }
         setUser(user)
       }
 
