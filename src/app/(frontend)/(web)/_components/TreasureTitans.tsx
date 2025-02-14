@@ -41,7 +41,6 @@ const TreasureTitans = ({ TreasureTitonImg }: any) => {
                                         src={TreasureTitonImg || TreasureImg}
                                         sizes='(min-width: 1024px) 50vw,(min-width: 640px) 100vw, 33vw'
                                         fill
-                                        loading='lazy'
                                         className='rounded-xl object-cover'
                                     />
                                 </div>

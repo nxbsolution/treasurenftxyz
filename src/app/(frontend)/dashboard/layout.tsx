@@ -1,4 +1,4 @@
-import Header from "../_components/Header"
+import Header from "../_components/AuthHeader"
 
 
 export default function RootLayout({

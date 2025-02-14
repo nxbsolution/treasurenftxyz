@@ -1,5 +1,5 @@
 import React from 'react'
-import HomePageHeader from './_components/HomePageHeader'
+import HomePageHeader from './_components/WebHeader'
 
 const layout = ({
     children,
