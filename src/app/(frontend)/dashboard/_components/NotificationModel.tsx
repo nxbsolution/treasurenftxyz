@@ -5,7 +5,7 @@ import NotificationCard from './NotificationCard';
 
 export default function NotificationModel() {
 
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   return <Model isOpen={isOpen} onClose={() => setIsOpen(false)} />
 }
