@@ -19,7 +19,7 @@ const Header = ({ }) => {
 
 
     return (
-        <div className='flex sticky justify-between top-0 bg-primary items-center z-50 px-16 max-md:px-10 max-sm:px-8 max-xs:px-2 py-4'>
+        <div className='flex sticky justify-between top-0 bg-primary items-center z-20 px-16 max-md:px-10 max-sm:px-8 max-xs:px-2 py-4'>
             <div className='flex items-center gap-6'>
                 <SideBar isLoggedIn={isLoggedIn} />
                 <div className=''>

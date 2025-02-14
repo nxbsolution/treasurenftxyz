@@ -2,17 +2,12 @@
 
 // import type { Permissions } from 'payload/auth'
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useState, useEffect } from 'react'
 
-import type { User } from '../../payload-types'
 import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword } from './types'
 
-import { gql, USER } from './gql'
-import { rest } from './rest'
-
-// import { getMemberByUserId } from './getMemberByUserId'
-import { createMember, createUser } from './createMember'
-import { redirect } from 'next/navigation'
+import { createMember, createUser, getUser, payloadForgetPassword, payloadLogin, payloadLogout, payloadResetPassword } from './payloadFunctions'
+import { Member, User } from '@/payload-types'
 
 const Context = createContext({} as AuthContext)
 
@@ -22,151 +17,64 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 }) => {
 
   const [user, setUser] = useState<null | User>()
-  // const [member, setMember] = useState<null | Member>()
-  // const [permissions, setPermissions] = useState<null | Permissions>(null)
+  const [member, setMember] = useState<null | Member>()
 
-  useEffect(() => { console.log({ AuthProvider: "AuthProvider", user }) }, [user]);
-
-  // On mount, get user and set
   useEffect(() => {
     const fetchMe = async () => {
-      if (api === 'rest') {
-        const user = await rest(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`,
-          {},
-          {
-            method: 'GET',
-          },
-        )
-        setUser(user)
-      }
-
-      if (api === 'gql') {
-        const { meUser } = await gql(`query {
-          meUser {
-            user {
-              ${USER}
-            }
-            exp
-          }
-        }`)
-
-        setUser(meUser.user)
-      }
+      const { user, member } = await getUser()
+      setMember(member)
+      setUser(user)
     }
-
     void fetchMe()
   }, [api])
+
+
 
   const create = useCallback<Create>(
     async (args) => {
       const { password, email, ...rest } = args
       const createdUser = await createUser({ password, email })
-      await createMember({ user: (await createdUser)?.id || 0, ...rest })
+      await createMember({ user: Number((await createdUser)?.id) || 0, ...rest })
 
-      setUser(createdUser)
       return createdUser
-
-      if (api === 'gql') {
-        const { createUser: user } = await gql(`mutation {
-        createUser(data: { email: "${args.email}", password: "${args.password}", username: "${args.email}" }) {
-          ${USER}
-        }
-      }`)
-
-        setUser(user)
-        return user
-      }
     },
     [api],
   )
 
   const login = useCallback<Login>(
     async (args) => {
-      if (api === 'rest') {
-        const user = await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/login`, args)
-        setUser(user)
-        return user
-      }
-
-      if (api === 'gql') {
-        const { loginUser } = await gql(`mutation {
-        loginUser(email: "${args.email}", password: "${args.password}") {
-          user {
-            ${USER}
-          }
-          exp
-        }
-      }`)
-
-        setUser(loginUser?.user)
-        return loginUser?.user
+      const result = await payloadLogin({ email: args.email, password: args.password })
+      setUser(result?.user)
+      return {
+        success: result.success,
+        message: result.message,
       }
     },
     [api],
   )
 
-  const logout = useCallback<Logout>(async () => {
-    if (api === 'rest') {
-      await rest(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/logout`)
-      setUser(null)
-      return
-    }
-
-    if (api === 'gql') {
-      await gql(`mutation {
-        logoutUser
-      }`)
-
-      setUser(null)
-    }
-  }, [api])
+  const logout = useCallback<Logout>(
+    async () => {
+      const result = await payloadLogout()
+      if (result.success) {
+        setUser(null)
+      }
+      return result
+    }, [api])
 
   const forgotPassword = useCallback<ForgotPassword>(
     async (args) => {
-      if (api === 'rest') {
-        const user = await rest(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/forgot-password`,
-          args,
-        )
-        setUser(user)
-        return user
-      }
-
-      if (api === 'gql') {
-        const { forgotPasswordUser } = await gql(`mutation {
-        forgotPasswordUser(email: "${args.email}")
-      }`)
-
-        return forgotPasswordUser
-      }
+      const token = await payloadForgetPassword(args.email)
+      console.log(token)
+      return token
     },
     [api],
   )
 
   const resetPassword = useCallback<ResetPassword>(
     async (args) => {
-      if (api === 'rest') {
-        const user = await rest(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/reset-password`,
-          args,
-        )
-        setUser(user)
-        return user
-      }
-
-      if (api === 'gql') {
-        const { resetPasswordUser } = await gql(`mutation {
-        resetPasswordUser(password: "${args.password}", token: "${args.token}") {
-          user {
-            ${USER}
-          }
-        }
-      }`)
-
-        setUser(resetPasswordUser.user)
-        return resetPasswordUser.user
-      }
+      const response = await payloadResetPassword(args.password, args.token)
+      return response
     },
     [api],
   )
@@ -174,6 +82,8 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
   return (
     <Context.Provider
       value={{
+        user,
+        member,
         create,
         forgotPassword,
         login,
@@ -181,9 +91,6 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
         // permissions,
         // setPermissions,
         resetPassword,
-        setUser,
-        user,
-        // member,
       }}
     >
       {children}

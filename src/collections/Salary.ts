@@ -1,11 +1,66 @@
-import { CollectionConfig } from "payload";
+import { CollectionConfig, PayloadRequest } from "payload";
+
+const getMemberData = async (req: PayloadRequest, memberId: number) => {
+  const populatedMember = await req.payload.findByID({
+    collection: 'members',
+    id: memberId,
+    select: {
+      uid: true,
+      depositAddress: true,
+    }
+  });
+  return populatedMember
+}
 
 export const Salary: CollectionConfig = {
   slug: "salary",
   admin: {
     useAsTitle: "member",
   },
+  hooks: {
+    afterChange: [
+      async ({ req, doc }) => {
+        await req.payload.create({
+          collection: "notifications",
+          data: {
+            assignToMembers: [doc.member],
+            linkTo: "SALARY",
+            priority: "HIGH",
+            statement: `Your salary application has been ${doc.status.replace(/([A-Z])/g, ' $1').replace(/^./, (str: string) => str.toUpperCase())}`,
+          }
+        });
+      }
+    ]
+  },
   fields: [
+    {
+      name: "status",
+      type: "select",
+      defaultValue: "pending",
+      options: [
+        {
+          label: "Pending",
+          value: "pending",
+        },
+        {
+          label: "Partial Approved",
+          value: "partialApproved",
+        },
+        {
+          label: "Full Approved",
+          value: "fullApproved",
+        },
+        {
+          label: "Rejected",
+          value: "rejected",
+        },
+      ],
+      admin: {
+        components: {
+          Cell: "@/components/SalaryStatusCell",
+        }
+      }
+    },
     {
       name: "member",
       type: "relationship",
@@ -13,14 +68,69 @@ export const Salary: CollectionConfig = {
       required: true,
     },
     {
-      name: "monthlyProgressReport",
-      type: "upload",
-      relationTo: "media",
+      name: "UID",
+      label: "UID",
+      type: "text",
+      virtual: true,
+      admin: {
+        readOnly: true,
+        components: {
+          Cell: "@/components/CopyableCell",
+        }
+      },
+      hooks: {
+        afterRead: [
+          async ({ data, req }) => {
+            if (data?.member) {
+              const { uid } = await getMemberData(req, data.member)
+              return uid
+            } else {
+              return "Not Found"
+            }
+          }
+        ]
+      }
     },
     {
-      name: "starCertificate",
-      type: "upload",
-      relationTo: "media",
+      name: "TRC-20",
+      label: "TRC-20",
+      type: "text",
+      virtual: true,
+      admin: {
+        readOnly: true,
+        components: {
+          Cell: "@/components/CopyableCell",
+        }
+      },
+      hooks: {
+        afterRead: [
+          async ({ data, req }) => {
+            if (data?.member) {
+              const { depositAddress } = await getMemberData(req, data.member)
+              return depositAddress["TRC-20"]
+            } else {
+              return "Not Found"
+            }
+          }
+        ]
+      }
+    },
+    {
+      name: "membersA",
+      type: "number",
+      required: true,
+      admin: {
+        description: "Number of members added in A group.",
+      }
+    },
+    {
+      name: "membersBC",
+      label: "Members B + C",
+      type: "number",
+      required: true,
+      admin: {
+        description: "Number of members added in B + C group.",
+      }
     },
     {
       name: "star",
@@ -33,48 +143,14 @@ export const Salary: CollectionConfig = {
       ]
     },
     {
-      name: "PersonAdded",
-      type: "group",
-      fields: [
-        {
-          type: "row",
-          fields: [
-            {
-              name: "A",
-              type: "number",
-              required: true,
-              min: 0
-            },
-            {
-              name: "B",
-              type: "number",
-              required: true,
-              min: 0
-            },
-            {
-              name: "C",
-              type: "number",
-              required: true,
-              min: 0
-            }
-          ]
-        }
-      ]
+      name: "starCertificate",
+      type: "upload",
+      relationTo: "media",
     },
     {
-      name: "TotalPersonAdded",
-      type: "number",
-      admin: {
-        readOnly: true,
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData }) => {
-            const { A, B, C } = siblingData.PersonAdded;
-            return A + B + C;
-          }
-        ]
-      }
-    }
+      name: "membersScreenshot",
+      type: "upload",
+      relationTo: "media",
+    },
   ],
 }

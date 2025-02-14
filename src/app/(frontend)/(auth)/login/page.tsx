@@ -1,5 +1,5 @@
 "use client"
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import React, { useState, useCallback } from 'react'
 import { useAuth } from '@/provider/Auth'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
 // import Link from 'next/link'
 import Loader from '../../_components/Loader'
+import Link from 'next/link'
 
 
 const FormSchema = z.object({
@@ -35,7 +36,7 @@ const Page = () => {
     const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
-    const { login } = useAuth()
+    const { user, login } = useAuth()
     const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -127,14 +128,9 @@ const Page = () => {
                                 </FormItem>
                             )}
                         />
-                        {/* <div className='flex justify-between text-primary'>
-                            <Link href={"/forgot-password"}>
-                                <Button variant="ghost" size="sm">Forgot Password?</Button>
-                            </Link>
-                            <Link href={"/signup"}>
-                                <Button variant="ghost" size="sm">Sign Up</Button>
-                            </Link>
-                        </div> */}
+                        <Link href={"/forgot-password"} className='text-primary text-sm font-semibold underline'>
+                            Forgot Password?
+                        </Link>
                         <Button
                             disabled={isSubmiting}
                             type="submit"
