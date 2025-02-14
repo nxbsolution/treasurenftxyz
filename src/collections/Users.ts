@@ -3,6 +3,8 @@ import { admin } from '@/access/admin'
 import { checkRole } from '@/access/checkRole'
 import { authenticated } from '@/access/authenticated'
 import type { CollectionConfig } from 'payload'
+import { generateSetPasswordEmailHTML, generateSetPasswordEmailSubject } from "@/email"
+
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -10,6 +12,10 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: {
+    forgotPassword: {
+      generateEmailHTML: generateSetPasswordEmailHTML,
+      generateEmailSubject: generateSetPasswordEmailSubject,
+    },
     tokenExpiration: 28800, // 28800 secs = 8 hours
     verify: false, // Require email verification before being allowed to authenticate
     maxLoginAttempts: 5, // Automatically lock a user out after X amount of failed logins. Set to 0 to disable.

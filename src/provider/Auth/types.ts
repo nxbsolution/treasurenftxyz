@@ -5,11 +5,10 @@ import type { User, Member } from '../../payload-types'
 
 export type ResetPassword = (args: {
   password: string
-  passwordConfirm: string
   token: string
-}) => Promise<User>
+}) => Promise<Message>
 
-export type ForgotPassword = (args: { email: string }) => Promise<User>
+export type ForgotPassword = (args: { email: string }) => Promise<string>
 
 export type Create = (args: {
   email: string
@@ -28,11 +27,18 @@ export type Create = (args: {
   "BEP-20": string;
 }) => Promise<User>
 
-export type Login = (args: { email: string; password: string }) => Promise<User>
+export type Message = {
+  success: boolean;
+  message?: string;
+}
 
-export type Logout = () => Promise<void>
+export type Login = (args: { email: string; password: string }) => Promise<Message>
+
+export type Logout = () => Promise<Message>
 
 export interface AuthContext {
+  user: null | undefined | User
+  member: null | undefined | Member
   create: Create
   forgotPassword: ForgotPassword
   login: Login
@@ -40,7 +46,4 @@ export interface AuthContext {
   permissions?: null | Permissions
   resetPassword: ResetPassword
   // setPermissions: (permissions: null | Permissions) => void
-  setUser: (user: null | User) => void
-  user?: null | User
-  member?: null | Member
 }

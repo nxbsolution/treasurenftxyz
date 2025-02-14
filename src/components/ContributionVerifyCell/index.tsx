@@ -11,13 +11,13 @@ export default function ContributionVerifyCell({ cellData, rowData, link }: { ce
 
   const backgroundColor = {
     PENDING: {
-      backgroundColor: "orange",
+      backgroundColor: "#F39C12",
     },
     APPROVED: {
-      backgroundColor: "#03c04a"
+      backgroundColor: "#30CB83"
     },
     REJECTED: {
-      backgroundColor: "red"
+      backgroundColor: "#E74C3C"
     }
   }
 

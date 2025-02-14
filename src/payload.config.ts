@@ -1,6 +1,7 @@
 // storage-adapter-import-placeholder
 import { s3Storage } from '@payloadcms/storage-s3';
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 // import { sqliteAdapter } from '@payloadcms/db-sqlite'
 // import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -10,6 +11,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import collections from './collections'
+import globals from './globals';
 import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
@@ -23,6 +25,7 @@ export default buildConfig({
     },
   },
   collections,
+  globals,
   upload: {
     limits: {
       fileSize: 2 * 1024 * 1024, // 2MB, written in bytes
@@ -38,6 +41,18 @@ export default buildConfig({
   //     url: process.env.DATABASE_URI || '',
   //   },
   // }),
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.DEFAULT_EMAIL_ADDRESS!,
+    defaultFromName: process.env.DEFAULT_EMAIL_NAME!,
+    transportOptions: {
+      host: process.env.SMTP_HOST!,
+      port: process.env.SMTP_PORT!,
+      auth: {
+        user: process.env.SMTP_USER!,
+        pass: process.env.SMTP_PASS!,
+      },
+    },
+  }),
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URI || '',
@@ -76,7 +91,7 @@ export default buildConfig({
         data: {
           username: 'admin',
           email: 'admin@nexusberry.com',
-          password: 'nxb@123',
+          password: 'nxb@123.',
           roles: ["superadmin", "admin"],
         },
       })

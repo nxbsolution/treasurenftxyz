@@ -14,6 +14,9 @@ export interface Config {
     users: User;
     members: Member;
     contributions: Contribution;
+    salary: Salary;
+    notifications: Notification;
+    star: Star;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -24,6 +27,9 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     contributions: ContributionsSelect<false> | ContributionsSelect<true>;
+    salary: SalarySelect<false> | SalarySelect<true>;
+    notifications: NotificationsSelect<false> | NotificationsSelect<true>;
+    star: StarSelect<false> | StarSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -32,8 +38,12 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'salary-form-settings': SalaryFormSetting;
+  };
+  globalsSelect: {
+    'salary-form-settings': SalaryFormSettingsSelect<false> | SalaryFormSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -166,6 +176,60 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary".
+ */
+export interface Salary {
+  id: number;
+  status?: ('pending' | 'partialApproved' | 'fullApproved' | 'rejected') | null;
+  member: number | Member;
+  UID?: string | null;
+  'TRC-20'?: string | null;
+  /**
+   * Number of members added in A group.
+   */
+  membersA: number;
+  /**
+   * Number of members added in B + C group.
+   */
+  membersBC: number;
+  star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  starCertificate?: (number | null) | Media;
+  membersScreenshot?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications".
+ */
+export interface Notification {
+  id: number;
+  statement: string;
+  assignToStars?: ('1star' | '2star' | '3star' | '4star' | '5star' | '6star')[] | null;
+  assignToMembers?: (number | Member)[] | null;
+  linkTo?: ('SALARY' | 'CONTRIBUTION') | null;
+  assignToDefaulters?: 'CONTRIBUTION' | null;
+  priority?: ('HIGH' | 'NORMAL') | null;
+  display?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "star".
+ */
+export interface Star {
+  id: number;
+  member: number | Member;
+  A: number;
+  BC: number;
+  totalReport: number | Media;
+  oldStarCard?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -182,6 +246,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contributions';
         value: number | Contribution;
+      } | null)
+    | ({
+        relationTo: 'salary';
+        value: number | Salary;
+      } | null)
+    | ({
+        relationTo: 'notifications';
+        value: number | Notification;
+      } | null)
+    | ({
+        relationTo: 'star';
+        value: number | Star;
       } | null)
     | ({
         relationTo: 'media';
@@ -290,6 +366,51 @@ export interface ContributionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary_select".
+ */
+export interface SalarySelect<T extends boolean = true> {
+  status?: T;
+  member?: T;
+  UID?: T;
+  'TRC-20'?: T;
+  membersA?: T;
+  membersBC?: T;
+  star?: T;
+  starCertificate?: T;
+  membersScreenshot?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications_select".
+ */
+export interface NotificationsSelect<T extends boolean = true> {
+  statement?: T;
+  assignToStars?: T;
+  assignToMembers?: T;
+  linkTo?: T;
+  assignToDefaulters?: T;
+  priority?: T;
+  display?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "star_select".
+ */
+export interface StarSelect<T extends boolean = true> {
+  member?: T;
+  A?: T;
+  BC?: T;
+  totalReport?: T;
+  oldStarCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -338,6 +459,36 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary-form-settings".
+ */
+export interface SalaryFormSetting {
+  id: number;
+  openSalaryForm?: boolean | null;
+  teamAPrompt: string;
+  teamBCPrompt: string;
+  minGrowthRate: number;
+  progressReportPrompt: string;
+  uploadStarPrompt: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary-form-settings_select".
+ */
+export interface SalaryFormSettingsSelect<T extends boolean = true> {
+  openSalaryForm?: T;
+  teamAPrompt?: T;
+  teamBCPrompt?: T;
+  minGrowthRate?: T;
+  progressReportPrompt?: T;
+  uploadStarPrompt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

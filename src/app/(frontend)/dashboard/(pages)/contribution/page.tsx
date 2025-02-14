@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react'
 import ContributionForm from './_components/new-contribution-form'
 import { useAuth } from "@/provider/Auth"
 import { Member } from '@/payload-types'
-import { getMemberByUserId } from '@/provider/Auth/getMemberByUserId'
 import LoadingSkeleton from './_components/LoadingSkeleton'
 import { PaginatedDocs } from 'payload'
 import { Button } from '@/components/ui/button'
-import { deleteUser } from '@/provider/Auth/createMember'
-import Loader from '../../_components/Loader'
+import { deleteUser } from '@/provider/Auth/payloadFunctions'
+import Loader from '../../../_components/Loader'
 import { useRouter } from 'next/navigation'
+import { getMemberByUserId } from './actions/getMemberByUserId'
 
 function Page() {
     const [member, setMember] = useState<PaginatedDocs<Member> | undefined>()
