@@ -246,8 +246,6 @@ export const getMemberNotifications = async (id: number | undefined, page: numbe
       }
     })
 
-    console.log(notifications)
-
     return {
       notifications: notifications.docs,
       totalPages: notifications.totalPages,

@@ -25,6 +25,7 @@ export const Salary: CollectionConfig = {
           data: {
             assignToMembers: [doc.member],
             linkTo: "SALARY",
+            assignToStars: null,
             priority: "HIGH",
             statement: `Your salary application has been ${doc.status.replace(/([A-Z])/g, ' $1').replace(/^./, (str: string) => str.toUpperCase())}`,
           }

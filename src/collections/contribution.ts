@@ -42,6 +42,9 @@ export const Contributions: CollectionConfig = {
       virtual: true,
       admin: {
         readOnly: true,
+        components: {
+          Cell: "@/components/CopyableCell",
+        }
       },
       hooks: {
         afterRead: [
