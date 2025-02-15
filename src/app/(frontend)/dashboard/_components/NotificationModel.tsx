@@ -2,17 +2,19 @@
 import { useState } from "react"
 import { X } from 'lucide-react';
 import NotificationCard from './NotificationCard';
+import { Notification } from "@/payload-types";
 
-export default function NotificationModel() {
+export default function NotificationModel({ notifications }: { notifications: Notification[] }) {
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(notifications.length > 0)
 
-  return <Model isOpen={isOpen} onClose={() => setIsOpen(false)} />
+  return <Model isOpen={isOpen} onClose={() => setIsOpen(false)} notifications={notifications} />
 }
 
-function Model({ isOpen, onClose }: {
+function Model({ isOpen, onClose, notifications }: {
   isOpen: boolean,
-  onClose: () => void
+  onClose: () => void,
+  notifications: Notification[]
 }) {
 
   return (
@@ -27,8 +29,16 @@ function Model({ isOpen, onClose }: {
             </button>
           </div>
           <div>
-            <div className="h-20 w-full p-5">
-              <NotificationCard time="123123" LinkTo='Salary' statement='ALi' variant='success' />
+            <div className="w-full p-5 space-y-4">
+              {notifications.map((notification) => (
+                <NotificationCard
+                  key={notification.id}
+                  LinkTo={notification.linkTo as string}
+                  statement={notification.statement}
+                  time={notification.createdAt}
+                  variant={notification.priority === "HIGH" ? "warning" : "info"}
+                />
+              ))}
             </div>
           </div>
         </div>

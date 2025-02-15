@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 export default function NotificationCard({
   LinkTo = "Message", variant = "info", statement, time
 }: {
-  LinkTo?: string, variant?: string, statement: string, time: string
+  LinkTo?: string, variant?: string, statement: string, time?: string
 }) {
 
   const getStyle = (variant: string) => {
@@ -28,7 +28,7 @@ export default function NotificationCard({
       <LucideBell className="h-6 w-6 mt-4" />
       <div className='flex justify-between'>
         <AlertTitle className="text-lg font-bold">{LinkTo}</AlertTitle>
-        <p className="text-xs text-muted-foreground">{format(new Date(time), 'MMM d, yyyy h:mm a')}</p>
+        {time && <p className="text-xs text-muted-foreground">{format(new Date(time), 'MMM d, yyyy h:mm a')}</p>}
       </div>
       <AlertDescription>
         {statement}

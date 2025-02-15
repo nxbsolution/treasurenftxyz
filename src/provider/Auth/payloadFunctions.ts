@@ -1,6 +1,6 @@
 "use server"
 
-import { getPayload, Where } from "payload"
+import { getPayload } from "payload"
 import config from "@/payload.config"
 import { cookies, headers } from "next/headers";
 
@@ -213,13 +213,14 @@ export const getUser = async () => {
   }
 }
 
-export const getMemberNotifications = async (limit: number = 10) => {
+export const getMemberNotifications = async (id: number | undefined, page: number = 1, limit: number = 10) => {
   try {
     const payload = await getPayload({ config })
     const notifications = await payload.find({
       collection: 'notifications',
       sort: '-createdAt',
       limit,
+      page,
       where: {
         and: [
           {
@@ -236,7 +237,7 @@ export const getMemberNotifications = async (limit: number = 10) => {
               },
               {
                 assignToMembers: {
-                  equals: 1
+                  equals: id
                 }
               }
             ]
@@ -245,10 +246,26 @@ export const getMemberNotifications = async (limit: number = 10) => {
       }
     })
 
-    return { notifications: notifications.docs, error: null }
+    console.log(notifications)
+
+    return {
+      notifications: notifications.docs,
+      totalPages: notifications.totalPages,
+      currentPage: notifications.page,
+      hasNextPage: notifications.hasNextPage,
+      hasPrevPage: notifications.hasPrevPage,
+      error: null
+    }
   } catch (error) {
     console.log(error)
-    return { notifications: [], error: error instanceof Error ? error.message : "Something went wrong" }
+    return {
+      notifications: [],
+      totalPages: 0,
+      currentPage: 1,
+      hasNextPage: false,
+      hasPrevPage: false,
+      error: error instanceof Error ? error.message : "Something went wrong"
+    }
   }
 }
 

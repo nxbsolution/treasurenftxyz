@@ -18,7 +18,6 @@ import Upload from "./Upload"
 
 import { sendSalaryData } from './../_actions/sendSalaryData'
 
-import { useAuth } from '@/provider/Auth'
 import { getEligibility } from '../../star-ambassadors/_components/starFromData'
 import Eligibilty from './Eligibilty'
 import { Member, SalaryFormSetting } from '@/payload-types'
