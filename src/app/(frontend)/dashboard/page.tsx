@@ -9,7 +9,7 @@ export default async function Page() {
     const { notifications, error } = await getMemberNotifications(member?.id)
 
     return (
-        <div className="container mx-auto space-y-6 max-sm:space-y-10">
+        <div className="container mx-auto space-y-6 max-sm:space-y-10 pb-6">
             <NotificationModel notifications={notifications.filter((ntfc) => ntfc.priority === 'HIGH')} />
             <NotificationCards notifications={notifications} error={error} />
             <DashboardCards />

@@ -11,6 +11,7 @@ export default function Page() {
 
   const Tabs: { [key: string]: JSX.Element } = {
     "Rules": <Rules />,
+    // "Check Status": <CheckStatus />,
     "New Issue": <NewIssue />,
     "Existing Update": <ExistingUpdate />
   }

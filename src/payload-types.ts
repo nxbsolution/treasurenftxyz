@@ -22,7 +22,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    members: {
+      contributions: 'contributions';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
@@ -134,6 +138,10 @@ export interface Member {
     'BEP-20': string;
   };
   star?: ('star1' | 'star2' | 'star3' | 'star4' | 'star5' | 'star6') | null;
+  contributions?: {
+    docs?: (number | Contribution)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -345,6 +353,7 @@ export interface MembersSelect<T extends boolean = true> {
         'BEP-20'?: T;
       };
   star?: T;
+  contributions?: T;
   updatedAt?: T;
   createdAt?: T;
 }
