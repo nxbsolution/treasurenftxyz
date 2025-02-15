@@ -49,9 +49,6 @@ const FormSchema = z.object({
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
     .refine((file) => file.size > 0, 'Star certificate is required'),
-  depositAddress: z.enum(["TRC-20", "BEP-20"], {
-    required_error: 'Please select a deposit address.',
-  }),
   star: z.string().min(1, 'Please select a star.'),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   screenShot: z
@@ -79,7 +76,6 @@ export default function ContributionForm({ member }: { member: Member }) {
     resolver: zodResolver(FormSchema),
     mode: 'onChange',
     defaultValues: {
-      depositAddress: undefined,
       star: '',
       transactionId: '',
     },
@@ -89,7 +85,7 @@ export default function ContributionForm({ member }: { member: Member }) {
 
     setIsSubmitting(true)
 
-    const { uploadStarCertificate, screenShot, transactionId, star, depositAddress } = values
+    const { uploadStarCertificate, screenShot, transactionId, star } = values
 
     const data = {
       member: member.id,
@@ -97,7 +93,6 @@ export default function ContributionForm({ member }: { member: Member }) {
       screenShot,
       transactionId,
       star,
-      depositAddress
     }
 
     const formData = new FormData()
@@ -364,57 +359,29 @@ export default function ContributionForm({ member }: { member: Member }) {
             </div>
 
             <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
+
               <h2 className="font-semibold text-center text-bold text-lg">
-                Deposit Address
+                USDT Deposit Address
               </h2>
 
+              <div className="bg-gray-50 ">
+                <FormLabel className="font-semibold">
+                  TRC-20:
+                </FormLabel>
+                <div className="overflow-auto ">
+                  <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
+                </div>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="depositAddress" //depositAddress
-                render={({ field }) => (
-                  <FormItem className="space-y-6 ">
-                    <FormLabel className='required'>
-                      USDT Deposit Address
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-col items-center justify-between space-y-4"
-                      >
-                        <FormItem className="flex items-center justify-start space-x-3">
-                          <FormControl>
-                            <RadioGroupItem value="TRC-20" />
-                          </FormControl>
-                          <div className="bg-gray-50   flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
-                            <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold">
-                              Tron (TRC20)
-                            </FormLabel>
-                            <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
-                              <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
-                            </div>
-                          </div>
-                        </FormItem>
-                        <FormItem className="flex items-center justify-start space-x-3">
-                          <FormControl>
-                            <RadioGroupItem value="BEP-20" />
-                          </FormControl>
-                          <div className="bg-gray-50  flex flex-col text-center p-4 space-y-2 rounded-xl ring-1 ring-primary">
-                            <FormLabel className="text-[20px] max-sm:text-[16px] font-semibold ">
-                              BNB Smart Chain (BEP20)
-                            </FormLabel>
-                            <div className=" overflow-auto sm:min-w-[380px] max-sm:max-w-[310px]  max-xs:max-w-[210px] max-xxs:max-w-[170px]">
-                              <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
-                            </div>
-                          </div>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="bg-gray-50">
+                <FormLabel className="font-semibold ">
+                  BEP-20:
+                </FormLabel>
+                <div className="overflow-auto ">
+                  <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
+                </div>
+              </div>
+
             </div>
 
             <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">
