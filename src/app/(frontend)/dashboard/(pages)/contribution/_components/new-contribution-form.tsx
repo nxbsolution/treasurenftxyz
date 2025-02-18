@@ -89,6 +89,8 @@ export default function ContributionForm({ member }: { member: Member }) {
 
     const data = {
       member: member.id,
+      realName: member.realName,
+      uid: member.uid,
       uploadStarCertificate,
       screenShot,
       transactionId,
@@ -172,14 +174,14 @@ export default function ContributionForm({ member }: { member: Member }) {
   }
 
   const memberDetails = [
-    { label: "UID", value: member?.uid },
+    { label: "UID", value: member.uid },
     // { label: "NFT Username", value: member?.nft_username },
     // { label: "Country", value: member?.country.toUpperCase() },
     // { label: "Level", value: member?.level },
-    { label: "Real Name", value: member?.realName },
+    { label: "Real Name", value: member.realName },
     // { label: "Upline UID", value: member?.uplineUid },
     // { label: "Upline Name", value: member?.uplineName },
-    { label: "Mobile Number", value: member?.mobile },
+    { label: "Mobile Number", value: member.mobile },
     // { label: "City", value: member?.city ?? "".toUpperCase() },
     // { label: "TRC-20 Deposit Address ", value: member?.depositAddress['TRC-20'] },
     // { label: "BEP-20 Deposit Address ", value: member?.depositAddress['BEP-20'] },
@@ -194,6 +196,7 @@ export default function ContributionForm({ member }: { member: Member }) {
           <Image
             src='/img1.jpg'
             alt='logo'
+            sizes='112px'
             fill
             className='object-contain  rounded-lg' />
         </div>

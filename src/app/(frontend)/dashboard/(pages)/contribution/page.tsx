@@ -1,11 +1,11 @@
-"use client"
 import React from 'react'
 import ContributionForm from './_components/new-contribution-form'
-import { useAuth } from "@/provider/Auth"
 import LoadingSkeleton from './_components/LoadingSkeleton'
+import { getUser } from '@/provider/Auth/payloadFunctions'
 
-function Page() {
-    const { member } = useAuth()
+async function Page() {
+
+    const { member } = await getUser()
 
     if (!member) {
         return <LoadingSkeleton />

@@ -68,6 +68,8 @@ export async function sendFormData(formData: FormData) {
 	try {
 		const contributionData = {
 			member: Number(formData.get('member')),
+			realName: formData.get('realName') as string,
+			uid: formData.get('uid') as string,
 			depositAddress: "TRC-20" as const,
 			transactionId: formData.get('transactionId') as string,
 			star: formData.get('star') as StarRating,

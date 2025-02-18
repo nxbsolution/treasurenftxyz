@@ -34,7 +34,7 @@ export type SalaryForm = UseFormReturn<{
   realName?: string;
 }, any, undefined>
 
-export default function SalaryForm({ formSettings, member }: { formSettings: SalaryFormSetting, member: Member | null }) {
+export default function SalaryForm({ formSettings, member }: { formSettings: SalaryFormSetting, member: Member }) {
 
   const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
   const [isContributionPaid, setIsContributionPaid] = useState(true)
@@ -94,7 +94,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
         }
 
         const formData = new FormData()
-        formData.append("id", String(member?.id))
+        formData.append("id", String(member.id))
         Object.entries(data).forEach(([key, value]) => {
           if (value instanceof File) {
             formData.append(key, value)
@@ -103,8 +103,11 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
           }
         });
 
-        if (member?.depositAddress['TRC-20'] === data['TRC-20']) {
-          formData.delete("TRC-20")
+        formData.set("uid", String(member.uid))
+        formData.set("realName", String(member.realName))
+
+        if (member.depositAddress['TRC-20'] !== data['TRC-20']) {
+          formData.append("depositeAddress", String(data['TRC-20']))
         }
 
         const result = await sendSalaryData(formData)
@@ -115,6 +118,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
             description: "Your application has been submitted successfully.",
             variant: "success",
           })
+          form.reset()
         } else {
           toast({
             title: "Error uploading data",

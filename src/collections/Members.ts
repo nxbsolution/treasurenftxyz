@@ -3,8 +3,8 @@ import { CollectionConfig } from "payload";
 export const Members: CollectionConfig = {
   slug: "members",
   admin: {
-    useAsTitle: "realName",
-    listSearchableFields: ["uid", "nft_username", "realName"],
+    useAsTitle: "uid",
+    listSearchableFields: ["uid", "realName"],
   },
   fields: [
     {
@@ -33,6 +33,7 @@ export const Members: CollectionConfig = {
               type: "text",
               required: true,
               unique: true,
+              index: true,
               admin: {
                 readOnly: true,
                 components: {

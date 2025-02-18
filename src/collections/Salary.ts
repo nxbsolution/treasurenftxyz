@@ -1,21 +1,17 @@
-import { CollectionConfig, PayloadRequest } from "payload";
-
-const getMemberData = async (req: PayloadRequest, memberId: number) => {
-  const populatedMember = await req.payload.findByID({
-    collection: 'members',
-    id: memberId,
-    select: {
-      uid: true,
-      depositAddress: true,
-    }
-  });
-  return populatedMember
-}
+import { CollectionConfig } from "payload";
 
 export const Salary: CollectionConfig = {
   slug: "salary",
   admin: {
     useAsTitle: "member",
+    listSearchableFields: ["uid", "realName"],
+    components: {
+      beforeListTable: [
+        {
+          path: "@/components/SalaryList",
+        }
+      ]
+    }
   },
   hooks: {
     afterChange: [
@@ -23,7 +19,7 @@ export const Salary: CollectionConfig = {
         await req.payload.create({
           collection: "notifications",
           data: {
-            assignToMembers: [doc.member],
+            assignToUid: [doc.member],
             linkTo: "SALARY",
             assignToStars: null,
             priority: "HIGH",
@@ -67,54 +63,39 @@ export const Salary: CollectionConfig = {
       type: "relationship",
       relationTo: "members",
       required: true,
+      admin: {
+        readOnly: true,
+        hidden: true,
+        disableListColumn: true,
+      }
     },
     {
-      name: "UID",
-      label: "UID",
+      name: "uid",
       type: "text",
-      virtual: true,
       admin: {
         readOnly: true,
         components: {
           Cell: "@/components/CopyableCell",
         }
       },
-      hooks: {
-        afterRead: [
-          async ({ data, req }) => {
-            if (data?.member) {
-              const { uid } = await getMemberData(req, data.member)
-              return uid
-            } else {
-              return "Not Found"
-            }
-          }
-        ]
+    },
+    {
+      name: "realName",
+      type: "text",
+      admin: {
+        readOnly: true,
       }
     },
     {
       name: "TRC-20",
       label: "TRC-20",
       type: "text",
-      virtual: true,
       admin: {
         readOnly: true,
         components: {
           Cell: "@/components/CopyableCell",
         }
       },
-      hooks: {
-        afterRead: [
-          async ({ data, req }) => {
-            if (data?.member) {
-              const { depositAddress } = await getMemberData(req, data.member)
-              return depositAddress["TRC-20"]
-            } else {
-              return "Not Found"
-            }
-          }
-        ]
-      }
     },
     {
       name: "membersA",

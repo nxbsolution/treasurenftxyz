@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
     Sheet,
@@ -6,6 +5,7 @@ import {
     SheetHeader,
     SheetTrigger,
     SheetTitle,
+    SheetClose,
 } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
 
@@ -15,14 +15,23 @@ export default function WebSideBar({ isLoggedIn }: { isLoggedIn: boolean }) {
             <SheetTrigger asChild className="cursor-pointer">
                 <Menu size={30} strokeWidth={2} className="stroke-foreground" />
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="overflow-y-scroll">
                 <SheetHeader>
                     <SheetTitle>
                         <Link href={isLoggedIn ? '/logout' : '/login'}>
-                            <Button className='border-2 rounded-xl text-lg max-sm:text-base p-4 text-card max-sm:p-4 hover:bg-card hover:text-foreground focus-visible:ring-card focus-visible:ring-0'>{isLoggedIn ? "Logout" : "Login"}</Button>
+                            <div className='text-lg font-semibold p-4 rounded-lg hover:bg-primary/70 mt-4 bg-primary text-card'>{isLoggedIn ? "Logout" : "Login"}</div>
                         </Link>
                     </SheetTitle>
                 </SheetHeader>
+                <div className="grid gap-2 py-4">
+                    <Link href={"/dashboard"} aria-label={"Dashboard"}>
+                        <SheetClose asChild>
+                            <div className='text-lg font-semibold bg-card p-4 rounded-lg hover:bg-primary/30'>
+                                Dashboard
+                            </div>
+                        </SheetClose>
+                    </Link>
+                </div>
             </SheetContent>
         </Sheet>
     )
