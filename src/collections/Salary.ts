@@ -72,6 +72,7 @@ export const Salary: CollectionConfig = {
     {
       name: "uid",
       type: "text",
+      index: true,
       admin: {
         readOnly: true,
         components: {
@@ -82,6 +83,7 @@ export const Salary: CollectionConfig = {
     {
       name: "realName",
       type: "text",
+      index: true,
       admin: {
         readOnly: true,
       }
