@@ -52,6 +52,7 @@ export const Contributions: CollectionConfig = {
     {
       name: "uid",
       type: "text",
+      index: true,
       admin: {
         readOnly: true,
         components: {
@@ -62,6 +63,7 @@ export const Contributions: CollectionConfig = {
     {
       name: "realName",
       type: "text",
+      index: true,
       admin: {
         readOnly: true,
         // components: {
