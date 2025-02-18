@@ -47,7 +47,7 @@ export const Notifications: CollectionConfig = {
       defaultValue: ["1star", "2star", "3star", "4star", "5star", "6star"],
     },
     {
-      name: "assignToMembers",
+      name: "assignToUid",
       type: "relationship",
       relationTo: "members",
       hasMany: true,

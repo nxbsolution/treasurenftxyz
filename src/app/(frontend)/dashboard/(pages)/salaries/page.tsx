@@ -2,6 +2,7 @@ import SalaryForm from "./_components/SalaryForm";
 import { getSalaryFormSettings } from "./_actions/GetSalaryFormSettings";
 import { unstable_cache } from "next/cache";
 import { getUser } from "@/provider/Auth/payloadFunctions";
+import LoadingSkeleton from "../contribution/_components/LoadingSkeleton";
 
 const getCachedSalaryFormSettings = unstable_cache(
   async () => {
@@ -45,6 +46,10 @@ export default async function Page() {
         </p>
       </div >
     )
+  }
+
+  if (!member) {
+    return <LoadingSkeleton />
   }
 
   return (

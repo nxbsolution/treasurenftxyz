@@ -8,11 +8,11 @@ export const dashboardLinks = [
     href: '/dashboard/presentation'
   },
   {
-    label: 'Star Ambassadors',
+    label: 'Apply for Star Ambassador Certificate',
     href: '/dashboard/star-ambassadors'
   },
   {
-    label: 'Star Ambassador Salaries',
+    label: 'Apply for Star Ambassador Salary',
     href: '/dashboard/salaries'
   },
   {
@@ -30,6 +30,10 @@ export const dashboardLinks = [
   {
     label: 'Events/LDP',
     href: '/dashboard/events-ldp'
+  },
+  {
+    label: 'Zoom Webinar',
+    href: '/dashboard/zoom-webinar'
   },
   {
     label: 'Alerts/Notifications',

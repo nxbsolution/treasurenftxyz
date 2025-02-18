@@ -11,7 +11,15 @@ export const Contributions: CollectionConfig = {
     create: authenticated,
   },
   admin: {
-    useAsTitle: "member",
+    useAsTitle: "realName",
+    listSearchableFields: ["uid", "realName"],
+    components: {
+      beforeListTable: [
+        {
+          path: "@/components/ContributionList",
+        }
+      ]
+    }
   },
   defaultSort: "-createdAt",
   fields: [
@@ -35,34 +43,30 @@ export const Contributions: CollectionConfig = {
       type: "relationship",
       relationTo: "members",
       required: true,
+      admin: {
+        readOnly: true,
+        hidden: true,
+        disableListColumn: true,
+      }
     },
     {
       name: "uid",
       type: "text",
-      virtual: true,
       admin: {
         readOnly: true,
         components: {
           Cell: "@/components/CopyableCell",
         }
       },
-      hooks: {
-        afterRead: [
-          async ({ data, req }) => {
-            if (data?.member) {
-              const populatedMember = await req.payload.findByID({
-                collection: 'members',
-                id: data.member,
-                select: {
-                  uid: true,
-                }
-              });
-              return populatedMember.uid
-            } else {
-              return "Not Found"
-            }
-          }
-        ]
+    },
+    {
+      name: "realName",
+      type: "text",
+      admin: {
+        readOnly: true,
+        // components: {
+        //   Cell: "@/components/CopyableCell",
+        // }
       }
     },
     {
@@ -89,6 +93,9 @@ export const Contributions: CollectionConfig = {
       name: "transactionId",
       type: "text",
       required: true,
+      admin: {
+        readOnly: true,
+      }
     },
     {
       name: "screenShot",

@@ -236,7 +236,7 @@ export const getMemberNotifications = async (id: number | undefined, page: numbe
                 }
               },
               {
-                assignToMembers: {
+                assignToUid: {
                   equals: id
                 }
               }

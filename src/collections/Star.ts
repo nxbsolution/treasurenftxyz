@@ -3,19 +3,6 @@ import { CollectionConfig } from "payload";
 
 export const Star: CollectionConfig = {
   slug: "star",
-  hooks: {
-    // beforeValidate: [
-    //   ({ data }) => {
-    //     const eligibility = getEligibility(data?.A, data?.BC)
-    //     if (eligibility === "not eligible") {
-    //       return null;
-    //     }
-    //     else {
-    //       return data
-    //     }
-    //   }
-    // ],
-  },
   fields: [
     {
       name: "member",

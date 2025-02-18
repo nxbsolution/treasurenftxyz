@@ -154,6 +154,7 @@ export interface Contribution {
   verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
   member: number | Member;
   uid?: string | null;
+  realName?: string | null;
   depositAddress: 'TRC-20' | 'BEP-20';
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
   transactionId: string;
@@ -190,7 +191,8 @@ export interface Salary {
   id: number;
   status?: ('pending' | 'partialApproved' | 'fullApproved' | 'rejected') | null;
   member: number | Member;
-  UID?: string | null;
+  uid?: string | null;
+  realName?: string | null;
   'TRC-20'?: string | null;
   /**
    * Number of members added in A group.
@@ -214,7 +216,7 @@ export interface Notification {
   id: number;
   statement: string;
   assignToStars?: ('1star' | '2star' | '3star' | '4star' | '5star' | '6star')[] | null;
-  assignToMembers?: (number | Member)[] | null;
+  assignToUid?: (number | Member)[] | null;
   linkTo?: ('SALARY' | 'CONTRIBUTION') | null;
   assignToDefaulters?: 'CONTRIBUTION' | null;
   priority?: ('HIGH' | 'NORMAL') | null;
@@ -365,6 +367,7 @@ export interface ContributionsSelect<T extends boolean = true> {
   verify?: T;
   member?: T;
   uid?: T;
+  realName?: T;
   depositAddress?: T;
   star?: T;
   transactionId?: T;
@@ -380,7 +383,8 @@ export interface ContributionsSelect<T extends boolean = true> {
 export interface SalarySelect<T extends boolean = true> {
   status?: T;
   member?: T;
-  UID?: T;
+  uid?: T;
+  realName?: T;
   'TRC-20'?: T;
   membersA?: T;
   membersBC?: T;
@@ -397,7 +401,7 @@ export interface SalarySelect<T extends boolean = true> {
 export interface NotificationsSelect<T extends boolean = true> {
   statement?: T;
   assignToStars?: T;
-  assignToMembers?: T;
+  assignToUid?: T;
   linkTo?: T;
   assignToDefaulters?: T;
   priority?: T;
