@@ -5,7 +5,7 @@ import type { CollectionConfig } from "payload";
 export const Contributions: CollectionConfig = {
   slug: 'contributions',
   access: {
-    read: authenticated,
+    read: admin,
     update: admin,
     delete: admin,
     create: authenticated,

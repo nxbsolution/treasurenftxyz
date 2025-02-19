@@ -1,3 +1,5 @@
+import { admin } from "@/access/admin";
+import { authenticated } from "@/access/authenticated";
 import { CollectionConfig } from "payload";
 
 export const Notifications: CollectionConfig = {
@@ -6,7 +8,10 @@ export const Notifications: CollectionConfig = {
     useAsTitle: "statement",
   },
   access: {
-    read: () => true,
+    read: admin,
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
   fields: [
     {

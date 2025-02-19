@@ -1,3 +1,4 @@
+import { admin } from "@/access/admin";
 import { revalidateTag } from "next/cache";
 import { GlobalConfig } from "payload";
 
@@ -7,6 +8,9 @@ export const salaryFormSettings: GlobalConfig = {
     afterChange: [
       () => revalidateTag('salary-form-settings')
     ]
+  },
+  access: {
+    read: admin
   },
   fields: [
     {

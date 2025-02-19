@@ -22,6 +22,7 @@ import { getEligibility } from '../../star-ambassadors/_components/starFromData'
 import Eligibilty from './Eligibilty'
 import { Member, SalaryFormSetting } from '@/payload-types'
 import { checkLastContribution } from '@/provider/Auth/payloadFunctions'
+import VideoMessage from './VideoMessage'
 
 export type SalaryForm = UseFormReturn<{
   membersA: number;
@@ -37,34 +38,35 @@ export type SalaryForm = UseFormReturn<{
 export default function SalaryForm({ formSettings, member }: { formSettings: SalaryFormSetting, member: Member }) {
 
   const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
+  const [isVideoCompleted, setIsVideoCompleted] = useState(false)
   const [isContributionPaid, setIsContributionPaid] = useState(true)
 
   useEffect(() => {
-    if (member) {
 
-      form.setValue("TRC-20", member.depositAddress['TRC-20'])
+    form.setValue("TRC-20", member.depositAddress['TRC-20'])
+    form.setValue("uid", member.uid)
+    form.setValue("realName", member.realName)
 
-      checkLastContribution(member.id)
-        .then((response) => {
-          if (response.success) {
-            setIsContributionPaid(response.result)
-          } else {
-            toast({
-              title: "Error checking last contribution",
-              description: response.error,
-              variant: "destructive",
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
+    checkLastContribution(member.id)
+      .then((response) => {
+        if (response.success) {
+          setIsContributionPaid(response.result)
+        } else {
           toast({
             title: "Error checking last contribution",
-            description: err instanceof Error ? err.message : "An unknown error occurred",
+            description: response.error,
             variant: "destructive",
           })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        toast({
+          title: "Error checking last contribution",
+          description: err instanceof Error ? err.message : "An unknown error occurred",
+          variant: "destructive",
         })
-    }
+      })
   }, [member])
 
 
@@ -102,9 +104,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
             formData.append(key, String(value))
           }
         });
-
-        formData.set("uid", String(member.uid))
-        formData.set("realName", String(member.realName))
 
         if (member.depositAddress['TRC-20'] !== data['TRC-20']) {
           formData.append("depositeAddress", String(data['TRC-20']))
@@ -158,18 +157,24 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
 
         <MemberDetail form={form} member={member} />
 
-        <GrowthRate form={form} teamAPrompt={formSettings.teamAPrompt} teamBCPrompt={formSettings.teamBCPrompt} />
+        <VideoMessage handleVideoComplete={() => setIsVideoCompleted(true)} />
 
-        <Upload form={form} ProgressReportPrompt={formSettings.progressReportPrompt} starPrompt={formSettings.uploadStarPrompt} />
+        {isVideoCompleted ? (
+          <>
+            <GrowthRate form={form} teamAPrompt={formSettings.teamAPrompt} teamBCPrompt={formSettings.teamBCPrompt} />
 
-        {isEligible ? <Eligibilty isEligible={isEligible} /> : <></>}
+            <Upload form={form} ProgressReportPrompt={formSettings.progressReportPrompt} starPrompt={formSettings.uploadStarPrompt} />
 
-        <Button
-          type="submit"
-          disabled={form.formState.isSubmitting}
-          className="w-1/2 mx-auto max-sm:w-11/12 text-lg rounded-xl text-card bg-blue-500 hover:bg-blue-400">
-          {form.formState.isSubmitting ? <Loader /> : 'Apply Now'}
-        </Button>
+            {isEligible ? <Eligibilty isEligible={isEligible} /> : <></>}
+
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="w-1/2 mx-auto max-sm:w-11/12 text-lg rounded-xl text-card bg-blue-500 hover:bg-blue-400">
+              {form.formState.isSubmitting ? <Loader /> : 'Apply Now'}
+            </Button>
+          </>
+        ) : null}
 
       </form>
     </Form >
