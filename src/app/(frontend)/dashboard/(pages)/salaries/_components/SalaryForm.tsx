@@ -23,6 +23,7 @@ import Eligibilty from './Eligibilty'
 import { Member, SalaryFormSetting } from '@/payload-types'
 import { checkLastContribution } from '@/provider/Auth/payloadFunctions'
 import VideoMessage from './VideoMessage'
+import { useRouter } from 'next/navigation'
 
 export type SalaryForm = UseFormReturn<{
   membersA: number;
@@ -40,6 +41,8 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
   const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
   const [isVideoCompleted, setIsVideoCompleted] = useState(!Boolean(formSettings.videoLink))
   const [isContributionPaid, setIsContributionPaid] = useState(true)
+
+  const router = useRouter()
 
   useEffect(() => {
 
@@ -117,6 +120,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
             description: "Your application has been submitted successfully.",
             variant: "success",
           })
+          router.push("/dashboard")
           form.reset()
         } else {
           toast({

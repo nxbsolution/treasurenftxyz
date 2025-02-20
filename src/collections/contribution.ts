@@ -45,7 +45,6 @@ export const Contributions: CollectionConfig = {
       required: true,
       admin: {
         readOnly: true,
-        hidden: true,
         disableListColumn: true,
       }
     },

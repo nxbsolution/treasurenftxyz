@@ -1,5 +1,6 @@
 import { authenticated } from "@/access/authenticated";
 import { manager } from "@/access/manegar";
+import { SalaryStatusNotification } from "@/hooks/SalaryStatusNotification";
 import { CollectionConfig } from "payload";
 
 export const Salary: CollectionConfig = {
@@ -23,18 +24,7 @@ export const Salary: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      async ({ req, doc }) => {
-        await req.payload.create({
-          collection: "notifications",
-          data: {
-            assignToUid: [doc.member],
-            linkTo: "SALARY",
-            assignToStars: null,
-            priority: "HIGH",
-            statement: `Your salary application has been ${doc.status.replace(/([A-Z])/g, ' $1').replace(/^./, (str: string) => str.toUpperCase())}`,
-          }
-        });
-      }
+      SalaryStatusNotification
     ]
   },
   fields: [
@@ -73,7 +63,6 @@ export const Salary: CollectionConfig = {
       required: true,
       admin: {
         readOnly: true,
-        hidden: true,
         disableListColumn: true,
       }
     },

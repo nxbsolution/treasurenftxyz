@@ -11,7 +11,6 @@ export default function Page() {
 
   const Tabs: { [key: string]: JSX.Element } = {
     "Rules": <Rules />,
-    // "Check Status": <CheckStatus />,
     "New Issue": <NewIssue />,
     "Existing Update": <ExistingUpdate />
   }
@@ -36,7 +35,7 @@ export default function Page() {
             aria-selected={activeTab === tab}
             aria-controls={`${tab}-panel`}
             tabIndex={activeTab === tab ? 0 : -1}
-            className={`px-6 py-3 ring-2 text-lg rounded-lg ring-primary font-bold 
+            className={`px-6 py-3 ring-2 text-lg rounded-lg ring-primary font-bold max-sm:text-sm max-xs:p-2
               ${activeTab === tab ? 'bg-primary text-white' : 'hover:text-primary hover:shadow-[6px_6px_10px_hsl(var(--primary))] duration-500 hover:-translate-y-[1px]'}`}>
             {tab}
           </button>

@@ -27,14 +27,14 @@ export const Members: CollectionConfig = {
               relationTo: "users",
               required: true,
             },
-            // {
-            //   name: "allowSalaryWithoutContribution",
-            //   type: "checkbox",
-            //   defaultValue: false,
-            //   admin: {
-            //     description: "If checked, this member can apply for salary without contribution.",
-            //   }
-            // },
+            {
+              name: "allowSalaryWithoutContribution",
+              type: "checkbox",
+              defaultValue: false,
+              admin: {
+                description: "If checked, this member can apply for salary without contribution.",
+              }
+            },
             {
               name: "uid",
               label: "UID",

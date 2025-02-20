@@ -58,6 +58,7 @@ export default function SalaryStatusCell({ cellData, rowData }: { cellData: Sala
       {loading ? "updating...." :
         <select
           value={currentStatus as StatusType}
+          key={rowData.id}
           onChange={(e) => handleChange(rowData.id, e.target.value as Salary["status"])}
           className="p-2 rounded border"
           style={{ ...generalStyle, ...backgroundColor[currentStatus || "pending"] }}
