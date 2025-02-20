@@ -94,7 +94,7 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   blocked?: boolean | null;
-  roles?: ('superadmin' | 'admin' | 'member')[] | null;
+  roles?: ('superadmin' | 'admin' | 'manager' | 'member')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -130,7 +130,7 @@ export interface Member {
   level: 'level1' | 'level2' | 'level3' | 'level4' | 'level5' | 'level6';
   uplineName: string;
   uplineUid: string;
-  realName?: string | null;
+  realName: string;
   mobile?: string | null;
   city?: string | null;
   depositAddress: {
@@ -485,6 +485,10 @@ export interface SalaryFormSetting {
   minGrowthRate: number;
   progressReportPrompt: string;
   uploadStarPrompt: string;
+  /**
+   * Please provide the youtube video link
+   */
+  videoLink?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -499,6 +503,7 @@ export interface SalaryFormSettingsSelect<T extends boolean = true> {
   minGrowthRate?: T;
   progressReportPrompt?: T;
   uploadStarPrompt?: T;
+  videoLink?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

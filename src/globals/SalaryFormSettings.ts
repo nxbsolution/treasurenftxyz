@@ -1,3 +1,4 @@
+import { admin } from "@/access/admin";
 import { revalidateTag } from "next/cache";
 import { GlobalConfig } from "payload";
 
@@ -7,6 +8,9 @@ export const salaryFormSettings: GlobalConfig = {
     afterChange: [
       () => revalidateTag('salary-form-settings')
     ]
+  },
+  access: {
+    read: admin
   },
   fields: [
     {
@@ -46,6 +50,15 @@ export const salaryFormSettings: GlobalConfig = {
       label: "Upload Star Prompt",
       type: "text",
       required: true,
+    },
+    {
+      name: "videoLink",
+      label: "Youtube Video Link",
+      type: "text",
+      // required: true,
+      admin: {
+        description: "Please provide the youtube video link"
+      }
     }
   ]
 }

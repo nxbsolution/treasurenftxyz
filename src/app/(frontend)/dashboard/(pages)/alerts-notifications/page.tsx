@@ -13,7 +13,7 @@ export default async function Page({
 
   const { member } = await getUser()
   const currentPage = Number((await searchParams).page) || 1
-  const { notifications, totalPages, hasNextPage, hasPrevPage } = await getMemberNotifications(member?.id, currentPage)
+  const { notifications, totalPages, hasNextPage, hasPrevPage } = await getMemberNotifications({ id: member?.id, page: currentPage, star: member?.star })
 
   return (
     <div className='container mx-auto my-10'>

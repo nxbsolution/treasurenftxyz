@@ -1,3 +1,5 @@
+import { authenticated } from "@/access/authenticated";
+import { manager } from "@/access/manegar";
 import { CollectionConfig } from "payload";
 
 export const Salary: CollectionConfig = {
@@ -12,6 +14,12 @@ export const Salary: CollectionConfig = {
         }
       ]
     }
+  },
+  access: {
+    read: manager,
+    create: authenticated,
+    update: manager,
+    delete: manager,
   },
   hooks: {
     afterChange: [

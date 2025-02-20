@@ -37,12 +37,12 @@ export default function CopyableCell({ cellData }: {
                 onClick={copyToClipboard}
                 type="button" // Explicitly set the button type to "button"
               >
-                {isCopied ? <Check size={12} color='green' /> : <Copy size={12} />}
+                {isCopied ? <Check size={16} color='green' /> : <Copy size={16} />}
               </Button>
               {cellData}
             </div>
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent side='top' align='start' style={{ backgroundColor: "grey", color: "black", fontSize: "12px", padding: "4px" }}>
             <p >{isCopied ? 'Copied!' : 'Click to copy'}</p>
           </TooltipContent>
         </Tooltip>

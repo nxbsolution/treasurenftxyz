@@ -6,7 +6,7 @@ import NotificationModel from "./_components/NotificationModel"
 export default async function Page() {
 
     const { member } = await getUser()
-    const { notifications, error } = await getMemberNotifications(member?.id)
+    const { notifications, error } = await getMemberNotifications({ id: member?.id, star: member?.star })
 
     return (
         <div className="container mx-auto space-y-6 max-sm:space-y-10 pb-6">

@@ -1,3 +1,5 @@
+import { admin } from "@/access/admin";
+import { authenticated } from "@/access/authenticated";
 import { CollectionConfig } from "payload";
 
 export const Members: CollectionConfig = {
@@ -5,6 +7,12 @@ export const Members: CollectionConfig = {
   admin: {
     useAsTitle: "uid",
     listSearchableFields: ["uid", "realName"],
+  },
+  access: {
+    read: admin,
+    create: () => true,
+    update: authenticated,
+    delete: authenticated,
   },
   fields: [
     {
@@ -81,6 +89,7 @@ export const Members: CollectionConfig = {
             {
               name: "realName",
               type: "text",
+              required: true,
             },
             {
               name: "mobile",

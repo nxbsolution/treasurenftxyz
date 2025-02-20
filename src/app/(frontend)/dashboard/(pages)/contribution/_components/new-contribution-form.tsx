@@ -367,24 +367,25 @@ export default function ContributionForm({ member }: { member: Member }) {
                 USDT Deposit Address
               </h2>
 
-              <div className="bg-gray-50 ">
-                <FormLabel className="font-semibold">
-                  TRC-20:
-                </FormLabel>
-                <div className="overflow-auto ">
+              <div className="bg-gray-50 space-y-2">
+                <FormLabel className="font-semibold flex justify-between">
+                  <span className='font-semibold'>
+                    TRC-20:
+                  </span>
                   <CopyToClipboard text="TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm" />
-                </div>
-              </div>
-
-              <div className="bg-gray-50">
-                <FormLabel className="font-semibold ">
-                  BEP-20:
                 </FormLabel>
-                <div className="overflow-auto ">
-                  <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
-                </div>
+                <p className='text-sm overflow-auto bg-gray-200 p-1 rounded-sm'>TVoq5JD3WqM425UWrFAzXQ3baYBzpnvWpm</p>
               </div>
 
+              <div className="bg-gray-50 space-y-2">
+                <FormLabel className="font-semibold flex justify-between">
+                  <span className='font-semibold'>
+                    BEP-20:
+                  </span>
+                  <CopyToClipboard text="0x9de1fd65e906abaf5661eecfd5be887472a1ded6" />
+                </FormLabel>
+                <p className='text-sm overflow-auto bg-gray-200 p-1 rounded-sm'>0x9de1fd65e906abaf5661eecfd5be887472a1ded6</p>
+              </div>
             </div>
 
             <div className="p-8 bg-card shadow-md shadow-foreground rounded-3xl space-y-4 ring-primary ">

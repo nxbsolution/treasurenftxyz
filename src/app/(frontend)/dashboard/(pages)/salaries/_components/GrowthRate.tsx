@@ -84,7 +84,7 @@ export default function GrowthRate({ form, teamAPrompt, teamBCPrompt }: {
               <Input type="number" {...field} />
             </FormControl>
             <FormDescription>
-              Enter Members A {teamAPrompt}
+              {teamAPrompt}
             </FormDescription>
             <FormMessage />
           </FormItem>
@@ -101,7 +101,7 @@ export default function GrowthRate({ form, teamAPrompt, teamBCPrompt }: {
               <Input type="number" {...field} />
             </FormControl>
             <FormDescription>
-              Enter Members B + C {teamBCPrompt}
+              {teamBCPrompt}
             </FormDescription>
             <FormMessage />
           </FormItem>
