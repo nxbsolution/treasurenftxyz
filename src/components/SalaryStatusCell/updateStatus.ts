@@ -4,7 +4,6 @@ import { getPayload } from "payload"
 import config from "@payload-config"
 
 import { Salary } from "@/payload-types"
-import { Success } from "node_modules/@payloadcms/ui/dist/providers/ToastContainer/icons/Success"
 
 export const updateStatus = async (id: number, status: Salary["status"]) => {
 

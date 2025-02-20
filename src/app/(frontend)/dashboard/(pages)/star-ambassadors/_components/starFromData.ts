@@ -32,7 +32,7 @@ export const newIssueSchema = z.object({
         .nonnegative("Must be a positive number")
         .min(0, "Team BC must be greater than 0")
     ),
-  star: z.string().min(1, 'Please select a star.'),
+  starApplyingFor: z.string().min(1, 'Please select a star.'),
   membersScreenshot: z.custom<File>((value) => value instanceof File, {
     message: 'Please upload your report.',
   })
@@ -46,8 +46,8 @@ export const newIssueSchema = z.object({
 })
 
 export const existingIssueSchema = newIssueSchema.extend({
-  oldStarCertificate: z.custom<File>((value) => value instanceof File, {
-    message: 'Please upload your old star certificate.',
+  latestStarCertificate: z.custom<File>((value) => value instanceof File, {
+    message: 'Please upload your Latest star certificate.',
   })
     .refine((file) => file.size <= MAX_FILE_SIZE, `File size must be less than 2MB. Please compress your image or choose a smaller file.`)
     .refine(
@@ -55,5 +55,5 @@ export const existingIssueSchema = newIssueSchema.extend({
         ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
-    .refine((file) => file.size > 0, 'old star certificate is required'),
+    .refine((file) => file.size > 0, 'latest certificate is required'),
 })

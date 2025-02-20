@@ -248,7 +248,7 @@ export interface StarAmbassador {
   membersBC: number;
   starApplyingFor: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
   membersScreenshot?: (number | null) | Media;
-  starCertificate?: (number | null) | Media;
+  latestStarCertificate?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -435,7 +435,7 @@ export interface StarAmbassadorsSelect<T extends boolean = true> {
   membersBC?: T;
   starApplyingFor?: T;
   membersScreenshot?: T;
-  starCertificate?: T;
+  latestStarCertificate?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -1,6 +1,5 @@
 import { admin } from "@/access/admin";
 import { authenticated } from "@/access/authenticated";
-import { getEligibility } from "@/app/(frontend)/dashboard/(pages)/star-ambassadors/_components/starFromData";
 import { CollectionConfig } from "payload";
 
 export const Star: CollectionConfig = {
@@ -66,7 +65,7 @@ export const Star: CollectionConfig = {
       relationTo: "media",
     },
     {
-      name: "starCertificate",
+      name: "latestStarCertificate",
       type: "upload",
       relationTo: "media",
     },
