@@ -64,6 +64,12 @@ export async function sendFormData(formData: FormData) {
 
 	// ------------------- Create contribution Now ------------------------------
 	type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star";
+	type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
+
+	const convertStarFormat = (star: StarRating) => {
+		const number = star.charAt(0);
+		return `star${number}` as MemberStar;
+	};
 
 	try {
 		const contributionData = {
@@ -74,10 +80,17 @@ export async function sendFormData(formData: FormData) {
 			transactionId: formData.get('transactionId') as string,
 			star: formData.get('star') as StarRating,
 		}
-		console.log(contributionData)
 
 		const uploadStarCertificate = certificateMedia.id;
 		const screenShot = payMedia.id;
+
+		await payload.update({
+			collection: "members",
+			id: contributionData.member,
+			data: {
+				star: convertStarFormat(contributionData.star),
+			}
+		})
 
 		const newContribution = await payload.create({
 			collection: 'contributions',

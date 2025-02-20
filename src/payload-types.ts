@@ -485,6 +485,10 @@ export interface SalaryFormSetting {
   minGrowthRate: number;
   progressReportPrompt: string;
   uploadStarPrompt: string;
+  /**
+   * Please provide the youtube video link
+   */
+  videoLink?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -499,6 +503,7 @@ export interface SalaryFormSettingsSelect<T extends boolean = true> {
   minGrowthRate?: T;
   progressReportPrompt?: T;
   uploadStarPrompt?: T;
+  videoLink?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

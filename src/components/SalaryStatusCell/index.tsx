@@ -1,14 +1,16 @@
 "use client"
-
+import { useState } from "react";
 import { Salary } from "@/payload-types";
-import { useRouter, usePathname } from "next/navigation"
+import { updateStatus } from "./updateStatus";
+import { toast } from "@payloadcms/ui";
 
-type cellData = Salary["status"]
 
-export default function SalaryStatusCell({ cellData, rowData, link }: { cellData: cellData, rowData: any, link?: boolean }) {
+export default function SalaryStatusCell({ cellData, rowData }: { cellData: Salary["status"], rowData: Salary }) {
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const [currentStatus, setCurrentStatus] = useState(cellData);
+  const [loading, setLoading] = useState(false);
+
+  type StatusType = Exclude<Salary["status"], null | undefined>;
 
   const backgroundColor = {
     pending: {
@@ -33,22 +35,39 @@ export default function SalaryStatusCell({ cellData, rowData, link }: { cellData
     display: "inline-block",
   }
 
-  const linkStyle = {
-    cursor: "pointer",
-    textDecoration: "underline",
-    textUnderlineOffset: "2px",
+  const handleChange = async (id: number, value: Salary["status"]) => {
+    try {
+      setLoading(true);
+      const { success, error } = await updateStatus(id, value);
+      if (success) {
+        setCurrentStatus(value);
+        toast.success("updated successfully");
+      } else {
+        toast.error("Error updating status")
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error instanceof Error ? error.message : "Unknown Error occured");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <span
-      style={{ ...generalStyle, ...backgroundColor[cellData || "pending"], ...link && linkStyle }}
-      onClick={() => {
-        if (link) {
-          router.push(`${pathname}/${rowData.id}`)
-        }
-      }}
-    >
-      {cellData?.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-    </span>
+    <>
+      {loading ? "updating...." :
+        <select
+          value={currentStatus as StatusType}
+          onChange={(e) => handleChange(rowData.id, e.target.value as Salary["status"])}
+          className="p-2 rounded border"
+          style={{ ...generalStyle, ...backgroundColor[currentStatus || "pending"] }}
+        >
+          <option value="pending">Pending</option>
+          <option value="partialApproved">Partial Approved</option>
+          <option value="fullApproved">Full Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      }
+    </>
   )
 };

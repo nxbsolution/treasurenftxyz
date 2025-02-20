@@ -3,6 +3,7 @@
 import { getPayload } from "payload"
 import config from "@/payload.config"
 import { cookies, headers } from "next/headers";
+import { Member } from "@/payload-types";
 
 interface Data {
   user: number;
@@ -213,7 +214,19 @@ export const getUser = async () => {
   }
 }
 
-export const getMemberNotifications = async (id: number | undefined, page: number = 1, limit: number = 10) => {
+export const getMemberNotifications = async ({ id, limit = 10, page = 1, star }: { id: number | undefined, limit?: number, page?: number, star?: Member["star"] }) => {
+
+  type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star"
+  type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
+
+  const convertStarFormat = (star: MemberStar | null | undefined): StarRating | undefined => {
+    if (star) {
+      const number = star.charAt(4);
+      return `${number}star` as StarRating;
+    }
+  };
+
+
   try {
     const payload = await getPayload({ config })
     const notifications = await payload.find({
@@ -232,7 +245,7 @@ export const getMemberNotifications = async (id: number | undefined, page: numbe
             or: [
               {
                 assignToStars: {
-                  equals: '1star'
+                  equals: convertStarFormat(star)
                 }
               },
               {

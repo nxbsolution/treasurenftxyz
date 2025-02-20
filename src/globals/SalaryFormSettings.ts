@@ -50,6 +50,15 @@ export const salaryFormSettings: GlobalConfig = {
       label: "Upload Star Prompt",
       type: "text",
       required: true,
+    },
+    {
+      name: "videoLink",
+      label: "Youtube Video Link",
+      type: "text",
+      // required: true,
+      admin: {
+        description: "Please provide the youtube video link"
+      }
     }
   ]
 }

@@ -38,7 +38,7 @@ export type SalaryForm = UseFormReturn<{
 export default function SalaryForm({ formSettings, member }: { formSettings: SalaryFormSetting, member: Member }) {
 
   const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
-  const [isVideoCompleted, setIsVideoCompleted] = useState(false)
+  const [isVideoCompleted, setIsVideoCompleted] = useState(!Boolean(formSettings.videoLink))
   const [isContributionPaid, setIsContributionPaid] = useState(true)
 
   useEffect(() => {
@@ -157,7 +157,9 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
 
         <MemberDetail form={form} member={member} />
 
-        <VideoMessage handleVideoComplete={() => setIsVideoCompleted(true)} />
+        {formSettings.videoLink ?
+          <VideoMessage handleVideoComplete={() => setIsVideoCompleted(true)} videoLink={formSettings.videoLink} />
+          : null}
 
         {isVideoCompleted ? (
           <>
