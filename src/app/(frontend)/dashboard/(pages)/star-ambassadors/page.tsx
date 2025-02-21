@@ -10,13 +10,13 @@ export default function Page() {
   const searchParams = useSearchParams()
 
   const Tabs: { [key: string]: JSX.Element } = {
-    "Rules": <Rules />,
-    "New Issue": <NewIssue />,
-    "Existing Update": <ExistingUpdate />
+    "Check Criteria": <Rules />,
+    "Apply for New Star Ambassador": <NewIssue />,
+    "Update Your Star Certificate": <ExistingUpdate />
   }
 
   const [activeTab, setActiveTab] = useState<keyof typeof Tabs | "">(
-    (searchParams.get('tab') as keyof typeof Tabs) || "Rules"
+    (searchParams.get('tab') as keyof typeof Tabs) || "Check Criteria"
   )
 
   // Update URL when tab changes

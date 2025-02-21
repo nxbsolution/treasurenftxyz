@@ -86,17 +86,17 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
     async (data: z.infer<typeof applySalarySchema>) => {
       try {
 
-        const eligibility = getEligibility(data.membersA, data.membersBC)
-        setIsEligible(eligibility)
+        // const eligibility = getEligibility(data.membersA, data.membersBC)
+        // setIsEligible(eligibility)
 
-        if (eligibility.star !== data.star) {
-          toast({
-            title: "Your growth rate is not eligible for selected star.",
-            description: "Please check your eligibility criteria and try again.",
-            variant: "destructive",
-          })
-          return;
-        }
+        // if (eligibility.star !== data.star) {
+        //   toast({
+        //     title: "Your growth rate is not eligible for selected star.",
+        //     description: "Please check your eligibility criteria and try again.",
+        //     variant: "destructive",
+        //   })
+        //   return;
+        // }
 
         const formData = new FormData()
         formData.append("id", String(member.id))

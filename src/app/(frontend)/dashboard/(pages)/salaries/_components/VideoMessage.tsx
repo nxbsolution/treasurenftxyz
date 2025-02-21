@@ -35,7 +35,8 @@ export default function VideoMessage({ handleVideoComplete, videoLink }: { handl
 
   return (
     <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card'>
-      <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Salary Apply Method</h1>
+      <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Watch this video before applying salary</h1>
+      <h2 className="text-xl text-center font-bold text-primary max-sm:text-lg max-sm:font-semibold">Keep Watching! Finish the video to see the form</h2>
       <iframe
         id="youtube-player"
         width={"100%"}

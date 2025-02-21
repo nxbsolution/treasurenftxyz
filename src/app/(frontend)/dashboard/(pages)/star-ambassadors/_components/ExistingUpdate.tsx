@@ -103,7 +103,7 @@ export default function NewIssue() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-2 flex flex-col">
         <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card m-6'>
           <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Update Star Ambassador Rank</h1>
-          <h2 className='font-bold'>Check Your Status:</h2>
+          <h2 className='font-bold'>Input Your Team:</h2>
 
           <FormField
             control={form.control}
@@ -115,7 +115,7 @@ export default function NewIssue() {
                   <Input {...fieldData} />
                 </FormControl>
                 <FormDescription>
-                  Enter the amount of Members A
+                  Enter the number of Members in Your Team A
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -132,7 +132,7 @@ export default function NewIssue() {
                   <Input {...fieldData} />
                 </FormControl>
                 <FormDescription>
-                  Enter the amount of Members B + C
+                  Enter the number of Members in Your Team B + C
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -144,7 +144,7 @@ export default function NewIssue() {
             name="starApplyingFor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='required'>Select Your Star</FormLabel>
+                <FormLabel className='required'>Your are applying for star:</FormLabel>
                 <Select
                   {...field}
                   onValueChange={field.onChange}
@@ -185,7 +185,7 @@ export default function NewIssue() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>Select your star level.</FormDescription>
+                <FormDescription>Select your star level</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -201,7 +201,7 @@ export default function NewIssue() {
                   <Input type="file" {...field} onChange={(e) => onChange(e.target.files ? e.target.files[0] : null)} />
                 </FormControl>
                 <FormDescription>
-                  Upload your members screenshot
+                  Upload your valid members screenshot for our verification
                 </FormDescription>
                 <FormMessage />
               </FormItem>

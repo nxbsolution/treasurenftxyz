@@ -5,6 +5,7 @@ import { CollectionConfig } from "payload";
 
 export const Salary: CollectionConfig = {
   slug: "salary",
+  defaultSort: "-createdAt",
   admin: {
     useAsTitle: "member",
     listSearchableFields: ["uid", "realName"],
@@ -14,7 +15,17 @@ export const Salary: CollectionConfig = {
           path: "@/components/SalaryList",
         }
       ]
-    }
+    },
+    defaultColumns: [
+      "realName",
+      "status",
+      "uid",
+      "star",
+      "membersA",
+      "membersBC",
+      "TRC-20",
+      "createdAt"
+    ],
   },
   access: {
     read: manager,
