@@ -15,26 +15,26 @@ export const getEligibility = (A: number, BC: number) => {
 }
 
 export const newIssueSchema = z.object({
-  A: z.string()
+  membersA: z.string()
     .transform((val) => parseInt(val))
     .pipe(
       z.number()
         .int("Only whole numbers are allowed")
         .nonnegative("Must be a positive number")
-        .min(0, "A must be greater than 0")
+        .min(0, "Team A must be greater than 0")
     ),
 
-  BC: z.string()
+  membersBC: z.string()
     .transform((val) => parseInt(val))
     .pipe(
       z.number()
         .int("Only whole numbers are allowed")
         .nonnegative("Must be a positive number")
-        .min(0, "B must be greater than 0")
+        .min(0, "Team BC must be greater than 0")
     ),
-
-  totalReport: z.custom<File>((value) => value instanceof File, {
-    message: 'Please upload your total report.',
+  starApplyingFor: z.string().min(1, 'Please select a star.'),
+  membersScreenshot: z.custom<File>((value) => value instanceof File, {
+    message: 'Please upload your report.',
   })
     .refine((file) => file.size <= MAX_FILE_SIZE, `File size must be less than 2MB. Please compress your image or choose a smaller file.`)
     .refine(
@@ -42,12 +42,12 @@ export const newIssueSchema = z.object({
         ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
-    .refine((file) => file.size > 0, 'Report is required'),
+    .refine((file) => file.size > 0, 'Members Screenshot is required'),
 })
 
 export const existingIssueSchema = newIssueSchema.extend({
-  oldStarCertificate: z.custom<File>((value) => value instanceof File, {
-    message: 'Please upload your old star certificate.',
+  latestStarCertificate: z.custom<File>((value) => value instanceof File, {
+    message: 'Please upload your Latest star certificate.',
   })
     .refine((file) => file.size <= MAX_FILE_SIZE, `File size must be less than 2MB. Please compress your image or choose a smaller file.`)
     .refine(
@@ -55,70 +55,5 @@ export const existingIssueSchema = newIssueSchema.extend({
         ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_DOCUMENT_TYPES.includes(file.type),
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
-    .refine((file) => file.size > 0, 'old star certificate is required'),
+    .refine((file) => file.size > 0, 'latest certificate is required'),
 })
-
-export const newIssueFields = [
-  {
-    title: "Star Ambassador",
-    fields: [
-      {
-        name: "A",
-        label: "Team A",
-        type: "number",
-        required: true,
-        description: "Enter your A team"
-      },
-      {
-        name: "BC",
-        label: "Team B + C",
-        type: "number",
-        required: true,
-        description: "Enter your B + C team"
-      },
-      {
-        name: "totalReport",
-        label: "Total Report",
-        type: "file",
-        required: true,
-        description: "Upload your total report"
-      }
-    ]
-  },
-]
-
-export const existingIssueFields = [
-  {
-    title: "Star Ambassador",
-    fields: [
-      {
-        name: "A",
-        label: "Team A",
-        type: "number",
-        required: true,
-        description: "Enter your A team"
-      },
-      {
-        name: "BC",
-        label: "Team B + C",
-        type: "number",
-        required: true,
-        description: "Enter your B + C team"
-      },
-      {
-        name: "totalReport",
-        label: "Total Report",
-        type: "file",
-        required: true,
-        description: "Upload your total report"
-      },
-      {
-        name: "oldStarCertificate",
-        label: "Old Star Certificate",
-        type: "file",
-        required: true,
-        description: "Upload your old star certificate"
-      }
-    ]
-  },
-]

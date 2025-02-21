@@ -1,39 +1,44 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Salary } from "@/payload-types";
 import { updateStatus } from "./updateStatus";
 import { toast } from "@payloadcms/ui";
 
+const backgroundColor = {
+  pending: {
+    backgroundColor: "#F39C12",
+  },
+  partialApproved: {
+    backgroundColor: "#54A0FF",
+  },
+  fullApproved: {
+    backgroundColor: "#03c04a"
+  },
+  rejected: {
+    backgroundColor: "#E74C3C"
+  }
+}
+
+const generalStyle = {
+  color: "white",
+  padding: "4px",
+  borderRadius: "5px",
+  fontWeight: "bold",
+  display: "inline-block",
+}
+
+type StatusType = Exclude<Salary["status"], null | undefined>;
 
 export default function SalaryStatusCell({ cellData, rowData }: { cellData: Salary["status"], rowData: Salary }) {
 
   const [currentStatus, setCurrentStatus] = useState(cellData);
   const [loading, setLoading] = useState(false);
 
-  type StatusType = Exclude<Salary["status"], null | undefined>;
+  useEffect(() => {
+    setCurrentStatus(cellData)
+  }, [cellData])
 
-  const backgroundColor = {
-    pending: {
-      backgroundColor: "#F39C12",
-    },
-    partialApproved: {
-      backgroundColor: "#54A0FF",
-    },
-    fullApproved: {
-      backgroundColor: "#03c04a"
-    },
-    rejected: {
-      backgroundColor: "#E74C3C"
-    }
-  }
 
-  const generalStyle = {
-    color: "white",
-    padding: "4px",
-    borderRadius: "5px",
-    fontWeight: "bold",
-    display: "inline-block",
-  }
 
   const handleChange = async (id: number, value: Salary["status"]) => {
     try {
@@ -58,6 +63,7 @@ export default function SalaryStatusCell({ cellData, rowData }: { cellData: Sala
       {loading ? "updating...." :
         <select
           value={currentStatus as StatusType}
+          key={rowData.id}
           onChange={(e) => handleChange(rowData.id, e.target.value as Salary["status"])}
           className="p-2 rounded border"
           style={{ ...generalStyle, ...backgroundColor[currentStatus || "pending"] }}

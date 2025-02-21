@@ -1,10 +1,9 @@
 import { admin } from "@/access/admin";
 import { authenticated } from "@/access/authenticated";
-import { getEligibility } from "@/app/(frontend)/dashboard/(pages)/star-ambassadors/_components/starFromData";
 import { CollectionConfig } from "payload";
 
 export const Star: CollectionConfig = {
-  slug: "star",
+  slug: "star-ambassadors",
   access: {
     read: admin,
     create: authenticated,
@@ -13,6 +12,21 @@ export const Star: CollectionConfig = {
   },
   fields: [
     {
+      name: "verify",
+      type: "select",
+      defaultValue: "PENDING",
+      options: [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ],
+      admin: {
+        components: {
+          Cell: "@/components/ContributionVerifyCell"
+        }
+      }
+    },
+    {
       name: "member",
       type: "relationship",
       unique: true,
@@ -20,25 +34,38 @@ export const Star: CollectionConfig = {
       required: true,
     },
     {
-      name: "A",
-      label: "Team A",
+      name: "membersA",
       type: "number",
       required: true,
+      admin: {
+        description: "Number of members added in A group.",
+      }
     },
     {
-      name: "BC",
-      label: "Team B + C",
+      name: "membersBC",
+      label: "Members B + C",
       type: "number",
       required: true,
+      admin: {
+        description: "Number of members added in B + C group.",
+      }
     },
     {
-      name: "totalReport",
+      name: "starApplyingFor",
+      type: "select",
+      hasMany: false,
+      required: true,
+      options: [
+        "1star", "2star", "3star", "4star", "5star", "6star"
+      ]
+    },
+    {
+      name: "membersScreenshot",
       type: "upload",
       relationTo: "media",
-      required: true,
     },
     {
-      name: "oldStarCard",
+      name: "latestStarCertificate",
       type: "upload",
       relationTo: "media",
     },

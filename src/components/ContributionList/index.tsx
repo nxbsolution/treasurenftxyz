@@ -16,7 +16,7 @@ const VERIFY_OPTIONS = [
   { value: 'APPROVED', label: 'Approved' }
 ];
 
-export default function ContributionList({ searchParams }: ContributionListProps) {
+export default function ContributionList({ searchParams = {} }: ContributionListProps) {
   const createQueryString = (type: 'star' | 'verify', value: string) => {
     // Create new URLSearchParams instance each time
     const params = new URLSearchParams();

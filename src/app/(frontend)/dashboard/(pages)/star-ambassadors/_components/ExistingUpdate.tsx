@@ -19,43 +19,41 @@ import {
 } from "@/components/ui/form"
 
 import Loader from '@/app/(frontend)/_components/Loader'
-import { getEligibility, existingIssueFields, existingIssueSchema } from './starFromData'
+import { getEligibility, existingIssueSchema } from './starFromData'
 import { updateStarData } from '../_actions/sendStarCertificate'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Star } from 'lucide-react'
+import Eligibilty from '../../salaries/_components/Eligibilty'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/provider/Auth'
 
-export default function ExistingIssue() {
+export default function NewIssue() {
 
-  // const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
+  const { member } = useAuth()
+
+  const [isEligible, setIsEligible] = useState<ReturnType<typeof getEligibility>>()
+
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof existingIssueSchema>>({
     resolver: zodResolver(existingIssueSchema),
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {
-      A: 0,
-      BC: 0,
+      membersA: 0,
+      membersBC: 0,
     }
   })
 
-  const onCheck = useCallback(
-    (data: z.infer<typeof existingIssueSchema>) => {
-      const starLevel = getEligibility(data.A, data.BC)
-      // setIsEligible(starLevel)
-      if (starLevel) {
-        return false
-      } else {
-        return true
-      }
-    },
-    []
-  )
-
-  const onApply = useCallback(
+  const onSubmit = useCallback(
     async (data: z.infer<typeof existingIssueSchema>) => {
       try {
-        const validate = onCheck(data)
 
-        if (!validate) {
+        const eligibility = getEligibility(data.membersA, data.membersBC)
+        setIsEligible(eligibility)
+
+        if (eligibility.star !== data.starApplyingFor) {
           toast({
-            title: "You are not eligible",
+            title: "Your growth rate is not eligible for selected star.",
             description: "Please check your eligibility criteria and try again.",
             variant: "destructive",
           })
@@ -63,7 +61,6 @@ export default function ExistingIssue() {
         }
 
         const formData = new FormData()
-
         Object.entries(data).forEach(([key, value]) => {
           if (value instanceof File) {
             formData.append(key, value)
@@ -72,14 +69,15 @@ export default function ExistingIssue() {
           }
         });
 
-        const result = await updateStarData(formData)
-
+        const result = await updateStarData(formData, member?.id)
         if (result.success) {
           toast({
             title: "Success",
             description: "Your application has been submitted successfully.",
             variant: "success",
           })
+          router.push("/dashboard")
+          form.reset()
         } else {
           toast({
             title: "Error uploading data",
@@ -97,71 +95,143 @@ export default function ExistingIssue() {
         })
       }
     },
-    []
+    [member]
   )
 
   return (
     <Form {...form} >
-      <form onSubmit={form.handleSubmit(onCheck)} className="space-y-4 mb-2 flex flex-col">
-
-        {
-          existingIssueFields.map((card, index) => {
-            return (
-              <div key={index} className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card m-6'>
-                <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>{card.title}</h1>
-                <h2 className='font-bold'>Check Your Status:</h2>
-                {card.fields.map((fieldData) => {
-                  return (
-                    <FormField
-                      key={fieldData.name}
-                      control={form.control}
-                      name={fieldData.name as keyof z.infer<typeof existingIssueSchema>}
-                      render={({ field: { onChange, value, ...field } }) => (
-                        <FormItem>
-                          <FormLabel className={fieldData.required ? "required" : ""}>{fieldData.label}</FormLabel>
-                          <FormControl>
-                            <Input type={fieldData.type} {...field}
-                              onChange={(e) => {
-                                if (e.target.files) {
-                                  onChange(e.target.files[0])
-                                } else {
-                                  onChange(e.target.value)
-                                }
-                              }} />
-                          </FormControl>
-                          <FormDescription>
-                            {fieldData.description}
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )
-                }
-                )}
-              </div >
-            )
-          })
-        }
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-2 flex flex-col">
         <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card m-6'>
-          <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Eligibilty</h1>
-          <p>
-            {/* {isEligible === "not eligible" ? "You are not eligible for star certificate" : `You are eligible for ${isEligible} NFT Ambassador`} */}
-          </p>
-        </div>
+          <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Update Star Ambassador Rank</h1>
+          <h2 className='font-bold'>Check Your Status:</h2>
+
+          <FormField
+            control={form.control}
+            name="membersA"
+            render={({ field: { value, ...fieldData } }) => (
+              <FormItem>
+                <FormLabel className="required">Members A</FormLabel>
+                <FormControl>
+                  <Input {...fieldData} />
+                </FormControl>
+                <FormDescription>
+                  Enter the amount of Members A
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="membersBC"
+            render={({ field: { value, ...fieldData } }) => (
+              <FormItem>
+                <FormLabel className="required">Members B + C</FormLabel>
+                <FormControl>
+                  <Input {...fieldData} />
+                </FormControl>
+                <FormDescription>
+                  Enter the amount of Members B + C
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="starApplyingFor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className='required'>Select Your Star</FormLabel>
+                <Select
+                  {...field}
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a star" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1star" className="hover:!bg-blue-100">
+                      <Star size={14} className="stroke-orange-400 fill-orange-400" />
+                    </SelectItem>
+                    <SelectItem value="2star" className="hover:!bg-blue-100">
+                      <div className="flex gap-2">
+                        {Array(2).fill(0).map((_, i) => (<Star key={i} size={14} className="fill-orange-400 stroke-orange-400" />))}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="3star" className="hover:!bg-blue-100">
+                      <div className="flex gap-2">
+                        {Array(3).fill(0).map((_, i) => (<Star key={i} size={14} className="fill-orange-400 stroke-orange-400" />))}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="4star" className="hover:!bg-blue-100">
+                      <div className="flex gap-2 ">
+                        {Array(4).fill(0).map((_, i) => (<Star key={i} size={14} className="fill-orange-400 stroke-orange-400" />))}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="5star" className="hover:!bg-blue-100">
+                      <div className="flex gap-2">
+                        {Array(5).fill(0).map((_, i) => (<Star key={i} size={14} className="fill-orange-400 stroke-orange-400" />))}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="6star" className="hover:!bg-blue-100">
+                      <div className="flex gap-2">
+                        {Array(6).fill(0).map((_, i) => (<Star key={i} size={14} className="fill-orange-400 stroke-orange-400" />))}
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select your star level.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="membersScreenshot"
+            render={({ field: { onChange, value, ...field } }) => (
+              <FormItem>
+                <FormLabel className="required">Members Screenshot:</FormLabel>
+                <FormControl>
+                  <Input type="file" {...field} onChange={(e) => onChange(e.target.files ? e.target.files[0] : null)} />
+                </FormControl>
+                <FormDescription>
+                  Upload your members screenshot
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="latestStarCertificate"
+            render={({ field: { onChange, value, ...field } }) => (
+              <FormItem>
+                <FormLabel className="required">Latest Star Certificate:</FormLabel>
+                <FormControl>
+                  <Input type="file" {...field} onChange={(e) => onChange(e.target.files ? e.target.files[0] : null)} />
+                </FormControl>
+                <FormDescription>
+                  Upload your latest star ambassador certificate.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div >
+
+        {isEligible ? <Eligibilty isEligible={isEligible} /> : <></>}
 
         <Button
-          disabled={form.formState.isSubmitting}
           type="submit"
-          className={`w-1/2 max-sm:w-11/12 text-lg self-center rounded-xl text-card hover:bg-primary-foreground ${form.formState.isSubmitting ? 'bg-blue-400' : 'bg-blue-500'}`}>
-          Check Status
-        </Button>
-        <Button
-          type="button"
-          onClick={form.handleSubmit(onApply)}
-          // disabled={isEligible === "not eligible"}
-          className="w-1/2 mx-auto max-sm:w-11/12 text-lg rounded-xl text-card bg-green-500 hover:bg-green-600">
+          disabled={form.formState.isSubmitting}
+          className="w-1/2 mx-auto max-sm:w-11/12 text-lg rounded-xl text-card bg-blue-500 hover:bg-blue-400">
           {form.formState.isSubmitting ? <Loader /> : 'Apply Now'}
         </Button>
 

@@ -16,7 +16,7 @@ export interface Config {
     contributions: Contribution;
     salary: Salary;
     notifications: Notification;
-    star: Star;
+    'star-ambassadors': StarAmbassador;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -33,7 +33,7 @@ export interface Config {
     contributions: ContributionsSelect<false> | ContributionsSelect<true>;
     salary: SalarySelect<false> | SalarySelect<true>;
     notifications: NotificationsSelect<false> | NotificationsSelect<true>;
-    star: StarSelect<false> | StarSelect<true>;
+    'star-ambassadors': StarAmbassadorsSelect<false> | StarAmbassadorsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -44,9 +44,11 @@ export interface Config {
   };
   globals: {
     'salary-form-settings': SalaryFormSetting;
+    'salary-notification-messages': SalaryNotificationMessage;
   };
   globalsSelect: {
     'salary-form-settings': SalaryFormSettingsSelect<false> | SalaryFormSettingsSelect<true>;
+    'salary-notification-messages': SalaryNotificationMessagesSelect<false> | SalaryNotificationMessagesSelect<true>;
   };
   locale: null;
   user: User & {
@@ -114,6 +116,10 @@ export interface User {
 export interface Member {
   id: number;
   user: number | User;
+  /**
+   * If checked, this member can apply for salary without contribution.
+   */
+  allowSalaryWithoutContribution?: boolean | null;
   uid: string;
   nft_username: string;
   country:
@@ -226,15 +232,23 @@ export interface Notification {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "star".
+ * via the `definition` "star-ambassadors".
  */
-export interface Star {
+export interface StarAmbassador {
   id: number;
+  verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
   member: number | Member;
-  A: number;
-  BC: number;
-  totalReport: number | Media;
-  oldStarCard?: (number | null) | Media;
+  /**
+   * Number of members added in A group.
+   */
+  membersA: number;
+  /**
+   * Number of members added in B + C group.
+   */
+  membersBC: number;
+  starApplyingFor: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  membersScreenshot?: (number | null) | Media;
+  latestStarCertificate?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -266,8 +280,8 @@ export interface PayloadLockedDocument {
         value: number | Notification;
       } | null)
     | ({
-        relationTo: 'star';
-        value: number | Star;
+        relationTo: 'star-ambassadors';
+        value: number | StarAmbassador;
       } | null)
     | ({
         relationTo: 'media';
@@ -339,6 +353,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MembersSelect<T extends boolean = true> {
   user?: T;
+  allowSalaryWithoutContribution?: T;
   uid?: T;
   nft_username?: T;
   country?: T;
@@ -411,14 +426,16 @@ export interface NotificationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "star_select".
+ * via the `definition` "star-ambassadors_select".
  */
-export interface StarSelect<T extends boolean = true> {
+export interface StarAmbassadorsSelect<T extends boolean = true> {
+  verify?: T;
   member?: T;
-  A?: T;
-  BC?: T;
-  totalReport?: T;
-  oldStarCard?: T;
+  membersA?: T;
+  membersBC?: T;
+  starApplyingFor?: T;
+  membersScreenshot?: T;
+  latestStarCertificate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -494,6 +511,31 @@ export interface SalaryFormSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary-notification-messages".
+ */
+export interface SalaryNotificationMessage {
+  id: number;
+  /**
+   * This message will be sent. When the salary is pending
+   */
+  pending: string;
+  /**
+   * This message will be sent. When the salary is partially approved
+   */
+  partialApproved: string;
+  /**
+   * This message will be sent. When the salary is fully approved
+   */
+  fullApproved: string;
+  /**
+   * This message will be sent. When the salary is rejected
+   */
+  rejected: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "salary-form-settings_select".
  */
 export interface SalaryFormSettingsSelect<T extends boolean = true> {
@@ -504,6 +546,19 @@ export interface SalaryFormSettingsSelect<T extends boolean = true> {
   progressReportPrompt?: T;
   uploadStarPrompt?: T;
   videoLink?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "salary-notification-messages_select".
+ */
+export interface SalaryNotificationMessagesSelect<T extends boolean = true> {
+  pending?: T;
+  partialApproved?: T;
+  fullApproved?: T;
+  rejected?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

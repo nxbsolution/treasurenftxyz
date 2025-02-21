@@ -4,7 +4,6 @@ import { getPayload } from "payload"
 import config from "@payload-config"
 
 import { Salary } from "@/payload-types"
-import { Success } from "node_modules/@payloadcms/ui/dist/providers/ToastContainer/icons/Success"
 
 export const updateStatus = async (id: number, status: Salary["status"]) => {
 
@@ -21,14 +20,14 @@ export const updateStatus = async (id: number, status: Salary["status"]) => {
 
     return {
       success: true,
-      error: false,
+      error: null,
     }
 
   } catch (error) {
     console.log(error)
     return {
       success: false,
-      error: true,
+      error: error instanceof Error ? error.message : "Server Error",
     }
   }
 

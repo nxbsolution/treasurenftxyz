@@ -12,7 +12,7 @@ const STATUS_OPTIONS = [
   { value: 'rejected', label: 'Rejected' },
 ];
 
-export default function SalaryList({ searchParams }: ContributionListProps) {
+export default function SalaryList({ searchParams = {} }: ContributionListProps) {
   const createQueryString = (value: string) => {
 
     const params = new URLSearchParams();
