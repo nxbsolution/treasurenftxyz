@@ -41,6 +41,7 @@ export default function NewIssue() {
     defaultValues: {
       membersA: 0,
       membersBC: 0,
+      starApplyingFor: "1star",
     }
   })
 
@@ -102,20 +103,20 @@ export default function NewIssue() {
     <Form {...form} >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-2 flex flex-col">
         <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card m-6'>
-          <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Star Ambassador</h1>
-          <h2 className='font-bold'>Check Your Status:</h2>
+          <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Become A Star Ambassador (New)</h1>
+          <h2 className='font-bold'>Input Your Team:</h2>
 
           <FormField
             control={form.control}
             name="membersA"
             render={({ field: { value, ...fieldData } }) => (
               <FormItem>
-                <FormLabel className="required">Members A</FormLabel>
+                <FormLabel className="required">Enter your A Team</FormLabel>
                 <FormControl>
                   <Input {...fieldData} />
                 </FormControl>
                 <FormDescription>
-                  Enter the amount of Members A
+                  Enter the number of Members in Your Team A
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -127,12 +128,12 @@ export default function NewIssue() {
             name="membersBC"
             render={({ field: { value, ...fieldData } }) => (
               <FormItem>
-                <FormLabel className="required">Members B + C</FormLabel>
+                <FormLabel className="required">Enter your B + C Team</FormLabel>
                 <FormControl>
                   <Input {...fieldData} />
                 </FormControl>
                 <FormDescription>
-                  Enter the amount of Members B + C
+                  Enter the number of Members in Your Team B + C
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -144,10 +145,11 @@ export default function NewIssue() {
             name="starApplyingFor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='required'>Select Your Star</FormLabel>
+                <FormLabel className='required'>Your are applying for star:</FormLabel>
                 <Select
                   {...field}
                   onValueChange={field.onChange}
+                  disabled
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -185,7 +187,7 @@ export default function NewIssue() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>Select your star level.</FormDescription>
+                <FormDescription>Select your star level</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -201,7 +203,7 @@ export default function NewIssue() {
                   <Input type="file" {...field} onChange={(e) => onChange(e.target.files ? e.target.files[0] : null)} />
                 </FormControl>
                 <FormDescription>
-                  Upload your members screenshot
+                  Upload your valid members screenshot for our verification
                 </FormDescription>
                 <FormMessage />
               </FormItem>

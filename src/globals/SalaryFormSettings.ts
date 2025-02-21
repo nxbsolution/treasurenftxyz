@@ -9,9 +9,6 @@ export const salaryFormSettings: GlobalConfig = {
       () => revalidateTag('salary-form-settings')
     ]
   },
-  access: {
-    read: admin
-  },
   fields: [
     {
       name: "openSalaryForm",

@@ -47,7 +47,7 @@ export default function Rules() {
         <div className='flex items-center justify-center mt-10'>
             <div className="flex flex-col bg-card items-center justify-center space-y-8 shadow-lg rounded-xl p-8">
                 <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl max-sm:font-semibold'>Treasure-NFT Community Star Job Salary Description</h1>
-
+                <h2 className='font-semibold'>Select star to see its eligibility</h2>
                 <select
                     value={selectedStar}
                     onChange={(e) => setSelectedStar(e.target.value)}

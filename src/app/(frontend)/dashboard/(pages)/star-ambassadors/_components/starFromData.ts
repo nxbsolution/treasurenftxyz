@@ -5,12 +5,12 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 const ACCEPTED_DOCUMENT_TYPES = ['application/pdf']
 
 export const getEligibility = (A: number, BC: number) => {
-  if (A >= 80 && BC >= 2500) return { star: "6star", message: "eligible for six-star ⭐⭐⭐⭐⭐⭐ ambassador" }
-  if (A >= 60 && BC >= 1500 && BC <= 2500) return { star: "5star", message: "eligible for five-star ⭐⭐⭐⭐⭐ ambassador" }
-  if (A >= 50 && BC >= 1000 && BC <= 1500) return { star: "4star", message: "eligible for four-star ⭐⭐⭐⭐ ambassador" }
-  if (A >= 30 && BC >= 500 && BC <= 999) return { star: "3star", message: "eligible for three-star ⭐⭐⭐ ambassador" }
-  if (A >= 25 && BC >= 150 && BC <= 499) return { star: "2star", message: "eligible for two-star ⭐⭐ ambassador" }
-  if (A >= 15 && BC >= 60 && BC <= 149) return { star: "1star", message: "eligible for one-star ⭐ ambassador" }
+  if (A >= 80 && BC >= 2500) return { star: "6star", message: "eligible for Six Star Ambassador ( ⭐⭐⭐⭐⭐⭐ )" }
+  if (A >= 60 && BC >= 1500 && BC <= 2500) return { star: "5star", message: "eligible for Five Star Ambassador ( ⭐⭐⭐⭐⭐ )" }
+  if (A >= 50 && BC >= 1000 && BC <= 1500) return { star: "4star", message: "eligible for Four Star Ambassador ( ⭐⭐⭐⭐ )" }
+  if (A >= 30 && BC >= 500 && BC <= 999) return { star: "3star", message: "eligible for Three Star Ambassador ( ⭐⭐⭐ )" }
+  if (A >= 25 && BC >= 150 && BC <= 499) return { star: "2star", message: "eligible for Two Star Ambassador ( ⭐⭐ )" }
+  if (A >= 15 && BC >= 60 && BC <= 149) return { star: "1star", message: "eligible for One Star Ambassador ( ⭐ )" }
   return { star: "0star", message: "Not eligible" }
 }
 
