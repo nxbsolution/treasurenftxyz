@@ -15,6 +15,22 @@ export const salaryFormSettings: GlobalConfig = {
       label: "Open Salary Form",
       type: "checkbox",
       defaultValue: true,
+      admin: {
+        position: "sidebar"
+      }
+    },
+    {
+      name: "SalaryOpenFor",
+      label: "Salary Open Form (Month)",
+      type: "date",
+      defaultValue: new Date(),
+      admin: {
+        position: "sidebar",
+        date: {
+          pickerAppearance: "monthOnly",
+          displayFormat: "MMM YYYY",
+        }
+      }
     },
     {
       name: "teamAPrompt",
@@ -32,7 +48,7 @@ export const salaryFormSettings: GlobalConfig = {
     },
     {
       name: "minGrowthRate",
-      label: "Minimum Growth Rate",
+      label: "Minimum Growth Rate Percentage",
       type: "number",
       required: true,
     },

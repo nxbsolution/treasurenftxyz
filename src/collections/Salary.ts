@@ -135,6 +135,17 @@ export const Salary: CollectionConfig = {
       ]
     },
     {
+      name: "salaryFor",
+      label: "Salary For",
+      type: "date",
+      admin: {
+        date: {
+          pickerAppearance: "monthOnly",
+          displayFormat: "MMM yyyy",
+        }
+      }
+    },
+    {
       name: "starCertificate",
       type: "upload",
       relationTo: "media",

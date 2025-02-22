@@ -312,3 +312,27 @@ export const checkLastContribution = async (id: number) => {
     return { success: false, result: false, error: error instanceof Error ? error.message : "An unknown error occurred", }
   }
 }
+
+export const checkSalaryDuplicate = async (memberId: number, salaryFor: string | undefined | null) => {
+  try {
+    const payload = await getPayload({ config })
+    const salaryDuplicate = await payload.find({
+      collection: 'salary',
+      limit: 1,
+      pagination: false,
+      sort: '-createdAt',
+      where: {
+        member: {
+          equals: memberId
+        },
+        salaryFor: {
+          equals: salaryFor
+        }
+      }
+    })
+    return { success: true, result: salaryDuplicate.docs[0], error: "" }
+  } catch (error) {
+    console.log(error)
+    return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred", }
+  }
+}
