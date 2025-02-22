@@ -32,6 +32,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
+import { format } from 'date-fns'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -49,6 +50,7 @@ const FormSchema = z.object({
       'Only .jpg, .jpeg, .png, .webp and .pdf formats are supported.',
     )
     .refine((file) => file.size > 0, 'Star certificate is required'),
+  contributionFor: z.string().min(1, 'Please select contribution month'),
   star: z.string().min(1, 'Please select a star.'),
   transactionId: z.string().min(2, 'Transaction ID must be at least 2 characters.'),
   screenShot: z
@@ -78,6 +80,7 @@ export default function ContributionForm({ member }: { member: Member }) {
     defaultValues: {
       star: '',
       transactionId: '',
+      contributionFor: format(new Date(), 'yyyy-MM'), // Sets current month as default
     },
   })
 
@@ -85,7 +88,7 @@ export default function ContributionForm({ member }: { member: Member }) {
 
     setIsSubmitting(true)
 
-    const { uploadStarCertificate, screenShot, transactionId, star } = values
+    const { uploadStarCertificate, screenShot, transactionId, star, contributionFor } = values
 
     const data = {
       member: member.id,
@@ -94,6 +97,7 @@ export default function ContributionForm({ member }: { member: Member }) {
       uploadStarCertificate,
       screenShot,
       transactionId,
+      contributionFor: new Date(contributionFor).toISOString(),
       star,
     }
 
@@ -392,6 +396,25 @@ export default function ContributionForm({ member }: { member: Member }) {
               <h2 className="font-semibold text-center text-bold text-lg">
                 Transaction Information
               </h2>
+
+              <FormField
+                control={form.control}
+                name="contributionFor"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='required'>Contribution Month</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="month"
+                        {...field}
+                        placeholder="Select month"
+                      />
+                    </FormControl>
+                    <FormDescription>Select the month for which you are paying contribution.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

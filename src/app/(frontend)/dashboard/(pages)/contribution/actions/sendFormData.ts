@@ -79,6 +79,7 @@ export async function sendFormData(formData: FormData) {
 			depositAddress: "TRC-20" as const,
 			transactionId: formData.get('transactionId') as string,
 			star: formData.get('star') as StarRating,
+			contributionFor: formData.get('contributionFor') as string,
 		}
 
 		const uploadStarCertificate = certificateMedia.id;
