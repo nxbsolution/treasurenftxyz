@@ -1,21 +1,10 @@
 import SalaryForm from "./_components/SalaryForm";
 import { getSalaryFormSettings } from "./_actions/GetSalaryFormSettings";
-import { unstable_cache } from "next/cache";
 import { getUser } from "@/provider/Auth/payloadFunctions";
 import LoadingSkeleton from "../contribution/_components/LoadingSkeleton";
 
-const getCachedSalaryFormSettings = unstable_cache(
-  async () => {
-    return await getSalaryFormSettings();
-  },
-  ['salary-form-settings'],
-  {
-    tags: ['salary-form-settings']
-  }
-);
-
 export default async function Page() {
-  const { data: formSettings, error } = await getCachedSalaryFormSettings();
+  const { data: formSettings, error } = await getSalaryFormSettings();
 
   const { member } = await getUser()
 
