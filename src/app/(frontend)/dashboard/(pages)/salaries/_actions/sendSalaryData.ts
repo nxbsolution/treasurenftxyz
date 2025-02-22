@@ -86,6 +86,7 @@ export async function sendSalaryData(formData: FormData) {
         membersA: formData.get('membersA') as unknown as number,
         membersBC: formData.get('membersBC') as unknown as number,
         star: formData.get('star') as "1star" | "2star" | "3star" | "4star" | "5star" | "6star",
+        salaryFor: new Date(formData.get('salaryFor') as string).toISOString(),
         membersScreenshot: uploadedReport.id,
         starCertificate: uploadedCertificate.id
       },

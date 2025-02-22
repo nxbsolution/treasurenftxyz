@@ -164,6 +164,7 @@ export interface Contribution {
   depositAddress: 'TRC-20' | 'BEP-20';
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
   transactionId: string;
+  contributionFor?: string | null;
   screenShot: number | Media;
   uploadStarCertificate: number | Media;
   updatedAt: string;
@@ -209,6 +210,7 @@ export interface Salary {
    */
   membersBC: number;
   star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  salaryFor?: string | null;
   starCertificate?: (number | null) | Media;
   membersScreenshot?: (number | null) | Media;
   updatedAt: string;
@@ -386,6 +388,7 @@ export interface ContributionsSelect<T extends boolean = true> {
   depositAddress?: T;
   star?: T;
   transactionId?: T;
+  contributionFor?: T;
   screenShot?: T;
   uploadStarCertificate?: T;
   updatedAt?: T;
@@ -404,6 +407,7 @@ export interface SalarySelect<T extends boolean = true> {
   membersA?: T;
   membersBC?: T;
   star?: T;
+  salaryFor?: T;
   starCertificate?: T;
   membersScreenshot?: T;
   updatedAt?: T;
@@ -497,6 +501,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SalaryFormSetting {
   id: number;
   openSalaryForm?: boolean | null;
+  SalaryOpenFor?: string | null;
   teamAPrompt: string;
   teamBCPrompt: string;
   minGrowthRate: number;
@@ -540,6 +545,7 @@ export interface SalaryNotificationMessage {
  */
 export interface SalaryFormSettingsSelect<T extends boolean = true> {
   openSalaryForm?: T;
+  SalaryOpenFor?: T;
   teamAPrompt?: T;
   teamBCPrompt?: T;
   minGrowthRate?: T;

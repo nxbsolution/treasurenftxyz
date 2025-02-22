@@ -99,6 +99,17 @@ export const Contributions: CollectionConfig = {
       }
     },
     {
+      name: "contributionFor",
+      label: "Contribution For",
+      type: "date",
+      admin: {
+        date: {
+          pickerAppearance: "monthOnly",
+          displayFormat: "MMM yyyy",
+        }
+      }
+    },
+    {
       name: "screenShot",
       type: "upload",
       relationTo: "media",

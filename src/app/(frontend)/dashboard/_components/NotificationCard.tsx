@@ -11,15 +11,15 @@ export default function NotificationCard({
   const getStyle = (variant: string) => {
     switch (variant) {
       case 'success':
-        return 'bg-green-500/30';
+        return 'bg-emerald-100 border-emerald-500 text-emerald-900';
       case 'error':
-        return 'bg-red-500/30';
+        return 'bg-rose-100 border-rose-500 text-rose-900';
       case 'warning':
-        return 'bg-yellow-500/30';
+        return 'bg-amber-100 border-amber-500 text-amber-900';
       case 'info':
-        return 'bg-blue-500/30';
+        return 'bg-sky-100 border-sky-500 text-sky-900';
       default:
-        return 'bg-gray-500/30';
+        return 'bg-slate-100 border-slate-500 text-slate-900';
     }
   }
 
