@@ -108,6 +108,25 @@ export default function GrowthRate({ form, teamAPrompt, teamBCPrompt }: {
         )}
       />
 
+      <FormField
+        control={form.control}
+        name="salaryFor"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className='required'>Contribution Month</FormLabel>
+            <FormControl>
+              <Input
+                type="month"
+                {...field}
+                placeholder="Select month"
+              />
+            </FormControl>
+            <FormDescription>Select the month for which you are paying contribution.</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
     </div >
   )
 }

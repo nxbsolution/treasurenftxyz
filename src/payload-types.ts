@@ -501,7 +501,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SalaryFormSetting {
   id: number;
   openSalaryForm?: boolean | null;
-  SalaryOpenFor?: string | null;
+  allowAllWithoutContribution?: boolean | null;
   teamAPrompt: string;
   teamBCPrompt: string;
   minGrowthRate: number;
@@ -545,7 +545,7 @@ export interface SalaryNotificationMessage {
  */
 export interface SalaryFormSettingsSelect<T extends boolean = true> {
   openSalaryForm?: T;
-  SalaryOpenFor?: T;
+  allowAllWithoutContribution?: T;
   teamAPrompt?: T;
   teamBCPrompt?: T;
   minGrowthRate?: T;

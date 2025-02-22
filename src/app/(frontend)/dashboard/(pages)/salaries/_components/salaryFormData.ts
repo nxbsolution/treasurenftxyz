@@ -26,6 +26,7 @@ export const applySalarySchema = z.object({
     ),
   "TRC-20": z.string(),
   star: z.string().min(1, 'Please select a star.'),
+  salaryFor: z.string().min(1, 'Please select salary month'),
   membersScreenshot: z.custom<File>((value) => value instanceof File, {
     message: 'Please upload your report.',
   })
