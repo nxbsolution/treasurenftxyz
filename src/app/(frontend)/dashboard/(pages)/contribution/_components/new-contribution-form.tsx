@@ -27,12 +27,12 @@ import { toast } from '@/hooks/use-toast'
 
 import { sendFormData } from '../actions/sendFormData'
 import Loader from '@/app/(frontend)/_components/Loader'
-import { Member } from '@/payload-types'
+import { Contribution, Member } from '@/payload-types'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CopyToClipboard } from '@/app/(frontend)/_components/CopyToClipboard'
 import { format } from 'date-fns'
+import { getDuplicateContribution } from '../actions/getDuplicateContribution'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -71,6 +71,7 @@ export default function ContributionForm({ member }: { member: Member }) {
 
   const [selectedStar, setSelectedStar] = useState<any>(undefined)
   const [isSubmiting, setIsSubmitting] = useState(false)
+  const [duplicateContribution, setDuplicateContribution] = useState<Contribution | null>()
 
   const router = useRouter()
 
@@ -112,20 +113,44 @@ export default function ContributionForm({ member }: { member: Member }) {
     });
 
     try {
-      const result = await sendFormData(formData)
-      if (result.success) {
 
-        form.reset()
+      const { success, result, error } = await getDuplicateContribution(member.id, contributionFor)
+
+      if (success) {
+        if (result) {
+          toast({
+            variant: 'warning',
+            title: "Contribution Already Submitted"
+          })
+          setDuplicateContribution(result)
+          return;
+        }
+        const response = await sendFormData(formData)
+
+        if (response.success) {
+          form.reset()
+          toast({
+            variant: 'success',
+            title: 'Contribution submitted successfully',
+            description: "Thank you for your contribution!",
+          })
+          router.push("/dashboard")
+        }
+        else {
+          console.log('Failed to submit contribution:', response.error)
+          toast({
+            variant: 'destructive',
+            title: 'Contribution submission failed',
+            description: response.error,
+          })
+        }
+      } else {
+        console.log(error)
         toast({
-          variant: 'success',
-          title: 'Contribution submitted successfully',
-          description: "Thank you for your contribution!",
+          variant: 'destructive',
+          title: "Error Checking Contribution",
+          description: error,
         })
-
-        router.push("/dashboard")
-      }
-      else {
-        console.log('Failed to submit contribution:', result.error)
       }
 
     } catch (error: any) {
@@ -191,6 +216,20 @@ export default function ContributionForm({ member }: { member: Member }) {
     // { label: "BEP-20 Deposit Address ", value: member?.depositAddress['BEP-20'] },
     // { label: "Star", value: member?.star || "Not Have a Star Yet" },
   ];
+
+  if (duplicateContribution) {
+    return (
+      <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-5' >
+        <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl'>Contribution Form</h1>
+        <p className='text-center text-red-500'>
+          You have already applied for <b>{format(duplicateContribution.contributionFor || Date.now(), "MMMM yyyy")}</b> contribution.
+        </p>
+        <p className='text-center'>
+          Your Contribution Status is currently <b className='capitalize'>{duplicateContribution.verify}</b>.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className="mb-8 pt-4">
