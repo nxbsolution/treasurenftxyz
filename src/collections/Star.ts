@@ -29,7 +29,7 @@ export const Star: CollectionConfig = {
     {
       name: "member",
       type: "relationship",
-      unique: true,
+      // unique: true,
       relationTo: "members",
       required: true,
     },

@@ -46,54 +46,60 @@ export default function NewIssue() {
 
   const onSubmit = useCallback(
     async (data: z.infer<typeof existingIssueSchema>) => {
-      try {
+      // try {
 
-        const eligibility = getEligibility(data.membersA, data.membersBC)
-        setIsEligible(eligibility)
+      //   const eligibility = getEligibility(data.membersA, data.membersBC)
+      //   setIsEligible(eligibility)
 
-        if (eligibility.star !== data.starApplyingFor) {
-          toast({
-            title: "Your growth rate is not eligible for selected star.",
-            description: "Please check your eligibility criteria and try again.",
-            variant: "destructive",
-          })
-          return;
-        }
+      //   if (eligibility.star !== data.starApplyingFor) {
+      //     toast({
+      //       title: "Your growth rate is not eligible for selected star.",
+      //       description: "Please check your eligibility criteria and try again.",
+      //       variant: "destructive",
+      //     })
+      //     return;
+      //   }
 
-        const formData = new FormData()
-        Object.entries(data).forEach(([key, value]) => {
-          if (value instanceof File) {
-            formData.append(key, value)
-          } else {
-            formData.append(key, String(value))
-          }
-        });
+      //   const formData = new FormData()
+      //   Object.entries(data).forEach(([key, value]) => {
+      //     if (value instanceof File) {
+      //       formData.append(key, value)
+      //     } else {
+      //       formData.append(key, String(value))
+      //     }
+      //   });
 
-        const result = await updateStarData(formData, member?.id)
-        if (result.success) {
-          toast({
-            title: "Success",
-            description: "Your application has been submitted successfully.",
-            variant: "success",
-          })
-          router.push("/dashboard")
-          form.reset()
-        } else {
-          toast({
-            title: "Error uploading data",
-            description: result.error || "An unknown error occurred",
-            variant: "destructive",
-          })
-        }
-      }
-      catch (error) {
-        console.error(error)
-        toast({
-          title: "Error submitting data",
-          description: error instanceof Error ? error.message : "An unknown error occurred",
-          variant: "destructive",
-        })
-      }
+      //   const result = await updateStarData(formData, member?.id)
+      //   if (result.success) {
+      //     toast({
+      //       title: "Success",
+      //       description: "Your application has been submitted successfully.",
+      //       variant: "success",
+      //     })
+      //     router.push("/dashboard")
+      //     form.reset()
+      //   } else {
+      //     toast({
+      //       title: "Error uploading data",
+      //       description: result.error || "An unknown error occurred",
+      //       variant: "destructive",
+      //     })
+      //   }
+      // }
+      // catch (error) {
+      //   console.error(error)
+      //   toast({
+      //     title: "Error submitting data",
+      //     description: error instanceof Error ? error.message : "An unknown error occurred",
+      //     variant: "destructive",
+      //   })
+      // }
+      toast({
+        title: "Development in progress",
+        description: "This is under development. Please try again later.",
+        variant: "warning",
+      })
+      router.push("/dashboard")
     },
     [member]
   )
