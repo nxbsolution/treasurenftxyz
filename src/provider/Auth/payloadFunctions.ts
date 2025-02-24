@@ -214,18 +214,27 @@ export const getUser = async () => {
   }
 }
 
+type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star"
+type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
+
 export const getMemberNotifications = async ({ id, limit = 10, page = 1, star }: { id: number | undefined, limit?: number, page?: number, star?: Member["star"] }) => {
 
-  type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star"
-  type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
-
+  if (!id) {
+    return {
+      notifications: [],
+      totalPages: 0,
+      currentPage: 1,
+      hasNextPage: false,
+      hasPrevPage: false,
+      error: "Member ID not found"
+    }
+  }
   const convertStarFormat = (star: MemberStar | null | undefined): StarRating | undefined => {
     if (star) {
       const number = star.charAt(4);
       return `${number}star` as StarRating;
     }
   };
-
 
   try {
     const payload = await getPayload({ config })
