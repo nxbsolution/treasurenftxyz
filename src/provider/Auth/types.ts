@@ -25,7 +25,10 @@ export type Create = (args: {
   uplineUid: string;
   "TRC-20": string;
   "BEP-20": string;
-}) => Promise<User>
+}) => Promise<Message & {
+  user: User | null;
+  member: Member | null;
+}>
 
 export type Message = {
   success: boolean;

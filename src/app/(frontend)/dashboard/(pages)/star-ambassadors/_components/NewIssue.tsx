@@ -88,7 +88,6 @@ export default function NewIssue() {
         }
       }
       catch (error) {
-        console.error(error)
         toast({
           title: "Error submitting data",
           description: error instanceof Error ? error.message : "An unknown error occurred",

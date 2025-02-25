@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import HomePageHeader from "./_components/WebHeader";
 import HeroSection from "./_components/HeroSection";
 import TreasureTitans from "./_components/TreasureTitans";
 import MarketingBanner from "./_components/MarketingBanner";

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,13 +40,9 @@ import { CustomFields, PasswordField, SelectField } from './FormFields'
 //   others: "+" // Default placeholder for other countries
 // }
 
-
 export default function SignupForm() {
 
   const { create } = useAuth()
-  const [isSubmiting, setIsSubmitting] = useState(false)
-  // const [phonePrefix, setPhonePrefix] = useState("")
-
 
   const router = useRouter()
 
@@ -56,24 +52,14 @@ export default function SignupForm() {
       email: '',
       password: '',
       confirmPassword: '',
-      // country: undefined,
-      // city: '',
       uid: '',
-      // nft_username: '',
-      // level: undefined,
       realName: '',
-      // uplineName: '',
-      // uplineUid: '',
       mobile: '',
-      // "TRC-20": '',
-      // "BEP-20": '',
-      // star: undefined,
     }
   })
 
   const onSubmit = useCallback(
     async (data: z.infer<typeof FormSchema>) => {
-      setIsSubmitting(true)
 
       const refinedData = {
         email: data.email,
@@ -92,45 +78,31 @@ export default function SignupForm() {
       }
 
       try {
-        await create(refinedData)
-        router.push('/dashboard')
-        toast({
-          title: 'Success',
-          description: 'Successfully created user',
-          variant: 'success',
-        })
+        const { success, message, error } = await create(refinedData)
+        if (success) {
+          toast({
+            title: 'Signup Successful',
+            description: message,
+            variant: 'success',
+          })
+          router.push('/dashboard')
+        } else {
+          toast({
+            title: 'Failed to Signup',
+            description: error,
+            variant: 'destructive',
+          })
+        }
       } catch (error: any) {
         toast({
-          title: 'Error',
-          description: error?.message || 'An error occurred',
+          title: 'Signup Failed',
+          description: error?.message || 'Check your internet connection and try again.',
           variant: 'destructive',
         })
-      } finally {
-        setIsSubmitting(false)
       }
     },
     [create, router],
   )
-
-  // const watchCountry = form.watch("country")
-
-
-  // useEffect(() => {
-  //   if (watchCountry) {
-  //     const newPrefix = countryPhoneCodes[watchCountry as keyof typeof countryPhoneCodes]
-  //     setPhonePrefix(newPrefix)
-  //     form.setValue("mobile", newPrefix)
-  //   }
-  // }, [watchCountry, form])
-
-  // const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value
-  //   if (value.startsWith(phonePrefix)) {
-  //     form.setValue("mobile", value)
-  //   } else {
-  //     form.setValue("mobile", phonePrefix + value.replace(phonePrefix, ""))
-  //   }
-  // }
 
   return (
     <Form {...form} >
@@ -175,12 +147,11 @@ export default function SignupForm() {
           })
         }
 
-
         <Button
-          disabled={isSubmiting}
+          disabled={form.formState.isSubmitting}
           type="submit"
-          className={`w-1/2 max-sm:w-11/12 text-lg self-center rounded-xl text-card hover:bg-primary-foreground ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'}`}>
-          {isSubmiting ? <Loader /> : 'Sign Up'}
+          className={`w-1/2 max-sm:w-11/12 text-lg self-center rounded-xl text-card hover:bg-primary-foreground ${form.formState.isSubmitting ? 'bg-blue-400' : 'bg-blue-500'}`}>
+          {form.formState.isSubmitting ? <Loader /> : 'Sign Up'}
         </Button>
 
         <div className='flex justify-center text-primary'>

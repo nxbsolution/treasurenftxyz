@@ -51,7 +51,6 @@ export default function SalaryStatusCell({ cellData, rowData }: { cellData: Sala
         toast.error("Error updating status")
       }
     } catch (error) {
-      console.error(error);
       toast.error(error instanceof Error ? error.message : "Unknown Error occured");
     } finally {
       setLoading(false);

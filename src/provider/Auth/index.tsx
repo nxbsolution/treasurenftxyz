@@ -1,12 +1,10 @@
 'use client'
 
-// import type { Permissions } from 'payload/auth'
-
 import React, { createContext, useCallback, useContext, useState, useEffect } from 'react'
 
 import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword } from './types'
 
-import { createMember, createUser, getUser, payloadForgetPassword, payloadLogin, payloadLogout, payloadResetPassword } from './payloadFunctions'
+import { createAccount, getUser, payloadForgetPassword, payloadLogin, payloadLogout, payloadResetPassword } from './payloadFunctions'
 import { Member, User } from '@/payload-types'
 
 const Context = createContext({} as AuthContext)
@@ -27,15 +25,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     void fetchMe()
   }, [])
 
-
-
   const create = useCallback<Create>(
     async (args) => {
-      const { password, email, ...rest } = args
-      const createdUser = await createUser({ password, email })
-      await createMember({ user: Number((await createdUser)?.id) || 0, ...rest })
-
-      return createdUser
+      const response = await createAccount(args)
+      if (response.success) {
+        await payloadLogin({ email: args.email, password: args.password })
+        setUser(response.user)
+        setMember(response.member)
+      }
+      return response
     },
     [],
   )

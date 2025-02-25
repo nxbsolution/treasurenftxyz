@@ -64,14 +64,14 @@ const Page = () => {
                 } else {
                     toast({
                         title: 'Login Failed',
-                        description: message || 'An unknown error occurred',
+                        description: message || 'Incorrect email or password. Try again. If the issue persists, check your internet.',
                         variant: 'destructive',
                     })
                 }
             } catch (error: any) {
                 toast({
                     title: 'Error',
-                    description: error?.message || 'An unknown error occurred',
+                    description: error?.message || 'Incorrect email or password. Try again. If the issue persists, check your internet.',
                     variant: 'destructive',
                 })
             }

@@ -66,7 +66,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
         }
       })
       .catch((err) => {
-        console.log(err)
         toast({
           title: "Error checking last contribution",
           description: err instanceof Error ? err.message : "An unknown error occurred",
@@ -156,7 +155,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
         }
       }
       catch (error) {
-        console.error(error)
         toast({
           title: "Error submitting data",
           description: error instanceof Error ? error.message : "An unknown error occurred",
