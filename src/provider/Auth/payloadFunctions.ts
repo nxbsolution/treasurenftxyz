@@ -81,15 +81,15 @@ export const payloadLogin = async (args: Login) => {
         secure: true,
       })
 
-      return { success: true, message: "Login Successfully", user: result.user }
+      return { success: true, message: "Successfully logged in", user: result.user }
     } else {
       return { success: false, message: "Login Failed", user: null }
     }
 
   }
   catch (error) {
-    console.error("Login Error", error);
-    throw new Error("Incorrect Password or Email");
+    console.log(error)
+    return { success: false, message: error instanceof Error ? error.message : "Unknown Error Occurred", user: null }
   }
 }
 
@@ -140,16 +140,24 @@ export const deleteUser = async (id: number) => {
 export const payloadForgetPassword = async (email: string) => {
   try {
     const payload = await getPayload({ config })
-    const forgetPassword = await payload.forgotPassword({
+    const token = await payload.forgotPassword({
       collection: 'users',
       data: {
         email
       }
     })
-    return forgetPassword
+    return {
+      success: true,
+      message: "Password reset link has been sent to your email",
+      error: ""
+    }
   } catch (error) {
     console.log(error)
-    return "something went wrong"
+    return {
+      success: false,
+      message: "",
+      error: error instanceof Error ? error.message : "Unknown error occurred"
+    }
   }
 }
 

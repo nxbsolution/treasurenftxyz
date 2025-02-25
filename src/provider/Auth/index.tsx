@@ -11,8 +11,7 @@ import { Member, User } from '@/payload-types'
 
 const Context = createContext({} as AuthContext)
 
-export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.ReactNode }> = ({
-  api = 'rest',
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
 
@@ -26,7 +25,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       setUser(user)
     }
     void fetchMe()
-  }, [api])
+  }, [])
 
 
 
@@ -38,7 +37,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
 
       return createdUser
     },
-    [api],
+    [],
   )
 
   const login = useCallback<Login>(
@@ -48,9 +47,10 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       return {
         success: result.success,
         message: result.message,
+        user: result.user,
       }
     },
-    [api],
+    [],
   )
 
   const logout = useCallback<Logout>(
@@ -60,15 +60,14 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
         setUser(null)
       }
       return result
-    }, [api])
+    }, [])
 
   const forgotPassword = useCallback<ForgotPassword>(
     async (args) => {
-      const token = await payloadForgetPassword(args.email)
-      console.log(token)
-      return token
+      const response = await payloadForgetPassword(args.email)
+      return response
     },
-    [api],
+    [],
   )
 
   const resetPassword = useCallback<ResetPassword>(
@@ -76,7 +75,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       const response = await payloadResetPassword(args.password, args.token)
       return response
     },
-    [api],
+    [],
   )
 
   return (

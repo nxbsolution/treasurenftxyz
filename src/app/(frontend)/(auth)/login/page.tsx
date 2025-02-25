@@ -1,5 +1,5 @@
 "use client"
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useState, useCallback } from 'react'
 import { useAuth } from '@/provider/Auth'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Eye, EyeOff } from "lucide-react"
-// import Link from 'next/link'
 import Loader from '../../_components/Loader'
 import Link from 'next/link'
 
@@ -33,10 +32,9 @@ const FormSchema = z.object({
 })
 
 const Page = () => {
-    const [isSubmiting, setIsSubmitting] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
 
-    const { user, login } = useAuth()
+    const { login } = useAuth()
     const router = useRouter()
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -50,25 +48,32 @@ const Page = () => {
 
     const onSubmit = useCallback(
         async (data: z.infer<typeof FormSchema>) => {
-            setIsSubmitting(true)
             try {
-                await login(data)
-                toast({
-                    title: 'Success',
-                    description: 'User is successfully logged in',
-                    variant: 'success',
-                })
-
-                router.push('/dashboard')
-
+                const { success, message, user } = await login(data)
+                if (success) {
+                    toast({
+                        title: 'Login Successful',
+                        description: 'User is successfully logged in',
+                        variant: 'success',
+                    })
+                    if (user?.roles?.some(role => ["superadmin", "admin", "manager"].includes(role))) {
+                        router.push('/admin')
+                    } else {
+                        router.push('/dashboard')
+                    }
+                } else {
+                    toast({
+                        title: 'Login Failed',
+                        description: message || 'An unknown error occurred',
+                        variant: 'destructive',
+                    })
+                }
             } catch (error: any) {
                 toast({
                     title: 'Error',
-                    description: error?.message || 'An error occurred',
+                    description: error?.message || 'An unknown error occurred',
                     variant: 'destructive',
                 })
-            } finally {
-                setIsSubmitting(false)
             }
         },
         [login, router],
@@ -132,19 +137,15 @@ const Page = () => {
                             Forgot Password?
                         </Link>
                         <Button
-                            disabled={isSubmiting}
+                            disabled={form.formState.isSubmitting}
                             type="submit"
-                            className={`w-full text-card hover:bg-primary-foreground ${isSubmiting ? 'bg-blue-400' : 'bg-blue-500'} `}>
-                            {isSubmiting ? (
-                                <Loader />
-                            ) : (
-                                'Log In'
-                            )}
+                            className={`w-full text-card hover:bg-primary-foreground ${form.formState.isSubmitting ? 'bg-blue-400' : 'bg-blue-500'} `}>
+                            {form.formState.isSubmitting ? <Loader /> : "Log In"}
                         </Button>
                     </form>
                 </Form>
                 <Button
-                    disabled={isSubmiting}
+                    disabled={form.formState.isSubmitting}
                     variant={"outline"}
                     onClick={() => router.push("/signup")}
                     className={`w-full border-blue-500 bg-white text-blue-500 hover:bg-blue-500 hover:text-white`}>
