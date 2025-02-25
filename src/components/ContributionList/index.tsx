@@ -12,6 +12,7 @@ const STAR_OPTIONS = [1, 2, 3, 4, 5, 6].map(num => ({
 
 const VERIFY_OPTIONS = [
   { value: 'PENDING', label: 'Pending' },
+  { value: 'HOLD', label: 'Hold' },
   { value: 'REJECTED', label: 'Rejected' },
   { value: 'APPROVED', label: 'Approved' }
 ];
