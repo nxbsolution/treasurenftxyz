@@ -2,11 +2,14 @@
 
 import { useRouter, usePathname } from "next/navigation"
 
-type cellData = "PENDING" | "APPROVED" | "REJECTED"
+type cellData = "PENDING" | "HOLD" | "APPROVED" | "REJECTED"
 
 const backgroundColor = {
   PENDING: {
     backgroundColor: "#F39C12",
+  },
+  HOLD: {
+    backgroundColor: "#9B59B6",
   },
   APPROVED: {
     backgroundColor: "#30CB83"

@@ -157,7 +157,7 @@ export interface Member {
  */
 export interface Contribution {
   id: number;
-  verify?: ('PENDING' | 'APPROVED' | 'REJECTED') | null;
+  verify?: ('PENDING' | 'HOLD' | 'APPROVED' | 'REJECTED') | null;
   member: number | Member;
   uid?: string | null;
   realName?: string | null;
