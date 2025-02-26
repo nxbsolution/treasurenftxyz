@@ -1,4 +1,3 @@
-import { superAdmin } from '@/access/superAdmin'
 import { admin } from '@/access/admin'
 import { checkRole } from '@/access/checkRole'
 import { authenticated } from '@/access/authenticated'
