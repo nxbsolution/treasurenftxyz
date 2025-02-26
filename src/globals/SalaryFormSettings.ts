@@ -20,16 +20,12 @@ export const salaryFormSettings: GlobalConfig = {
       }
     },
     {
-      name: "SalaryOpenFor",
-      label: "Salary Open Form (Month)",
-      type: "date",
-      defaultValue: new Date(),
+      name: "allowAllWithoutContribution",
+      label: "Allow all members without Checking Contribution",
+      type: "checkbox",
+      defaultValue: false,
       admin: {
-        position: "sidebar",
-        date: {
-          pickerAppearance: "monthOnly",
-          displayFormat: "MMM YYYY",
-        }
+        position: "sidebar"
       }
     },
     {
