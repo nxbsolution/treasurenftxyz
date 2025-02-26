@@ -4,8 +4,6 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from "@/components/ui/carousel"
 import Image from 'next/image'
 import TreasureImg from '../_assets/images/TreasureTitan.jpg'

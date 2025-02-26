@@ -5,8 +5,9 @@ import config from "@/payload.config"
 import { cookies, headers } from "next/headers";
 import { Member } from "@/payload-types";
 
-interface Data {
-  user: number;
+interface CreateAccount {
+  email: string;
+  password: string;
   mobile: string | null;
   city: string | null | undefined;
   uid: string;
@@ -21,23 +22,73 @@ interface Data {
   "BEP-20": string;
 }
 
-interface UserData {
-  email: string;
-  password: string;
-}
-
 interface Login {
   email: string;
   password: string;
 }
 
-export const createMember = async (args: Data) => {
+export const createAccount = async (args: CreateAccount) => {
   try {
     const payload = await getPayload({ config })
-    const getMember = payload.create({
+    const existingUser = await payload.find({
+      collection: "users",
+      where: {
+        email: {
+          equals: args.email
+        }
+      },
+      pagination: false,
+      depth: 0,
+      select: {
+        email: true,
+      }
+    })
+    if (existingUser.docs.length) {
+      return {
+        success: false,
+        message: "",
+        error: "Duplicate email Error. User with this email already exist. Please sign in or use a different email.",
+        user: null,
+        member: null
+      }
+    }
+
+    const existingMember = await payload.find({
+      collection: "members",
+      where: {
+        uid: {
+          equals: args.uid
+        }
+      },
+      pagination: false,
+      depth: 0,
+      select: {
+        uid: true,
+      }
+    })
+    if (existingMember.docs.length) {
+      return {
+        success: false,
+        message: "",
+        error: "Duplicate UID Error. User with this UID already exist. Please sign in or use a different UID.",
+        user: null,
+        member: null
+      }
+    }
+
+    const createdUser = await payload.create({
+      collection: 'users',
+      data: {
+        username: args.email,
+        email: args.email,
+        password: args.password
+      }
+    })
+
+    const createMember = await payload.create({
       collection: 'members',
       data: {
-        user: args.user,
+        user: createdUser.id,
         mobile: args.mobile,
         city: args.city,
         uid: args.uid,
@@ -55,11 +106,23 @@ export const createMember = async (args: Data) => {
       }
     })
 
-    return await getMember
-  } catch (error) {
-    console.log(error)
-  }
+    return {
+      success: true,
+      message: "Account created successfully",
+      error: "",
+      user: createdUser,
+      member: createMember
+    }
 
+  } catch (error) {
+    return {
+      success: false,
+      message: "",
+      error: error instanceof Error ? error.message : "Failed to create account. Check your internet connection and try again.",
+      user: null,
+      member: null
+    }
+  }
 }
 
 export const payloadLogin = async (args: Login) => {
@@ -81,15 +144,14 @@ export const payloadLogin = async (args: Login) => {
         secure: true,
       })
 
-      return { success: true, message: "Login Successfully", user: result.user }
+      return { success: true, message: "Successfully logged in", user: result.user }
     } else {
-      return { success: false, message: "Login Failed", user: null }
+      return { success: false, message: "Login Failed! Please Try Again.", user: null }
     }
 
   }
   catch (error) {
-    console.error("Login Error", error);
-    throw new Error("Incorrect Password or Email");
+    return { success: false, message: error instanceof Error ? error.message : "Login Failed! Try Again.", user: null }
   }
 }
 
@@ -100,28 +162,8 @@ export const payloadLogout = async () => {
 
     return { success: true }; // Indicate success
   } catch (error) {
-    console.error("Logout error:", error);
     return { success: false, message: "An error occurred during logout" };
   }
-}
-
-export const createUser = async (args: UserData) => {
-  try {
-    const payload = await getPayload({ config })
-    const getUser = payload.create({
-      collection: 'users',
-      data: {
-        username: args.email,
-        email: args.email,
-        password: args.password
-      }
-    })
-
-    return await getUser
-  } catch (error: any) {
-    throw new Error("Email already exists")
-  }
-
 }
 
 export const deleteUser = async (id: number) => {
@@ -140,16 +182,23 @@ export const deleteUser = async (id: number) => {
 export const payloadForgetPassword = async (email: string) => {
   try {
     const payload = await getPayload({ config })
-    const forgetPassword = await payload.forgotPassword({
+    const token = await payload.forgotPassword({
       collection: 'users',
       data: {
         email
       }
     })
-    return forgetPassword
+    return {
+      success: true,
+      message: "Password reset link has been sent to your email",
+      error: ""
+    }
   } catch (error) {
-    console.log(error)
-    return "something went wrong"
+    return {
+      success: false,
+      message: "",
+      error: error instanceof Error ? error.message : "Unknown error occurred"
+    }
   }
 }
 
@@ -179,7 +228,6 @@ export const payloadResetPassword = async (password: string, token: string) => {
     }
 
   } catch (error) {
-    console.log(error)
     return {
       success: false,
       message: "Your password reset link has expired or is invalid. Please request a new reset link.",
@@ -209,32 +257,22 @@ export const getUser = async () => {
 
     return { user: null, member: null }
   } catch (error) {
-    console.log(error)
     return { user: null, member: null }
   }
 }
 
-type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star"
-type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
-
 export const getMemberNotifications = async ({ id, limit = 10, page = 1, star }: { id: number | undefined, limit?: number, page?: number, star?: Member["star"] }) => {
 
-  if (!id) {
-    return {
-      notifications: [],
-      totalPages: 0,
-      currentPage: 1,
-      hasNextPage: false,
-      hasPrevPage: false,
-      error: "Member ID not found"
-    }
-  }
+  type StarRating = "1star" | "2star" | "3star" | "4star" | "5star" | "6star"
+  type MemberStar = "star1" | "star2" | "star3" | "star4" | "star5" | "star6";
+
   const convertStarFormat = (star: MemberStar | null | undefined): StarRating | undefined => {
     if (star) {
       const number = star.charAt(4);
       return `${number}star` as StarRating;
     }
   };
+
 
   try {
     const payload = await getPayload({ config })
@@ -277,7 +315,6 @@ export const getMemberNotifications = async ({ id, limit = 10, page = 1, star }:
       error: null
     }
   } catch (error) {
-    console.log(error)
     return {
       notifications: [],
       totalPages: 0,
@@ -317,7 +354,6 @@ export const checkLastContribution = async (id: number) => {
     return { success: true, result: Boolean(lastContribution.totalDocs), error: "" }
 
   } catch (error) {
-    console.log(error)
     return { success: false, result: false, error: error instanceof Error ? error.message : "An unknown error occurred", }
   }
 }
@@ -341,7 +377,6 @@ export const checkSalaryDuplicate = async (memberId: number, salaryFor: string |
     })
     return { success: true, result: salaryDuplicate.docs[0], error: "" }
   } catch (error) {
-    console.log(error)
     return { success: false, error: error instanceof Error ? error.message : "An unknown error occurred", }
   }
 }

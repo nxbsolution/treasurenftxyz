@@ -104,7 +104,6 @@ export async function sendFormData(formData: FormData) {
 
 		return { success: true, data: newContribution }
 	} catch (error) {
-		console.error('Error creating donation:', error)
 		return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
 	}
 }

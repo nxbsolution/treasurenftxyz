@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -35,8 +35,7 @@ const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
       if (success) {
         router.push('/dashboard');
       }
-    } catch (err: any) {
-      console.log(err);
+    } catch (_) {
       toast({
         title: 'System Error',
         variant: 'destructive',

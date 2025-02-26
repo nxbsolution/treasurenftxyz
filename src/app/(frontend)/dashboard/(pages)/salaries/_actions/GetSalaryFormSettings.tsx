@@ -17,7 +17,6 @@ export async function getSalaryFormSettings() {
     }
 
   } catch (error) {
-    console.error(error)
     return {
       data: null,
       error: error instanceof Error ? error.message : "An unknown error occurred"

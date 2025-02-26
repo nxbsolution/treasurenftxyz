@@ -137,7 +137,6 @@ export default function ContributionForm({ member }: { member: Member }) {
           router.push("/dashboard")
         }
         else {
-          console.log('Failed to submit contribution:', response.error)
           toast({
             variant: 'destructive',
             title: 'Contribution submission failed',
@@ -145,7 +144,6 @@ export default function ContributionForm({ member }: { member: Member }) {
           })
         }
       } else {
-        console.log(error)
         toast({
           variant: 'destructive',
           title: "Error Checking Contribution",
