@@ -54,10 +54,8 @@ export async function sendStarData(formData: FormData, id: number | undefined) {
         membersScreenshot: uploadedScreenshot.id,
       },
     })
-    console.log(uploadedData)
     return { success: true, data: null }
   } catch (error) {
-    console.error('Error uploading Star Data:', error)
     if (error instanceof Error && error.message === "The following field is invalid: member") {
       return { success: false, error: "Star Certificate already issued for this user." }
     }
@@ -148,10 +146,8 @@ export async function updateStarData(formData: FormData, id: number | undefined)
         latestStarCertificate: uploadedCertificate.id,
       },
     })
-    console.log(uploadedData)
     return { success: true, data: null }
   } catch (error) {
-    console.error('Error uploading Star Data:', error)
     return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
   }
 }

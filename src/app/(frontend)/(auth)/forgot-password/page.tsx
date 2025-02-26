@@ -44,7 +44,11 @@ export default function Page() {
                 description: 'Reset password link sent to your email',
             })
         } catch (error) {
-            console.error(error)
+            toast({
+                title: 'Error',
+                variant: 'destructive',
+                description: error instanceof Error ? error.message : 'Something went wrong',
+            })
         }
     }
 

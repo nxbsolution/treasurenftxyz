@@ -1,18 +1,15 @@
 'use client'
 
-// import type { Permissions } from 'payload/auth'
-
 import React, { createContext, useCallback, useContext, useState, useEffect } from 'react'
 
 import type { AuthContext, Create, ForgotPassword, Login, Logout, ResetPassword } from './types'
 
-import { createMember, createUser, getUser, payloadForgetPassword, payloadLogin, payloadLogout, payloadResetPassword } from './payloadFunctions'
+import { createAccount, getUser, payloadForgetPassword, payloadLogin, payloadLogout, payloadResetPassword } from './payloadFunctions'
 import { Member, User } from '@/payload-types'
 
 const Context = createContext({} as AuthContext)
 
-export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.ReactNode }> = ({
-  api = 'rest',
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
 
@@ -26,19 +23,19 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       setUser(user)
     }
     void fetchMe()
-  }, [api])
-
-
+  }, [])
 
   const create = useCallback<Create>(
     async (args) => {
-      const { password, email, ...rest } = args
-      const createdUser = await createUser({ password, email })
-      await createMember({ user: Number((await createdUser)?.id) || 0, ...rest })
-
-      return createdUser
+      const response = await createAccount(args)
+      if (response.success) {
+        await payloadLogin({ email: args.email, password: args.password })
+        setUser(response.user)
+        setMember(response.member)
+      }
+      return response
     },
-    [api],
+    [],
   )
 
   const login = useCallback<Login>(
@@ -48,9 +45,10 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       return {
         success: result.success,
         message: result.message,
+        user: result.user,
       }
     },
-    [api],
+    [],
   )
 
   const logout = useCallback<Logout>(
@@ -60,15 +58,14 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
         setUser(null)
       }
       return result
-    }, [api])
+    }, [])
 
   const forgotPassword = useCallback<ForgotPassword>(
     async (args) => {
-      const token = await payloadForgetPassword(args.email)
-      console.log(token)
-      return token
+      const response = await payloadForgetPassword(args.email)
+      return response
     },
-    [api],
+    [],
   )
 
   const resetPassword = useCallback<ResetPassword>(
@@ -76,7 +73,7 @@ export const AuthProvider: React.FC<{ api?: 'gql' | 'rest'; children: React.Reac
       const response = await payloadResetPassword(args.password, args.token)
       return response
     },
-    [api],
+    [],
   )
 
   return (

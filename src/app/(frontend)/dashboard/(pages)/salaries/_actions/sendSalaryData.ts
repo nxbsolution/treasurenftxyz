@@ -48,7 +48,7 @@ export async function sendSalaryData(formData: FormData) {
   try {
 
     if (formData.has("depositeAddress")) {
-      const updatedMember = await payload.update({
+      await payload.update({
         collection: 'members',
         id: Number(formData.get('id')),
         data: {
@@ -57,7 +57,6 @@ export async function sendSalaryData(formData: FormData) {
           }
         }
       })
-      console.log(updatedMember)
     }
 
     const uploadedReport = await payload.create({
@@ -76,7 +75,7 @@ export async function sendSalaryData(formData: FormData) {
       file: oldCertificateFile,
     })
 
-    const uploadedData = await payload.create({
+    await payload.create({
       collection: 'salary',
       data: {
         member: Number(formData.get('id')),
@@ -94,7 +93,6 @@ export async function sendSalaryData(formData: FormData) {
 
     return { success: true, error: null }
   } catch (error) {
-    console.error('Error uploading Star Data:', error)
     return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' }
   }
 }

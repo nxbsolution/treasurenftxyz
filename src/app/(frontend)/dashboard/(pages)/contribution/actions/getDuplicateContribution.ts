@@ -22,14 +22,12 @@ export const getDuplicateContribution = async (memberId: number, contributionFor
       limit: 1,
     })
 
-    console.log(contribution)
     return {
       success: true,
       result: contribution.docs[0],
       error: ""
     }
   } catch (error) {
-    console.log(error)
     return {
       success: false,
       result: null,

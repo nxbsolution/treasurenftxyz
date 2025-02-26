@@ -24,7 +24,6 @@ export const updateStatus = async (id: number, status: Salary["status"]) => {
     }
 
   } catch (error) {
-    console.log(error)
     return {
       success: false,
       error: error instanceof Error ? error.message : "Server Error",

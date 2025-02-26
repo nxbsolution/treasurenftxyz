@@ -8,7 +8,7 @@ export type ResetPassword = (args: {
   token: string
 }) => Promise<Message>
 
-export type ForgotPassword = (args: { email: string }) => Promise<string>
+export type ForgotPassword = (args: { email: string }) => Promise<Message>
 
 export type Create = (args: {
   email: string
@@ -25,16 +25,26 @@ export type Create = (args: {
   uplineUid: string;
   "TRC-20": string;
   "BEP-20": string;
-}) => Promise<User>
+}) => Promise<Message & {
+  user: User | null;
+  member: Member | null;
+}>
 
 export type Message = {
   success: boolean;
   message?: string;
+  error?: string;
 }
 
-export type Login = (args: { email: string; password: string }) => Promise<Message>
+export type Login = (args: { email: string; password: string }) => Promise<{
+  success: boolean;
+  message: string;
+  user: (User & {
+    [key: string]: any;
+  }) | null;
+}>
 
-export type Logout = () => Promise<Message>
+export type Logout = () => Promise<Exclude<Message, { error: string }>>
 
 export interface AuthContext {
   user: null | undefined | User

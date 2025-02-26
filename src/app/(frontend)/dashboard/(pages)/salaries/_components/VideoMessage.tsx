@@ -17,9 +17,8 @@ export default function VideoMessage({ handleVideoComplete, videoLink }: { handl
     firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
     // Create YouTube player
-    let player: any;
     window.onYouTubeIframeAPIReady = () => {
-      player = new window.YT.Player('youtube-player', {
+      new window.YT.Player('youtube-player', {
         events: {
           'onStateChange': (event: { data: number }) => {
             // Video finished playing
