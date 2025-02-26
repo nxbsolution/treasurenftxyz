@@ -29,7 +29,6 @@ export const Contributions: CollectionConfig = {
       defaultValue: "PENDING",
       options: [
         "PENDING",
-        "HOLD",
         "APPROVED",
         "REJECTED"
       ],
