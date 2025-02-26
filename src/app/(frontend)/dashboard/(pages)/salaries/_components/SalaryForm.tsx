@@ -31,6 +31,7 @@ export type SalaryForm = UseFormReturn<{
   membersBC: number;
   "TRC-20": string;
   star: string;
+  salaryFor: string;
   membersScreenshot: File;
   starCertificate: File;
   uid?: string;
@@ -51,25 +52,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
     form.setValue("TRC-20", member.depositAddress['TRC-20'])
     form.setValue("uid", member.uid)
     form.setValue("realName", member.realName)
-
-    checkSalaryDuplicate(member.id, formSettings.SalaryOpenFor)
-      .then((response) => {
-        if (response.success) {
-          setIsDuplicate(response.result)
-        } else {
-          toast({
-            title: "Error checking salary duplicate",
-            description: response.error,
-            variant: "destructive",
-          })
-        }
-      }).catch((err) => {
-        toast({
-          title: "Error checking salary duplicate",
-          description: err instanceof Error ? err.message : "An unknown error occurred",
-          variant: "destructive",
-        })
-      })
 
     checkLastContribution(member.id)
       .then((response) => {
@@ -100,6 +82,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
     defaultValues: {
       membersA: 0,
       membersBC: 0,
+      salaryFor: format(new Date(), 'yyyy-MM'), // Sets current month as default
     }
   })
 
@@ -121,7 +104,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
 
         const formData = new FormData()
         formData.append("id", String(member.id))
-        formData.append("salaryFor", String(formSettings.SalaryOpenFor || Date.now()))
         Object.entries(data).forEach(([key, value]) => {
           if (value instanceof File) {
             formData.append(key, value)
@@ -134,20 +116,40 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
           formData.append("depositeAddress", String(data['TRC-20']))
         }
 
-        const result = await sendSalaryData(formData)
+        const { success, result, error } = await checkSalaryDuplicate(member.id, data.salaryFor)
 
-        if (result.success) {
-          toast({
-            title: "Success",
-            description: "Your application has been submitted successfully.",
-            variant: "success",
-          })
-          router.push("/dashboard")
-          form.reset()
+        if (success) {
+          if (result) {
+            toast({
+              title: "Duplicate salary",
+              description: "You have already submitted a salary for this month.",
+              variant: "warning",
+            })
+            setIsDuplicate(result)
+            return;
+          }
+
+          const response = await sendSalaryData(formData)
+
+          if (response.success) {
+            toast({
+              title: "Success",
+              description: "Your application has been submitted successfully.",
+              variant: "success",
+            })
+            router.push("/dashboard")
+            form.reset()
+          } else {
+            toast({
+              title: "Error uploading data",
+              description: response.error || "An unknown error occurred",
+              variant: "destructive",
+            })
+          }
         } else {
           toast({
-            title: "Error uploading data",
-            description: result.error || "An unknown error occurred",
+            title: "Error checking salary",
+            description: error || "An unknown error occurred",
             variant: "destructive",
           })
         }
@@ -169,7 +171,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
       <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-5'>
         <h1 className='text-3xl text-center font-bold text-primary max-sm:text-2xl'>Salary Form</h1>
         <p className='text-center text-red-500'>
-          You have already applied for <b>{format(formSettings.SalaryOpenFor || Date.now(), "MMMM yyyy")}</b> salary.
+          You have already applied for <b>{format(duplicateSalary.salaryFor || Date.now(), "MMMM yyyy")}</b> salary.
           <br />
           You can apply for salary only once in a month.
         </p>
@@ -180,7 +182,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
     )
   }
 
-  if (!member?.allowSalaryWithoutContribution && !isContributionPaid) {
+  if (!formSettings.allowAllWithoutContribution && !member.allowSalaryWithoutContribution && !isContributionPaid) {
 
     return (
       <div className='border shadow-lg p-6 max-sm:p-4 rounded-lg max-w-7xl w-3/4 max-md:w-9/12 max-sm:w-11/12 mx-auto space-y-2 bg-card mt-5'>
@@ -196,7 +198,6 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
   return (
     <Form {...form} >
       <form onSubmit={form.handleSubmit(onSubmit)} className="my-8 space-y-8 flex flex-col">
-        <h1 className=' text-3xl text-center font-bold py-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground'>Salary Applying For {format(formSettings.SalaryOpenFor || Date.now(), "MMMM yyyy")}</h1>
 
         <MemberDetail form={form} member={member} />
 

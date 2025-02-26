@@ -32,6 +32,7 @@ export const Members: CollectionConfig = {
               type: "checkbox",
               defaultValue: false,
               admin: {
+                position: "sidebar",
                 description: "If checked, this member can apply for salary without contribution.",
               }
             },
