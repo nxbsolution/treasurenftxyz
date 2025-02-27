@@ -7,23 +7,23 @@ const ACCEPTED_DOCUMENT_TYPES = ['application/pdf']
 export const applySalarySchema = z.object({
   uid: z.string().optional(),
   realName: z.string().optional(),
-  membersA: z.string()
-    .transform((val) => parseInt(val))
-    .pipe(
-      z.number()
-        .int("Only whole numbers are allowed")
-        .nonnegative("Must be a positive number")
-        .min(0, "Team A must be greater than 0")
-    ),
+  // membersA: z.string()
+  //   .transform((val) => parseInt(val))
+  //   .pipe(
+  //     z.number()
+  //       .int("Only whole numbers are allowed")
+  //       .nonnegative("Must be a positive number")
+  //       .min(0, "Team A must be greater than 0")
+  //   ).optional(),
 
-  membersBC: z.string()
-    .transform((val) => parseInt(val))
-    .pipe(
-      z.number()
-        .int("Only whole numbers are allowed")
-        .nonnegative("Must be a positive number")
-        .min(0, "Team BC must be greater than 0")
-    ),
+  // membersBC: z.string()
+  //   .transform((val) => parseInt(val))
+  //   .pipe(
+  //     z.number()
+  //       .int("Only whole numbers are allowed")
+  //       .nonnegative("Must be a positive number")
+  //       .min(0, "Team BC must be greater than 0")
+  //   ).optional(),
   "TRC-20": z.string(),
   star: z.string().min(1, 'Please select a star.'),
   salaryFor: z.string().min(1, 'Please select salary month'),

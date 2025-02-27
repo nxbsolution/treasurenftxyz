@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Member } from "@/payload-types";
-import { UseFormReturn } from "react-hook-form"
 import { SalaryForm } from "./SalaryForm";
 
 export default function MemberDetail({ form, member }: {

@@ -27,8 +27,8 @@ import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 
 export type SalaryForm = UseFormReturn<{
-  membersA: number;
-  membersBC: number;
+  membersA?: number;
+  membersBC?: number;
   "TRC-20": string;
   star: string;
   salaryFor: string;
@@ -80,8 +80,8 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
     resolver: zodResolver(applySalarySchema),
     mode: "onSubmit",
     defaultValues: {
-      membersA: 0,
-      membersBC: 0,
+      // membersA: 0,
+      // membersBC: 0,
       salaryFor: format(new Date(), 'yyyy-MM'), // Sets current month as default
     }
   })
@@ -101,7 +101,7 @@ export default function SalaryForm({ formSettings, member }: { formSettings: Sal
         //   })
         //   return;
         // }
-
+        console.log("onSubmit", data)
         const formData = new FormData()
         formData.append("id", String(member.id))
         Object.entries(data).forEach(([key, value]) => {

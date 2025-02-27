@@ -74,7 +74,7 @@ export default function GrowthRate({ form, teamAPrompt, teamBCPrompt }: {
         )}
       />
 
-      <FormField
+      {/* <FormField
         control={form.control}
         name="membersA"
         render={({ field: { value, ...field } }) => (
@@ -106,7 +106,7 @@ export default function GrowthRate({ form, teamAPrompt, teamBCPrompt }: {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <FormField
         control={form.control}
