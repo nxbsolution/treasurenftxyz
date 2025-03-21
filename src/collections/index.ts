@@ -5,6 +5,7 @@ import { Members } from './Members'
 import { Salary } from './Salary'
 import { Star } from './Star'
 import { Notifications } from './Notifications'
+import { Queries } from './Queries'
 
 export default [
   Users,
@@ -13,6 +14,7 @@ export default [
   Salary,
   Notifications,
   Star,
+  Queries,
   Media,
 ]
 

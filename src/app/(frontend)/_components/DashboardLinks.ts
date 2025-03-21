@@ -40,6 +40,10 @@ export const dashboardLinks = [
     href: '/dashboard/alerts-notifications'
   },
   {
+    label: 'Help & Support Center',
+    href: '/dashboard/help-support'
+  },
+  {
     label: "Others",
     href: '/dashboard/others'
   }

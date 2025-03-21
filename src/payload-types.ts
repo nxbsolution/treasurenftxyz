@@ -17,6 +17,7 @@ export interface Config {
     salary: Salary;
     notifications: Notification;
     'star-ambassadors': StarAmbassador;
+    queries: Query;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -34,6 +35,7 @@ export interface Config {
     salary: SalarySelect<false> | SalarySelect<true>;
     notifications: NotificationsSelect<false> | NotificationsSelect<true>;
     'star-ambassadors': StarAmbassadorsSelect<false> | StarAmbassadorsSelect<true>;
+    queries: QueriesSelect<false> | QueriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -45,10 +47,12 @@ export interface Config {
   globals: {
     'salary-form-settings': SalaryFormSetting;
     'salary-notification-messages': SalaryNotificationMessage;
+    meetings: Meeting;
   };
   globalsSelect: {
     'salary-form-settings': SalaryFormSettingsSelect<false> | SalaryFormSettingsSelect<true>;
     'salary-notification-messages': SalaryNotificationMessagesSelect<false> | SalaryNotificationMessagesSelect<true>;
+    meetings: MeetingsSelect<false> | MeetingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -256,6 +260,19 @@ export interface StarAmbassador {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "queries".
+ */
+export interface Query {
+  id: number;
+  member: number | Member;
+  status: 'open' | 'in-progress' | 'resolved' | 'closed';
+  question: string;
+  answer?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -284,6 +301,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'star-ambassadors';
         value: number | StarAmbassador;
+      } | null)
+    | ({
+        relationTo: 'queries';
+        value: number | Query;
       } | null)
     | ({
         relationTo: 'media';
@@ -445,6 +466,18 @@ export interface StarAmbassadorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "queries_select".
+ */
+export interface QueriesSelect<T extends boolean = true> {
+  member?: T;
+  status?: T;
+  question?: T;
+  answer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -541,6 +574,34 @@ export interface SalaryNotificationMessage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "meetings".
+ */
+export interface Meeting {
+  id: number;
+  status: 'start' | 'end' | 'hold';
+  link: string;
+  agenda: string;
+  /**
+   * Select this if you want to assign to all members
+   */
+  assignToAll?: boolean | null;
+  /**
+   * Dont select assign to uid if you want to assign to specific members
+   */
+  assignToStars?: ('1star' | '2star' | '3star' | '4star' | '5star' | '6star')[] | null;
+  /**
+   * Dont select assign to stars if you want to assign to specific members
+   */
+  assignToUid?: (number | Member)[] | null;
+  /**
+   * This message will be shown when meeting is not scheduled or not assigned to a member/star
+   */
+  announcement: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "salary-form-settings_select".
  */
 export interface SalaryFormSettingsSelect<T extends boolean = true> {
@@ -565,6 +626,22 @@ export interface SalaryNotificationMessagesSelect<T extends boolean = true> {
   partialApproved?: T;
   fullApproved?: T;
   rejected?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "meetings_select".
+ */
+export interface MeetingsSelect<T extends boolean = true> {
+  status?: T;
+  link?: T;
+  agenda?: T;
+  assignToAll?: T;
+  assignToStars?: T;
+  assignToUid?: T;
+  announcement?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

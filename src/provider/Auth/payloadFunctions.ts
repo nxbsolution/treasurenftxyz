@@ -246,6 +246,10 @@ export const getUser = async () => {
     if (user) {
       const member = await payload.find({
         collection: 'members',
+        depth: 0,
+        select: {
+          contributions: false
+        },
         where: {
           user: {
             equals: user.id
