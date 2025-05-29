@@ -1,4 +1,4 @@
-import "../old_app_folder/(frontend)/globals.css"
+import "../../old_app_folder/(frontend)/globals.css"
 
 export const metadata = {
   title: 'Online Acedemy',

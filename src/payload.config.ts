@@ -20,15 +20,15 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
-    meta: {
-      titleSuffix: '- Team Of Ninjas',
-    },
-    components: {
-      graphics: {
-        Logo: "/graphics/Logo",
+    // meta: {
+    //   titleSuffix: '- Team Of Ninjas',
+    // },
+    // components: {
+    //   graphics: {
+    //     Logo: "/graphics/Logo",
 
-      }
-    },
+    //   }
+    // },
     importMap: {
       baseDir: path.resolve(dirname),
     },
