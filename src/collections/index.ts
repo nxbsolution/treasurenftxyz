@@ -6,6 +6,7 @@ import { Salary } from './Salary'
 import { Star } from './Star'
 import { Notifications } from './Notifications'
 import { Queries } from './Queries'
+import { oldContributions } from './oldContributions'
 
 export default [
   Users,
@@ -16,6 +17,7 @@ export default [
   Star,
   Queries,
   Media,
+  oldContributions
 ]
 
 
