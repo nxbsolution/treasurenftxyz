@@ -19,6 +19,7 @@ export interface Config {
     'star-ambassadors': StarAmbassador;
     queries: Query;
     media: Media;
+    oldContributions: OldContribution;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -37,6 +38,7 @@ export interface Config {
     'star-ambassadors': StarAmbassadorsSelect<false> | StarAmbassadorsSelect<true>;
     queries: QueriesSelect<false> | QueriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    oldContributions: OldContributionsSelect<false> | OldContributionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -273,6 +275,23 @@ export interface Query {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "oldContributions".
+ */
+export interface OldContribution {
+  id: number;
+  verify?: ('PENDING' | 'HOLD' | 'APPROVED' | 'REJECTED') | null;
+  uid?: string | null;
+  realName?: string | null;
+  depositAddress: 'TRC-20' | 'BEP-20';
+  star: '1star' | '2star' | '3star' | '4star' | '5star' | '6star';
+  transactionId: string;
+  screenShot?: (number | null) | Media;
+  uploadStarCertificate?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -309,6 +328,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'oldContributions';
+        value: number | OldContribution;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -494,6 +517,22 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "oldContributions_select".
+ */
+export interface OldContributionsSelect<T extends boolean = true> {
+  verify?: T;
+  uid?: T;
+  realName?: T;
+  depositAddress?: T;
+  star?: T;
+  transactionId?: T;
+  screenShot?: T;
+  uploadStarCertificate?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
